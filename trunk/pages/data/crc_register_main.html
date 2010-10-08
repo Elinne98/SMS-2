@@ -1,0 +1,229 @@
+
+<form name="register" action="crc_handler.php?method=register&func=add" method="post">
+
+	<input type="hidden" name="context" value="ou=Don Mills,ou=Toronto,ou=Ontario,ou=Canada,o=CRC World">
+
+	<table width="500"  align="center" border="0" cellpadding="6" cellspacing="0" class="std">
+    <?php
+
+		$data = $_SESSION['registerdata'];
+
+		if ($data == NULL) {
+
+			print '<tr>';
+				print '<table  width="500" align="center" border="0" cellpadding="6" cellspacing="0" class="std">';
+		print '<tr>';
+			print '<th colspan="2"><em>New User Registration</em></th>';
+		print '</tr>';
+
+				print '<tr>';
+		print '<td colspan="2">';
+		print '	Please fill this form in order to register. Registration is free. The';
+		print '	advantage to register is to get information on CRC events';
+		print '	and programs. This information will not be used to solicit any activities';
+		print '	other than CRC initiatives. Please note that fields with';
+		print '	\'[<span class="error">*</span>]\' are mandatory. <br><br>';
+		print '</td>';
+				print '</tr>';
+
+				$len = strlen($_SESSION['msg']);
+				if ($len > 0) {
+					print('<tr><td colspan="2"class="error"><b><br>' . $_SESSION['msg'] . '</b><br><br></td></tr>');
+				}
+
+				print '<tr>';
+				print '<td align="right">Profile: </td>';
+				print '<td><select name="profile" class="text">';
+				print '<option selected>Student</option>';
+				print '<option >Teacher</option>';
+				print '</select> [<span class="error">*</span>]';
+				print '</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Password: </td>';
+				print '<td><input type="password" name="password" size="10" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Given Name: </td>';
+				print '<td><input type="text" name="fname" size="15" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Surname: </td>';
+				print '<td><input type="text" name="lname" size="15" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Email: </td>';
+				print '<td><input type="text" name="email" size="40" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Gender: </td>';
+				print '<td><select name="gender" class="text">';
+				print '<option selected>Male</option>';
+				print '<option >Female</option>';
+				print '</select> [<span class="error">*</span>]';
+				print '</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Date of Birth: &nbsp;</td>';
+				print '<td><input type="text" name="day" size="2" value="00" class="text">-<input type="text" name="month" size="2" value="00" class="text">-<input type="text" name="year" size="4" value="0000" class="text"> (DD-MM-YYYY) [<span class="error">*</span>]';
+				print '</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Address: </td>';
+				print '<td><input type="text" name="add1" size="40" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td></td>';
+				print '<td><input type="text" name="add2" size="40" value="" class="text"></td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">City: </td>';
+				print '<td><input type="text" name="city" size="30" value="Toronto" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Province: </td>';
+				print '<td><input type="text" name="province" size="2" value="ON" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Country: </td>';
+				print '<td><input type="text" name="country" size="30" value="Canada" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Postal Code: </td>';
+				print '<td><input type="text" name="pc" size="15" value="" class="text"> [<span class="error">*</span>]</td>';
+				print '</tr>';
+				print '<tr>';
+				print '<td align="right">Phone: </td>';
+				print '<td>(<input type="text" name="lcode" size="3" value="416" class="text">)';
+				print '<input type="text" name="lprefix" size="3" value="000" class="text">-';
+				print '<input type="text" name="lpostfix" size="4" value="0000" class="text"> [<span class="error">*</span>]';
+				print '</td>';
+				print '</tr>';
+			print '<tr align="right">';
+			print '<td colspan="3"><input type="button" onclick="javascript:verify(\'register\');" name="register" value="Register" class="button"> &nbsp;';
+			print '<input type="reset" name="reset" value="Reset" class="button">';
+			print '</td>';
+			print '</tr>';
+				print '</table>';
+			print '</tr>';
+
+
+
+		} else {
+
+			print '<tr>';
+				print '<table  width="500" align="center" border="0" cellpadding="6" cellspacing="0" class="std">';
+		print '<tr>';
+			print '<th colspan="2"><em>New User Registration</em></th>';
+		print '</tr>';
+
+				print '<tr>';
+		print '<td colspan="2">';
+		print '	Please fill this form in order to register. Registration is free. The';
+		print '	advantage to register is to get information on CRC events';
+		print '	and programs. This information will not be used to solicit any activities';
+		print '	other than CRC initiatives. Please note that fields with';
+		print '	\'[<span class="error">*</span>]\' are mandatory. ';
+		print '</td>';
+				print '</tr>';
+
+				$len = strlen($_SESSION['msg']);
+				if ($len > 0) {
+					print('<tr><td colspan="2"class="error"><b><br>' . $_SESSION['msg'] . '</b><br><br></td></tr>');
+				}
+
+				print '<tr>';
+			print '<td>Profile: </td>';
+			print '<td><select name="profile">';
+			if ($data['profile'] == "Student") {
+				print '<option selected>Student</option>';
+				print '<option >Teacher</option>';
+			} else {
+				print '<option>Student</option>';
+				print '<option selected>Teacher</option>';
+			}
+			print '</select> [<span class="error">*</span>]';
+			print '</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Password: </td>';
+			print '<td><input type="password" name="password" size="10" value="' . $data['password'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Given Name: </td>';
+			print '<td><input type="text" name="fname" size="15" value="' . $data['fname'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Surname: </td>';
+			print '<td><input type="text" name="lname" size="15" value="' . $data['lname'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Email: </td>';
+			print '<td><input type="text" name="email" size="40" value="' . $data['email'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Gender: </td>';
+			if ($data['gender'] == "Male") {
+				print '<td><select name="gender">';
+				print '<option selected>Male</option>';
+				print '<option >Female</option>';
+			} else {
+				print '<td><select name="gender">';
+				print '<option>Male</option>';
+				print '<option selected>Female</option>';
+			}
+			print '</select> [<span class="error">*</span>]';
+			print '</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Date of Birth: &nbsp;</td>';
+			print '<td><input type="text" name="day" size="2" value="' . $data['day'] . '">-<input type="text" name="month" size="2" value="' . $data['month'] . '">-<input type="text" name="year" size="4" value="' . $data['year'] . '"> (DD-MM-YYYY) [<span class="error">*</span>]';
+			print '</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Address: </td>';
+			print '<td><input type="text" name="add1" size="40" value="' . $data['add1'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td></td>';
+			print '<td><input type="text" name="add2" size="40" value="' . $data['add2'] . '"></td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>City: </td>';
+			print '<td><input type="text" name="city" size="30" value="' . $data['city'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Province: </td>';
+			print '<td><input type="text" name="province" size="2" value="' . $data['province'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Country: </td>';
+			print '<td><input type="text" name="country" size="30" value="' . $data['country'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Postal Code: </td>';
+			print '<td><input type="text" name="pc" size="15" value="' . $data['pc'] . '"> [<span class="error">*</span>]</td>';
+			print '</tr>';
+			print '<tr>';
+			print '<td>Phone: </td>';
+			print '<td>(<input type="text" name="lcode" size="3" value="' . $data['lcode'] . '">)';
+			print '<input type="text" name="lprefix" size="3" value="' . $data['lprefix'] . '">-';
+			print '<input type="text" name="lpostfix" size="4" value="' . $data['lpostfix'] . '"> [<span class="error">*</span>]';
+			print '</td>';
+			print '</tr>';
+			print '<tr align="right">';
+			print '<td colspan="3"><input type="button" onclick="javascript:verify(\'register\');" name="register" value="Register" class="button">';
+			print '</td>';
+			print '</tr>';
+			print '</table>';
+			print '</tr>';
+
+		}
+
+    ?>
+
+
+
+	</table>
+</form>
+
