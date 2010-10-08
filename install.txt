@@ -1,0 +1,76 @@
+This file will provide you with a brief description of FreSMS and instructions
+on how to install FreeSMS.
+
+Since it's development in 2003, FreeSMS has successfully offered educational organizations
+an easy to use and effective facility to manage courses, teachers and students.
+FreeSMS provides the following features:
+
+ - Manage courses within a class environment
+ - Sopport for profile based management: Administrator, Teacher and Student
+ - Online teacher and student registration
+ - Allow students to self manage class enrollment
+ - Allow teachers to manage student attendance
+ - Ability for students to submit course evaluations
+
+From a technical perspective FreeSMS is based on PHP4 and requires a MySQL database. This 
+demonstration site has been tested on: <br> 
+
+ - Apache 1.3.33 (<a href="http://www.apache.org">www.apache.org</a>)
+ - PHP 4.3.9 (<a href="http://www.php.net">www.php.net</a>)
+ - MySQL 4.1.7 (<a href="http://www.mysql.com">www.mysql.com</a>)
+
+In order to install FreeSMS, please follow the following instructions:
+
+1. Download FreeSMS: 
+====================
+FreeSMS can be downloaded at http://sourceforge.net/projects/freesms/.
+
+2. Extract FreeSMS: 
+===================
+Now that you have a zip file, you need to extract it a directory in the 
+path of your web server root (or have an alias setup). For example if 
+the path to your web server's document root is "C:\www" than you need
+to create a folder "C:\www\freesms" and extract all the files into that 
+directory. 
+
+3. MySQL Server Database Setup:
+===============================
+The first step required is to setup the MySQL database for FreeSMS
+usage. I personally prefer MyPhpAdmin, you can download it at 
+http://sourceforge.net/projects/phpmyadmin/. Using MyPhpAdmin craete a databse 
+called 'crcdb'. Using MyPhpAdmin's SQL window open the sql script file
+crc_database_setup.sql located in the mysql directory and modify line 27, 28 
+and 33 to suit the username and password to manage FreeSMS.  After modifying 
+your user information, run the script. Me sure to run the SQL script against 
+the 'crcdb' database. You should now have a working database for FreeSMS.
+
+The database setup is now done, we now need to proceed to setup
+the FreeSMS configuration script(s) as pere the next instruction
+below. 
+
+4. Configure PHP Script:
+========================
+We now need to setup the primary configuration file that FreeSMS
+requires to successfully administer the application. In the directory
+"[Install Directory]/classes/" you fill find a file crc_constants.mod.php. 
+Open this file and modify lines 19, 20, 22 and 23 to reflect the connection
+parameters that needs to be used when FreeSMS interacts with the MySQL database.
+
+Once thie file has been modified approprietly, you can now use one of the links
+below to login into FreeSMS, enjoy!
+
+
+5. Start Using FreeSMS:
+=======================
+To continue, please select one of the resource link 
+http://<server>/freesms/pages/crc_login.php
+
+I hope that you find FreeSMS usefull. If you have any further questions or comments please
+do not hesitate to check out the postings on the project page or email me directly at
+shaffin_bhanji@yahoo.ca. For thos of you who would like to help out, I am looking for
+volunteers on this project, please send me an email.
+
+Thank You,
+Shaffin Bhanji
+FreeSMS Project Developer.
+

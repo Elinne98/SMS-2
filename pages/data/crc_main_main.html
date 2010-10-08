@@ -1,0 +1,73 @@
+<?php
+  if (!isset($_SESSION['uid'])) {
+    echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php">';
+  }
+?>
+<table width="500">
+	<tr>
+		<td valign="top" width="80">
+
+			<br><br>
+
+			<!--
+			This is the menu
+			-->
+
+		<?php
+			include "../common/crc_menu.html"
+		?>
+
+		</td>
+
+
+		<td valign="top" align="left" width="420">
+
+			<!--
+			This is the content
+			-->
+			<br><br>
+
+			<table class="tbl">
+				<tr>
+					<td valign="top">
+						 Welcome <?php print($_SESSION['name']); ?>,
+						
+						 <p>
+						 You have accessed the Computer Resource Center's (CRC) official Student Registration System
+						 running FreeSMS. The CRC (hypothetical demonstartion facility) is an education body  
+						 whose mandate is to educate our community members in technology and technological trends. 
+						 </p>
+						
+						 <p>
+						 The CRC hold various computer related courses througout the year for our community so that our
+						 community members can take advantage of trainning at minimal cost (enough to cover operational
+						 expenses only). The courses that are run by the CRC fall into the following categories: <br>
+						 <ul>
+						 	<li>Operating Systems (such as Microsoft Windows and Linux)
+						 	<li>Office Applications (such as Microsoft Office and OpenOffice)
+						 	<li>Development Languages and Tools (such as VB.NET and Java)
+						 </ul>
+
+						<p>
+						CRC members would like to thank all its volunteers (Operational Staff, Teachers and Students) who
+						make the CRC a viable organization.
+						
+						<p>
+						 We hope that you will find the recources and information that you are looking for. For
+						 any reason if you have feedback or problems regarding any page or content, please do not
+						 hesistate to contact a CRC member.
+						 </p>
+						
+						 <p>
+						 Thank You, <br>
+						 Shaffin N. Bhanji <br> 
+						 CRC Manager.<br>
+						 </p>
+					</td>
+				</tr>
+			</table>
+
+		</td>
+	</tr>
+<table>
+
