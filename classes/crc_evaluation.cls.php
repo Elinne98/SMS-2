@@ -10,8 +10,8 @@
 	// Name: crc_object
 	//******************************************
 	//
-	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Desc: The Evaluation Object
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0
@@ -312,32 +312,3 @@
 	//$data = $test->fn_getquestions();
 	*/
 ?>
-
-
-<?php 
-	/*
-	//This will test the set_profile function.
-	$profile = new crc_profile(True);
-	$data['profileid'] = '6';
-	$data['email'] = 'altaf';
-	$data['password'] = 'altaf';
-	$data['fname'] = 'altaf';
-	$data['lname'] = 'bhanji';
-	$data['year'] = '1969';
-	$data['month'] = '03';
-	$data['day'] = '24';
-	$data['gender'] = 'Male';
-	$data['add1'] = '28 Elson Street';
-	$data['add2'] = '';
-	$data['city'] = 'Markham';
-	$data['province'] = 'ON';
-	$data['pc'] = 'L3S2J5';
-	$data['country'] = 'Canada';
-	$data['lcode'] = '416';
-	$data['lprefix'] = '524';
-	$data['lpostfix'] = '9520';
-	
-	$profile->fn_setprofile($data);
-	*/
-?>
-

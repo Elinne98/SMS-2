@@ -51,7 +51,8 @@
 				<!-- The Page Content -->
 				<TR CLASS="OUTER">
 					<?php
-						include "crc_index_main.html";
+						//include "crc_index_main.html";
+						echo '<meta http-equiv="refresh"' . 'content="0;URL=pages/crc_login.php">';
 					?>
 				</TR>
 				<!-- The Page Footer -->

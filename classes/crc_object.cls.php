@@ -4,7 +4,7 @@
 	//******************************************
 	//
 	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0

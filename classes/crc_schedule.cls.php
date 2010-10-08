@@ -10,8 +10,8 @@
 	// Name: crc_schedule
 	//******************************************
 	//
-	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Desc: The Schedule Object
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0
@@ -61,51 +61,40 @@
 
 				$this->m_sql = 'select course_name, schedule_start_date, schedule_end_date, ' .
 														'schedule_day_time, course_fee, schedule_status, ' . 
-														'schedule_id, schedule_room_id, room_name, ' . 
-														'venue_shortname ' .
+														'schedule_id, schedule_room_id, room_name ' . 
 												'from ' . MYSQL_SCHEDULE_TBL . ' as s, ' .
 														MYSQL_COURSES_TBL . ' as c, ' .
-														MYSQL_ROOMS_TBL . ' as r, ' .
-														MYSQL_VENUE_TBL . ' as v ' .
+														MYSQL_ROOMS_TBL . ' as r ' .
 												'where (s.schedule_course_id=c.course_id) and ' .
 														'(s.schedule_active=0) and ' .
-														'(s.schedule_room_id=r.room_id) and ' .
-														'(s.schedule_venue_id=v.venue_id) ' .
-												'order by v.venue_shortname, r.room_name, c.course_name asc';
-				
-				//echo $this->m_sql;
-				//die;
-
+														'(s.schedule_room_id=r.room_id) ' .
+												'order by c.course_name asc';
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 
 				if (mysql_num_rows($resource) > 0) {
 					$index = 0;
 					while ($row = mysql_fetch_array($resource)) {
-
 						switch($roleid) {
 						
 							case 3:
 								
-								$this->m_sql = 'select * from ' . MYSQL_STUDENT_SCHEDULE_TBL . ', ' . 
-																		MYSQL_SCHEDULE_TBL .  
-																' where student_schedule_schedule_id = ' . $row[6] . 
-																		' and student_schedule_profile_id = ' . $profileid;
+								$this->m_sql = 'select * from ' . MYSQL_STUDENT_SCHEDULE_TBL .
+												' where student_schedule_schedule_id = ' . $row[6] . 
+												' and student_schedule_profile_id = ' . $profileid;
 								break;
 
 							case 2:
 
-								$this->m_sql = 'select * from ' . MYSQL_TEACHER_SCHEDULE_TBL . ', ' . 
-																		MYSQL_SCHEDULE_TBL .  
-																' where teacher_schedule_schedule_id = ' . $row[6] . 
-																		' and teacher_schedule_profile_id = ' . $profileid;
+								$this->m_sql = 'select * from ' . MYSQL_TEACHER_SCHEDULE_TBL . 
+												' where teacher_schedule_schedule_id = ' . $row[6] . 
+												' and teacher_schedule_profile_id = ' . $profileid;
 								break;
 								
 							case 1:
 
-								$this->m_sql = 'select * from ' . MYSQL_TEACHER_SCHEDULE_TBL . ', ' . 
-																		MYSQL_SCHEDULE_TBL .  
-																' where teacher_schedule_schedule_id = ' . $row[6] . 
-																		' and teacher_schedule_profile_id = ' . $profileid;
+								$this->m_sql = 'select * from ' . MYSQL_TEACHER_SCHEDULE_TBL . 
+												' where teacher_schedule_schedule_id = ' . $row[6] . 
+												' and teacher_schedule_profile_id = ' . $profileid;
 								break;
 
 						}
@@ -115,8 +104,17 @@
 							echo "DEBUG {crc_schedule::fn_getschedule}: Checking enrollment of schedule id " . $row[6] . " for profile id " . $profileid . ". <br>";
 						}
 
-						if (mysql_num_rows($enrol) == 0) {
+						if (mysql_num_rows($enrol) != 0) {
 							$this->m_data[$index] = $row;
+							
+							//get the number of students for this schedule id
+							$this->m_sql = 'select count(*) as students from ' . MYSQL_STUDENT_SCHEDULE_TBL .
+														' where student_schedule_schedule_id = ' . $row[6];
+
+							$students = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+							$studentcount = mysql_fetch_array($students);
+							$this->m_data[$index][9] = $studentcount[0];
+							
 							$index = $index + 1;
 						}
 						$db->fn_freesql($enrol);

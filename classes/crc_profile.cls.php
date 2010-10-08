@@ -10,8 +10,8 @@
 	// Name: crc_object
 	//******************************************
 	//
-	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Desc: The Profile Object
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0
@@ -46,7 +46,7 @@
 		var $m_phland;
 		var $m_phcell;
 		var $m_phfax;
-		var $m_roleid;
+		//var $m_roleid;
 		var $m_active;
 		var $m_sql;
 		var $m_data;
@@ -71,14 +71,14 @@
 		}
 
 
-		function fn_getprofile($role) {
+		function fn_getprofile($uid) {
 			//******************************************
 			// Get the users profile information
 			//******************************************
 			$result = false;
 			
 			if ($this->_DEBUG) {
-				echo "DEBUG {crc_profile::fn_getprofile}: Retreiving the profile of role id: " . $role . ". <br>";
+				echo "DEBUG {crc_profile::fn_getprofile}: Retreiving the profile of uid: " . $uid . ". <br>";
 			}
 
 			$db = new crc_mysql($this->_DEBUG);
@@ -87,7 +87,7 @@
 
 				$this->m_sql = 'select * ' . 
 												'from ' . MYSQL_PROFILES_TBL . 
-												' where (profile_uid = "' . $role . '")';
+												' where (profile_uid = "' . $uid . '")';
 
 				//echo $this->m_sql;
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
@@ -113,6 +113,47 @@
 			}
 		}
 
+		function fn_getadminprofile() {
+			//******************************************
+			// Get the administrator profile information 
+			//******************************************
+			$result = false;
+			
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_profile::fn_getadminprofile}: Retreiving the administrator profile. <br>";
+			}
+
+			$db = new crc_mysql($this->_DEBUG);
+			$dbhandle = $db->fn_connect();
+			if ($dbhandle != 0) {
+
+				$this->m_sql = 'select * ' . 
+												'from ' . MYSQL_PROFILES_TBL . 
+												' where (profile_role_id = "1")';
+
+				//echo $this->m_sql;
+				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($resource) > 0) {
+					$this->m_data = mysql_fetch_array($resource);
+				} else {
+					$this->m_data = null;
+					$this->lasterrnum = ERR_PROFILE_NOPROFILE_NUM;
+					$this->lasterrmsg = ERR_PROFILE_NOPROFILE_DESC;
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_profile::fn_getadminprofile}: The sql command returned nothing. <br>';
+						echo 'ERROR {crc_profile::fn_getadminprofile}: Error number: ' . $this->m_lasterrnum . '. <br>';
+						echo 'ERROR {crc_profile::fn_getadminprofile}: Error description: ' . $this->m_lasterrmsg . '. <br>';
+					}
+				}
+				$db->fn_freesql($resource);
+				$db->fn_disconnect();
+				return $this->m_data;
+			} else {
+				$db->fn_freesql($resource);
+				$db->fn_disconnect();
+				return null;
+			}
+		}
 
 		function fn_setprofile($post) {
 			//******************************************
@@ -127,30 +168,25 @@
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != 0) {
 
-				//$this->m_roleid = $post['roleid'];
-				//$this->fn_getroleid($this->m_roleid);
-
 				$this->m_sql = 'update ' . MYSQL_PROFILES_TBL .
-														' SET profile_uid="' . strtolower($post['email']) . '", profile_pwd="' . strtolower($post['password']) . '", ' .
+														' SET profile_uid="' . $post['username'] . '", profile_pwd=SHA1("' . strtolower($post['password']) . '"), ' .
 														'profile_firstname="' . ucfirst($post['fname']) . '", profile_lastname="' . ucfirst($post['lname']) . '", ' .
-														'profile_email="' . strtolower($post['email']) . '", profile_dob="' . $post['year'] . '-' . $post['month'] . '-' . $post['day'] . '", ' .
-														'profile_gender="' . strtoupper($post['gender']) . '", profile_address_one="' . strtoupper($post['add1']) . '", ' .
-														'profile_address_two="' . strtoupper($post['add2']) . '", profile_city="' . strtoupper($post['city']) . '", ' .
+														'profile_email="' . $post['email'] . '", profile_dob="' . $post['year'] . '-' . $post['month'] . '-' . $post['day'] . '", ' .
+														'profile_gender="' . strtoupper($post['gender'][0]) . '", profile_address_one="' . $post['add1'] . '", ' .
+														'profile_address_two="' . $post['add2'] . '", profile_city="' . $post['city'] . '", ' .
 														'profile_province_state="' . strtoupper($post['province']) . '", profile_postal_code="' . strtoupper($post['pc']) . '", ' .
-														'profile_country="' . strtoupper($post['country']) . '", profile_phone_land="' . $post['lcode'] . $post['lprefix'] . $post['lpostfix'] . '"' .
+														'profile_country="' . ucfirst($post['country']) . '", profile_phone_land="' . $post['lcode'] . $post['lprefix'] . $post['lpostfix'] . '"' .
 												' where (profile_id = ' . $post['profileid'] . ')';
 
-				//print('SQL: [' . $this->m_sql . ']');
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-				if (mysql_affected_rows() > 0) {
-					$_SESSION['uid'] = strtolower($post['email']);
+				if (mysql_errno() == 0) {
+					$_SESSION['uid'] = $post['username'];
 					$result = true;
 				} else {
 					$this->lasterrnum = ERR_PROFILE_UPDATE_NUM;
 					$this->lasterrmsg = ERR_PROFILE_UPDATE_DESC;
 					if ($this->_DEBUG) {
-						echo 'ERROR {crc_profile::fn_setprofile}: Could not update profile information. <br>';
+						echo 'ERROR {crc_profile::fn_setprofile}: Could not update profile information for ' . $post['profileid'] . '<br>';
 						echo 'ERROR {crc_profile::fn_setprofile}: Error number: ' . $this->m_lasterrnum . '. <br>';
 						echo 'ERROR {crc_profile::fn_setprofile}: Error description: ' . $this->m_lasterrmsg . '. <br>';
 					}
