@@ -2,22 +2,20 @@
 	// Include the CRC Object class that needs to
 	// extended by all classes. This is the super
 	// class.
-
 	if(isset($_REQUEST[session_name()])) {
-		// There is a session already available
+		// There is a session already available		
 		session_start();
 	}
-
-	include_once('crc_constants.mod.php');
-	include_once('crc_object.cls.php');
-	include_once('crc_mysql.cls.php');
+	include_once('crc_constants.mod.php');	
+	include_once('crc_object.cls.php');	
+	include_once('crc_mysql.cls.php');	
 
 	//******************************************
 	// Name: crc_object
 	//******************************************
 	//
-	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Desc: The Login Object
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0
@@ -116,16 +114,13 @@
 				$db = new crc_mysql($this->_DEBUG);
 				$dbhandle = $db->fn_connect();
 				if ($dbhandle != 0) {
-
 					$this->m_sql = 'select profile_id, profile_firstname, profile_lastname, profile_role_id ' . 
 													'from ' . MYSQL_PROFILES_TBL . 
 													' where ((profile_uid = "' . $this->m_uid . '") AND' .
-															' (profile_pwd = "' . $this->m_pwd . '") AND (profile_rdn = "' . $this->m_rdn . '"))';
+															' (profile_pwd = SHA1("' . $this->m_pwd . '")) AND (profile_rdn = "' . $this->m_rdn . '"))';
 
-					//print('SQL: [' . $this->m_sql . ']');
 					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-					//print('Number of records: ' . mysql_num_rows($result));
-					//die;
+
 					if (mysql_num_rows($resource) > 0) {
 						$row = mysql_fetch_row($resource);
 						$this->m_name = $row[1] . ' ' . $row[2];
@@ -133,8 +128,12 @@
 						$this->m_roleid = $row[3];
 						$result = true;
 					} else {
-						$this->lasterrnum = ERR_LOGIN_NOUSER_NUM;
-						$this->lasterrmsg = ERR_LOGIN_NOUSER_DESC;
+						$this->lasterrnum = mysql_errno();
+						$this->lasterrmsg = mysql_error();
+						if ($this->lasterrmsg == '') {
+							$this->lasterrnum = ERR_LOGIN_NOUSER_NUM;
+							$this->lasterrmsg = ERR_LOGIN_NOUSER_DESC;
+						}
 						if ($this->_DEBUG) {
 							echo '<font color="red">';
 							echo 'ERROR {crc_login::fn_login}: The sql command returned nothing. <br>';
@@ -148,7 +147,6 @@
 				} else {
 					$this->lasterrnum = $db->lasterrnum;
 					$this->lasterrmsg = $db->lasterrmsg;
-					$result = false;
 				}
 			}
 			return $result;

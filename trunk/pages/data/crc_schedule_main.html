@@ -19,9 +19,6 @@
 
 		</td>
 
-
-
-
 		<td valign="top" align="left" width="420">
 	    <!--
         This is the content
@@ -37,7 +34,7 @@
               $data = $_SESSION['scheduledata'];
               print $_SESSION['name'] . ',';
               print '<p>';
-              print 'Here you will find the course schedule for the term 2003.';
+              print 'Here you will find your course schedule. ';
               print 'Please note that courses mentioned are forcasts and may ';
               print 'change upon teacher and student availability.';
               print '</p><p>';
@@ -70,7 +67,7 @@
                   print '<td>' . $data[$i][1] . '</td>';
                   print '<td>' . $data[$i][2] . '</td>';
                   print '<td>' . $data[$i][3] . '</td>';
-                  print '<td>' . $data[$i][9] . '</td>';
+                  print '<td>N/A</td>';
                   print '<td>' . $data[$i][8] . '</td>';
                   print '<td>$' . $data[$i][4] . '</td>';
                   //print '<td>' . $data[$i][5] . '</td>';
@@ -121,26 +118,6 @@
                 print '</table>';
 
                 print '<p>';
-
-
- 				print '<table>';
-				print '<tr><td class="message">';
-				print 'Note: <br><br>';
-				print '<ul>';
-				print '<li>In order to run classes as per schedule, minimum of 4 students must be enrolled, else classes will be cancelled for the session and students will be refunded of their fees.</li>';
-				print '<li>Fees are due upon registration or prior to first day of class.</li>';
-				print '<li>Fees may not be refunded if a student has not provided notice of cancellation prior to the first class.</li>';
-				print '<li>Admission is on first come, first serve basis. CRC has the right to cancel any class or registrant due to unforeseeable situations.</li>';
-				print '<li>Students should verify class status a week before classes start.</li>';
-				print '</ul>';
-				print '</td></tr>';
- 				print '</table>';
-
-
-
-
-
-
               } else {
                 print '<table class="green"><tr><td>Sorry there are no new courses offered at this time.</td></tr></table>';
               }

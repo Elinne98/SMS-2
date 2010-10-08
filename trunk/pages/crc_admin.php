@@ -52,7 +52,13 @@
 				<!-- The Page Content -->
 				<TR CLASS="OUTER">
 					<?php
-						include "data/crc_admin_main.html";
+						if($_GET['method'] == 'addcourse') {
+							include "data/crc_admin_add_course.html";
+						} else if($_GET['method'] == 'addstudent') {
+							include "data/crc_admin_add_student.html"; 
+						} else {
+							include "data/crc_unknown_main.html";
+						}						
 					?>
 				</TR>
 				<!-- The Page Footer -->

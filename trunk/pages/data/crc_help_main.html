@@ -1,7 +1,8 @@
 <?php
-  if (!isset($_SESSION['uid'])) {
+if (!isset($_SESSION['uid'])) {
     echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php">';
-  }
+}
+include_once('../classes/crc_profile.cls.php');
 ?>
 <table width="500">
 	<tr>
@@ -32,10 +33,13 @@
           <?php print($_SESSION['name']); ?>,
 
           <p>
-          In order to get help, please contact a FreeSMS member
-          of the Computer Resource Center. You
-          can also send requests or feedback via email
-          to <a href="mailto:shaffin_bhanji@hotmail.com"><b>Shaffin N. Bhanji</b></a>.
+          In order to get help, please contact a FreeSMS Team member. You
+          can also send requests or feedback via email to the 
+          <?php
+          $profile = new crc_profile(false);
+		  $profile->fn_getadminprofile();
+          print '<a href=mailto:' . $profile->m_data[5] . '><b>system administrator</b></a>'; 
+          ?>.
           </p>
 
           <p>

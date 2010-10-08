@@ -10,8 +10,8 @@
 	// Name: crc_object
 	//******************************************
 	//
-	// Desc: The primary CRC Object
-	// Developer: Shaffin Bhanji
+	// Desc: The Register Object
+	// Developer: Free SMS team
 	// Email: shaffin_bhanji@hotmail.com
 	// Date: March 10th, 2003
 	// Version: 1.0.0
@@ -105,34 +105,38 @@
 			}
 		}
 
-		function fn_userexists($userid) {
+		function fn_userexists($db, $username, $firstname, $lastname) {
 			//******************************************
-			// Check for a userid, if it already exisits
+			// Check for username or first name, last name, if it already exists
 			//******************************************
 			$result = false;
-		
-			$db = new crc_mysql($this->_DEBUG);
-			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
-
-				if ($this->_DEBUG) {
-					echo 'DEBUG {crc_register::fn_userexists}: Checking to see if the userid: ' . $userid . ' already exists!. <br>';
-				}
-
-
-				$this->m_sql = 'select * from ' . MYSQL_PROFILES_TBL . ' where (profile_uid = "' . $userid . '")';
-
-				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-				if (mysql_num_rows($resource) > 0) {
-					$result = true;
-				} else {
-					$result = false;
-				}
-
-				$db->fn_freesql($resource);
-				return $result;
+				
+			if ($this->_DEBUG) {
+				echo 'DEBUG {crc_register::fn_userexists}: Checking to see if the username: ' .$username . ' already exists!. <br>';
 			}
+
+			$this->m_sql = 'select * from ' . MYSQL_PROFILES_TBL . ' where profile_username = "' . $username .'"';
+			$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+			if (mysql_num_rows($resource) > 0) {
+				$this->lasterrmsg = 'The username ' . $username . ' already exists. Please choose a different username.';					
+				return true;
+			}
+
+			if ($this->_DEBUG) {
+				echo 'DEBUG {crc_register::fn_userexists}: Checking to see if the user: ' .$firstname . ' ' . $lastname . ' already exists!. <br>';
+			}
+
+			$this->m_sql = 'select * from ' . MYSQL_PROFILES_TBL . ' where profile_firstname = "' . $firstname . 
+							'" and profile_lastname = "'. $lastname . '"';
+			$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+			if (mysql_num_rows($resource) > 0) {
+				$result = true;
+				$this->lasterrmsg = 'The user ' . $firstname . ' '. $lastname . ' already exists. Please contact the admin if you need to modify this user.';
+			} else {
+				$result = false;
+			}
+
+			return $result;
 
 		}
 		
@@ -150,18 +154,18 @@
 					echo 'DEBUG {crc_register::fn_register}: Reading $post variables. <br>';
 				}
 				
-				$this->m_uid = strtolower($post['email']);
+				$this->m_uid = $post['username'];
 				$this->m_pwd = strtolower($post['password']);
 				$this->m_email = strtolower($post['email']);
 				$this->m_rdn = strtolower($post['context']);
-				$this->m_gender = strtoupper($post['gender']{0});
+				$this->m_gender = strtoupper($post['gender'][0]);
 				$this->m_dob = $post['year'] . '-' . $post['month'] . '-' . $post['day'];
 				$this->m_fname = ucfirst($post['fname']);
 				$this->m_lname = ucfirst($post['lname']);
-				$this->m_add1 = strtoupper($post['add1']);
-				$this->m_add2 = strtoupper($post['add2']);
+				$this->m_add1 = $post['add1'];
+				$this->m_add2 = $post['add2'];
 				$this->m_city = ucfirst($post['city']);
-				$this->m_prov = strtoupper($post['province']);
+				$this->m_prov = $post['province'];
 				$this->m_country = ucfirst($post['country']);
 				$this->m_code = str_replace(" ", "", strtoupper($post['pc']));
 				$this->m_phland = $post['lcode'] . $post['lprefix'] . $post['lpostfix'];
@@ -171,7 +175,7 @@
 					echo 'DEBUG {crc_register::fn_register}: Obtained role id: '. $this->m_roleid . ' <br>';
 				}
 
-				if ($this->fn_userexists($this->m_uid) == false) {				
+				if ($this->fn_userexists($db, $this->m_uid, $this->m_fname, $this->m_lname) == false) {				
 
 					$this->m_sql = 'insert into ' . MYSQL_PROFILES_TBL . '(' .
 															'profile_uid, profile_pwd, profile_firstname, profile_lastname, ' .
@@ -179,7 +183,7 @@
 															'profile_address_two, profile_city, profile_province_state, profile_postal_code, ' .
 															'profile_country, profile_phone_land, ' .
 															'profile_role_id, profile_rdn) ' .
-												'values("' . $this->m_uid . '","' . $this->m_pwd . '","' . $this->m_fname . '","' . $this->m_lname . '",' .
+												'values("' . $this->m_uid . '",SHA1("' . $this->m_pwd . '"),"' . $this->m_fname . '","' . $this->m_lname . '",' .
 															'"' . $this->m_email . '","' . $this->m_dob . '","' . $this->m_gender . '","' . $this->m_add1 . '",' .
 															'"' . $this->m_add2 . '","' . $this->m_city . '","' . $this->m_prov . '","' . $this->m_code . '",' .
 															'"' . $this->m_country . '","' . $this->m_phland . '",' . $this->m_roleid . ',"' . $this->m_rdn . '")';
@@ -208,9 +212,9 @@
 				} else {
 				
 					$this->lasterrnum = ERR_REGISTER_USEREXISTS_NUM;
-					$this->lasterrmsg = ERR_REGISTER_USEREXISTS_DESC;
+					//lasterrmsg is provided by fn_userexists()
 					if ($this->_DEBUG) {
-						echo 'ERROR {crc_profile::fn_setprofile}: The email you have provided already exists! <br>';
+						echo 'ERROR {crc_profile::fn_setprofile}: This user ' . $this->m_fname . ' '. $this->m_lname . ' already exists! <br>';
 						echo 'ERROR {crc_profile::fn_setprofile}: Error number: ' . $this->lasterrnum . '. <br>';
 						echo 'ERROR {crc_profile::fn_setprofile}: Error description: ' . $this->lasterrmsg . '. <br>';
 					}

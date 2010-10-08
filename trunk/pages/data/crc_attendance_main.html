@@ -3,7 +3,7 @@
     echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php">';
   }
 ?>
-<table width="500">
+<table width="400">
 	<tr>
 
 		<td valign="top" width="80">
@@ -22,7 +22,7 @@
 
 
 
-		<td valign="top" align="left" width="420">
+		<td valign="top" align="left" width="300">
 	    <!--
         This is the content
       -->
@@ -44,7 +44,7 @@
 
 			if (count($data) > 0) {
 
-				print '<p>This page has the attendance for student <b>' . $data[0][1] . ' ' . $data[0][2] . '</b> for the course <a href="crc_handler.php?method=teacher&func=getstudents&scheduleid=' . $data[0][9] . '"><b>' . $data[0][0] . '</b></a>.';
+				print '<p>This page has the attendance for student <b>' . $data[0][2] . ', ' . $data[0][1] . '</b> for the course <a href="crc_handler.php?method=teacher&func=getstudents&scheduleid=' . $data[0][9] . '"><b>' . $data[0][0] . '</b></a>.';
 				print '</p><p>';
 
 				$totalclasses = count($data);
@@ -66,69 +66,30 @@
 				print '</table>';
 				print '<p>';
 
-		              print '<table width="400" border=0 class="popcal">';
-				//print '<table border=1>';
+		        print '<table width="310" border=0 class="popcal">';
 				print '<tr>';
-				print '  <th>Date</th>';
-				print '  <th>Attendance</th>';
-
-				if ($_SESSION['roleid'] <= 2) {
-
-					if ($data[0][10] == "In Progress") {
-						print '  <th>Action</th>';
-					}
-				}
-
+				print '<th>Date</th>';
+				print '<th>Attendance</th>';
 				print '</tr>';
-
 				for ($i=0; $i < count($data); $i++) {
-
 					print '<tr>';
-					print '<td>' . $data[$i][3] . '-';
+					print '<td><center>' . $data[$i][3] . '-';
 					print $data[$i][4] . '-';
-					print $data[$i][5] . '</td>';
-
+					print $data[$i][5] . '</center></td>';
 					if ($data[$i][6] == "P") {
-
-						print '<td align="center" class="message"> Present </td>';
-
+						print '<td align="center" class="message">Present</td>';
 					} else {
-
-						print '<td align="center" class="error"> Absent </td>';
-
+						print '<td align="center" class="error">Absent</td>';
 					}
-
-					if ($_SESSION['roleid'] <= 2) {
-
-						if ($data[0][10] == "In Progress") {
-
-							if ($data[$i][6] == "A") {
-
-								print '<td><input type="button" value="Mark Present" onclick="javascript:window.location=\'crc_handler.php?method=teacher&func=setattendance&action=p&id=' . $data[$i][7] . '&profileid=' . $data[$i][8] . '&scheduleid=' . $data[$i][9] . '\';" class="button"></td>';
-
-							} else {
-
-								print '<td><input type="button" value="Mark Absent" onclick="javascript:window.location=\'crc_handler.php?method=teacher&func=setattendance&action=a&id=' . $data[$i][7] . '&profileid=' . $data[$i][8] . '&scheduleid=' . $data[$i][9] . '\';" class="button"></td>';
-
-							}
-						}
-					}
-
 					print '</tr>';
-
 				}
-
 				print '</table>';
-
 			} else {
-
 				print '<table class="green"><tr><td>Sorry there are no dates assigned for this student scheduled for this courses offering at this time.</td></tr></table>';
-
 			}
-
 			print '<p>';
-			print '  FreeSMS Team';
-			print '  </p>';
+			print 'FreeSMS Team';
+			print '</p>';
 			print '</td></tr>';
 
           ?>

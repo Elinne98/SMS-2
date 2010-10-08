@@ -85,7 +85,7 @@
 			//***************************************
 
 			// if success return handle, else return false
-			$this->set_serverinfo(MYSQL_SERVER, MYSQL_PORT);
+			$this->set_serverinfo(MYSQL_SERVER, MYSQL_PORT);//TODO: port name is not used
 			$this->set_userinfo(MYSQL_USER, MYSQL_PASS);
 
 			$this->m_mysqlhandle = mysql_connect($this->m_mysqlserver, $this->m_mysqlusername, $this->m_mysqlpassword);
@@ -118,11 +118,18 @@
 			// Run SQL 
 			//***************************************
 			if ($this->m_mysqlhandle != 0) {
-				mysql_select_db($db);
+				if (mysql_select_db($db) == false) {
+					if ($this->_DEBUG) {
+						echo '<font color="blue">';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Cannot connect to database: ' . $db . '. <br>';
+						echo '</font>';
+					}
+					return null;
+				}
 				if ($this->_DEBUG) {
 					echo '<font color="blue">';
-					echo 'DEBUG {crc_mysql::fn_runsql}: Runing an SQL against database: ' . $db . '. <br>';
-					echo 'DEBUG {crc_mysql::fn_runsql}: Runing the SQL command: ' . $sql . '. <br>';
+					echo 'DEBUG {crc_mysql::fn_runsql}: Running an SQL against database: ' . $db . '. <br>';
+					echo 'DEBUG {crc_mysql::fn_runsql}: Running the SQL command: ' . $sql . '. <br>';
 					echo '</font>';
 				}
 				
@@ -161,7 +168,6 @@
 						echo '</font>';
 						die();
 					}
-					//exit($this->error->fn_handleerror(mysql_errno(), mysql_error()));
 					return null;
 				}
 			}
@@ -179,7 +185,7 @@
 				echo '</font>';
 			}
 
-			if (strpos($resource, "Resource") !== false) {
+			if (strpos((string)$resource, "Resource") != false) {
 				$result = mysql_free_result($resource); 
 
 				if ($result == false) {

@@ -12,15 +12,10 @@
 			This is the menu
 			-->
 			<br><br>
-
 				<?php
 					include "../common/crc_menu.html";
 				?>
-
 		</td>
-
-
-
 
 		<td valign="top" align="left" width="420">
 	    <!--
@@ -41,29 +36,41 @@
 
 			print $_SESSION['name'] . ',';
 			print '<p>';
-
-			print 'Here you will find the students registered for your class. Please note that the
-				  class may be subject to cancellation if less than 4 students are registered.';
-			print '</p><p>';
+			print 'Here you will find the students registered for the course: ';
+			print '<br><b><center>' . $data[0][1] . '</center></b>';
+			print 'Current date is: ';
+			$currentdate = @getdate();//local time needs to be set in php.ini
+			if ($currentdate['mday'] < 10) {
+				$currentdate['mday'] = '0' . $currentdate['mday'];
+			}
+			if ($currentdate['mon'] < 10) {
+				$currentdate['mon'] = '0' . $currentdate['mon'];
+			}
+			print '<b><center>';
+			print $currentdate['mday'] . '-' . $currentdate['mon'] . '-' . $currentdate['year'];
+			print '</center></b>';
+			print '</p>';
 
 			if (count($data) > 0) {
 
-	                print '<table width="400" border=0 class="popcal">';
-			  //print '<table border=1>';
+	          print '<table width="300" border=0 class="popcal" align="center">';
 			  print '<tr>';
-			  print '  <th>Course</th>';
 			  print '  <th>Name</th>';
-			  print '  <th>Email</th>';
-			  print '  <th>Fee</th>';
+			  print '  <th>Attendance</th>';
+			  print '  <th>Action</th>';
 			  print '</tr>';
 
 			  for ($i=0; $i < count($data); $i++) {
 
 				print '<tr align="left">';
-				print '<td>' . $data[$i][1] . '</td>';
-				print '<td><a href="crc_handler.php?method=teacher&func=getattendance&profileid=' . $data[$i][6] . '&scheduleid=' . $data[$i][0] . '"><b>' . $data[$i][3] . ', ' . $data[$i][2] . '</b></a></td>';
-				print '<td>' . $data[$i][4] . '</td>';
-				print '<td align="center">' . $data[$i][5] . '</td>';
+				print '<td align = "center"><a href="crc_handler.php?method=teacher&func=getattendance&profileid=' . $data[$i][6] . '&scheduleid=' . $data[$i][0] . '"><b>' . $data[$i][3] . ', ' . $data[$i][2] . '</b></a></td>';
+				if ($data[$i][8] == 'A') {
+					print '<td align = "center" class="error">Absent</td>';
+					print '<td align = "center"><input type="button" value="Mark Present" onclick="javascript:window.location=\'crc_handler.php?method=teacher&action=P&func=setpresent&scheduleid=' . $data[$i][7] . '&day=' . $currentdate['mday'] . '&month=' . $currentdate['mon'] . '&year=' . $currentdate['year'] . '\';" class="button"></td>';
+				} else {
+					print '<td align = "center" class="message">Present</td>';
+					print '<td align = "center"><input type="button" value="Mark Absent" onclick="javascript:window.location=\'crc_handler.php?method=teacher&action=A&func=setpresent&scheduleid=' . $data[$i][7] . '&day=' . $currentdate['mday'] . '&month=' . $currentdate['mon'] . '&year=' . $currentdate['year'] . '\';" class="button"></td>';
+				}
 				print '</tr>';
 
 			  }
@@ -72,7 +79,7 @@
 
 			} else {
 
-			  print '<table class="green"><tr><td>Sorry there no students registered for a class at this time.</td></tr></table>';
+			  print '<table class="green"><tr><td>Sorry there are no students registered for this class.</td></tr></table>';
 
 			}
 

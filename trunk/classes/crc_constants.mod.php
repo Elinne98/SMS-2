@@ -4,25 +4,32 @@
 	// by the application. The constants include:
 	// APP_, ERR_ and LOG_ delimiters.
 	//******************************************************
+	
+	//******************************************************
+	// MYSQL_ Constants (mysql server and database access)
+	//******************************************************
+	define('MYSQL_SERVER', 'localhost');	
+	define('MYSQL_PORT', '3306');	
+	define('MYSQL_DB', 'crcdb');	
+	define('MYSQL_USER', 'bogdan');	
+	define('MYSQL_PASS', 'ewigkeit');	
 
 	//******************************************************
 	// APP_ Constants
 	//******************************************************
-	define('APP_PROJECTNAME', 'Computer Resource Center (CRC) Internet Development');
-	define('APP_DIVISION', 'CRC');
-	define('APP_DEVELOPMENT_LEAD', 'Shaffin Bhanji');
-	define('APP_VERSION', '1.0.0');
-	define('APP_CONTACT_NAME', 'Shaffin Bhanji');
-	define('APP_CONTACT_EMAIL', 'shaffin_bhanji@hotmail.com');
-	define('APP_COPYRIGHT', 'This application is copyright &copy; 2003. Use of any code in part or whole without the written concent of the developer is prohibited and against the law.');
-	define('APP_PATH', '/freesms/');
+	define('APP_PROJECTNAME', 'Free Student Management System');
+	define('APP_DIVISION', 'FreeSMS');
+	define('APP_DEVELOPMENT_LEAD', 'Free SMS Team');
+	define('APP_VERSION', '2.0.0');
+	define('APP_CONTACT_NAME', 'Bogdan Cristea');
+	define('APP_CONTACT_EMAIL', 'cristeab@gmail.com');
+	define('APP_COPYRIGHT', 'This application is copyright &copy; 2003. Use of any code in part or whole without the written concent of FreeSMS Team is prohibited and against the law.');
+	define('APP_PATH', '/freesms/');	
 
-	define('MYSQL_SERVER', 'localhost');	
-	define('MYSQL_PORT', '3306');	
-	define('MYSQL_DB', 'crcdb');	
-	define('MYSQL_USER', 'freesms_user');	
-	define('MYSQL_PASS', 'freesms');	
-
+	//******************************************************
+	// MYSQL_ Constants (other)
+	//******************************************************
+	
 	define('MYSQL_SESSIONS_TBL', 'crcdb.crc_sessions');
 	define('MYSQL_PROFILES_TBL', 'crcdb.crc_profiles');
 	define('MYSQL_ROLES_TBL', 'crcdb.crc_roles');
@@ -37,7 +44,6 @@
 	define('MYSQL_FEEDBACK_TBL', 'crcdb.crc_feedback');
 	define('MYSQL_FEEDBACK_QUESTIONS_TBL', 'crcdb.crc_feedback_questions');
 	define('MYSQL_FEEDBACK_ANSWERS_TBL', 'crcdb.crc_feedback_answers');
-
 
 	//******************************************************
 	// ERR_ Constants
@@ -55,17 +61,14 @@
 	define('ERR_LDAP_DISCONNECT_NUM', '10005');
 	define('ERR_LDAP_DISCONNECT_DESC', 'Error disconnecting from LDAP server. The connection has been lost or does not exists.');
 	define('ERR_LDAP_MISSING_DN_NUM', '10006');
-	define('ERR_LDAP_MISSING_DN_DESC', 'Missing RDN. Enter the RDN using fn_dninfo().');
-
-	
+	define('ERR_LDAP_MISSING_DN_DESC', 'Missing RDN. Enter the RDN using fn_dninfo().');	
 	
 	define('ERR_MYSQL_MISSING_SERVER_NUM', '20000');
 	define('ERR_MYSQL_MISSING_SERVER_DESC', 'Missing MySQL server name. Call set_serverinfo() to provide servername and port.');
 	define('ERR_MYSQL_MISSING_PORT_NUM', '20001');
 	define('ERR_MYSQL_MISSING_PORT_DESC', 'Missing MySQL server port number. Call set_serverinfo() to provide servername and port.');
 	define('ERR_MYSQL_DISCONNECT_NUM', '20005');
-	define('ERR_MYSQL_DISCONNECT_DESC', 'Error disconnecting from MySQL server. The connection has been lost or does not exists.');
-	
+	define('ERR_MYSQL_DISCONNECT_DESC', 'Error disconnecting from MySQL server. The connection has been lost or does not exists.');	
 
 	define('ERR_LOGIN_NOUSER_NUM', '50000');
 	define('ERR_LOGIN_NOUSER_DESC', 'No such user exists! Re-enter a valid Username and/or Password or register yourself.');
@@ -86,12 +89,10 @@
 	define('ERR_REGISTER_USEREXISTS_NUM', '50008');
 	define('ERR_REGISTER_USEREXISTS_DESC', 'The email adress you have provided already exists!');
 
-
-
 	//******************************************************
 	// LOG_ Constants
 	//******************************************************
-	
+	//TODO
 
 ?>
 
