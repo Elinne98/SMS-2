@@ -59,7 +59,7 @@
 			
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 				if ($this->_DEBUG) {
 					echo "DEBUG {crc_teacher::fn_setattendance}: Updating attendance id " . $id . " to " . ucwords($action) . ". <br>";
 				}
@@ -89,7 +89,7 @@
 			
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 				if ($this->_DEBUG) {
 					echo "DEBUG {crc_teacher::fn_setpresent}: Setting student presence.<br>";
 				}
@@ -331,7 +331,7 @@
 						$db->fn_disconnect();
 						return null;//an error occured
 					}					
-				} else {
+				} else { //this date already exists in database
 					$this->m_sql = 'select attendance_check from ' . MYSQL_ATTENDANCE_TBL .
 									' where (attendance_student_schedule_id = "' . $studentscheduleid . '") and ' .
 									'(attendance_date_id= "' . $this->m_dateid . '")';

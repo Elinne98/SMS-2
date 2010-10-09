@@ -113,11 +113,7 @@
 				$this->m_status = 'In progress';
 				$this->m_roomname = $post['roomname'];
 				$this->m_roomdesc = 'N/A';
-				if(isset($post['cactive'])) {
-					$this->m_active = '0';
-				} else {
-					$this->m_active = '-1';
-				}
+				$this->m_active = '0';//fixed when adding a course
 				$this->m_venueid = '1';//unused
 				$this->m_coursefee = '0';//unused
 				$this->m_evaluation = '10';//unused
@@ -689,9 +685,11 @@
 						//set student schedule
 						$this->m_sql = 'insert into ' . MYSQL_STUDENT_SCHEDULE_TBL . '(' .
 									'student_schedule_profile_id, ' .
-									'student_schedule_schedule_id) ' .
+									'student_schedule_schedule_id, ' .
+									'student_schedule_questions) ' .
 									'values("' . $profileid .
-									'","' . $this->m_scheduleid . '")';
+									'","' . $this->m_scheduleid .
+									'","1")';
 						$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 						if (mysql_affected_rows() <= 0) {
 							if ($this->_DEBUG) {

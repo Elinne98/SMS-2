@@ -190,7 +190,7 @@ print '[' . $title . ']';
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_profile.php?func=editstudent&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 
 			} else if ($_GET['func'] == 'updatestudent') {
-				
+
 				$profile = new crc_profile(false);
 				$result_profile = $profile->fn_setprofile($_POST);
 				$admin = new crc_admin(false);
