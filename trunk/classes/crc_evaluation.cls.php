@@ -63,7 +63,7 @@
 
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 			
 				$this->m_sql = 'select * ' .
 												'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
@@ -102,13 +102,11 @@
 
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 
 				$this->m_sql = 'select distinct feedback_questions_category ' . 
 												'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
 												' where (feedback_questions_active = 0)';
-
-				//echo $this->m_sql;
 				$categories = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 
 				if (mysql_num_rows($categories) > 0) {
@@ -124,32 +122,24 @@
 
 						$questions = $this->fn_getcategory($category[0]);
 						
-						while ($row = mysql_fetch_array($questions)) {
-					
+						while ($row = mysql_fetch_array($questions)) {					
 							$this->m_data[$index] = $row;
-
-							if ($this->_DEBUG) {
-							
-								switch($this->m_data[$index][3]) {
-								
-									case "OPTION":
+							if ($this->_DEBUG) {							
+								switch(strtolower($this->m_data[$index][3])) {								
+									case "option":
 										$form = '<input type="radio" name="' . $this->m_data[$index][0] . '" value="1">';
 										$form = $form . '<input type="radio" name="' . $this->m_data[$index][0] . '" value="2">';
 										$form = $form . '<input type="radio" name="' . $this->m_data[$index][0] . '" value="3">';
 										$form = $form . '<input type="radio" name="' . $this->m_data[$index][0] . '" value="4">';
 										$form = $form . '<input type="radio" name="' . $this->m_data[$index][0] . '" value="5">';
 										$form = $form . '<input name="' . $this->m_data[$index][0] . 'text" size="40" width="80">';
-										break;
-										
-									case "COMMENT":
+										break;										
+									case "comment":
 										$form = '<textarea name="' . $this->m_data[$index][0] . '" col="40" row="3" wrap="soft"></textarea>';
 										break;
-								}
-								
-								
+								}							
 								echo 'DEBUG {crc_evaluation::fn_getquestions}: Question found: "' . $this->m_data[$index][1] . '" ' . $form . '<br>';
-							}							
-					
+							}												
 							$index = $index + 1;
 						}
 						
@@ -162,8 +152,6 @@
 					}
 
 					$db->fn_freesql($categories);
-
-					//$this->m_data = mysql_fetch_array($resource);
 
 				} else {
 
@@ -204,80 +192,46 @@
 
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 
 
 				$this->m_sql = 'insert into ' . MYSQL_FEEDBACK_TBL .
 														' (feedback_profile_id, feedback_session_id) ' .
-														' values (' . $profileid . ', ' . $post['schedule_id'] . ')'; 
-
-					//echo 'Running SQL: ' . $this->m_sql . '<br><br>';
-					//die();
-					
+														' values (' . $profileid . ', ' . $post['schedule_id'] . ')'; 					
 				$db->fn_runsql(MYSQL_DB, $this->m_sql);
-
 				if (mysql_affected_rows() > 0) {
-
 					$this->m_sql = 'update ' . MYSQL_STUDENT_SCHEDULE_TBL .
 															' SET student_schedule_questions = 0 ' .
 															'where (student_schedule_id = ' . $post['schedule_id'] . ')'; 
-					
-					//echo 'Running SQL: ' . $this->m_sql . '<br><br>';
-
 					$db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-				
 					$this->m_sql = 'select * from ' . MYSQL_FEEDBACK_TBL .
 															' where (feedback_profile_id = ' . $profileid . ') and ' .
 															'(feedback_session_id = ' . $post['schedule_id'] . ')'; 
-
-
-					//echo 'Running SQL: ' . $this->m_sql . '<br><br>';
-
 					$feedback = mysql_fetch_array($db->fn_runsql(MYSQL_DB, $this->m_sql));
-
 					for ($i = 1; $i <= count($_SESSION['evaluation']); $i++) {
-
-						//print_r(array_keys ($post));
-
 						$question = $_SESSION['evaluation'][$i - 1];
 						$answers = $post;
 						$answeri = $question[0] . 'name';
 						$answer = $post[$answeri];
-
 						if (!isset($answer) or ($answer == "")) {
 							$answer = 0;
 						}
-						
-						if ($question[3] == "OPTION") {
-						
+						if (strtoupper($question[3]) == "OPTION") {
 							$commenti = $question[0] . 'comment';
 							$comment = $post[$commenti];
-						
 							$this->m_sql = 'insert into ' . MYSQL_FEEDBACK_ANSWERS_TBL .
 															' (feedback_answers_feedback_id, feedback_answers_questions_id, ' .
 															' feedback_answers_answer, feedback_answers_comments) ' .
 															' values (' . $feedback[0] . ', ' . $question[0] . ', ' . $answer . ', "' . $comment . '")'; 
-
-						} else {
-						
+						} else {						
 							$this->m_sql = 'insert into ' . MYSQL_FEEDBACK_ANSWERS_TBL .
 															' (feedback_answers_feedback_id, feedback_answers_questions_id, ' .
 															' feedback_answers_answer) ' .
 															' values (' . $feedback[0] . ', ' . $question[0] . ', "' . $answer . '")'; 
 						
 						}
-
-						//echo 'Running SQL: ' . $this->m_sql . '<br><br>';
-
-
 						$db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-
-
 					}
-
-
 					$result = true;			
 
 				} else {
