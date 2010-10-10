@@ -34,14 +34,13 @@
               $data = $_SESSION['coursesdata'];
               print $_SESSION['name'] . ',';
               print '<p>';
-              print 'These are the courses that you have registered for, if any.';
+              print '&nbsp These are the courses that you have registered for, if any.';
               print ' Please note that courses mentioned are tentative and subject to';
               print ' change upon teacher availability and registrants.';
               print '</p><p>';
 
               if (count($data) > 0) {
                 print '<table width="550" border=0 class="popcal">';
-                //print '<tr CLASS="GREEN">';
                 print '<tr>';
                 print '  <th>Course Name</th>';
                 print '  <th>Start Date</th>';
@@ -60,23 +59,22 @@
 					} else {
 						print '<tr valign="top">';
 					}
-                  //print '<tr>';
-                  print '<td>' . $data[$i][0] . '</td>';
-                  print '<td>' . $data[$i][1] . '</td>';
-                  print '<td>' . $data[$i][2] . '</td>';
-                  print '<td>' . $data[$i][3] . '</td>';
-                  //print '<td>' . $data[$i][9] . '</td>';
-                  print '<td>' . $data[$i][8] . '</td>';//room
-                  //print '<td>$' . $data[$i][4] . '</td>';//price
+                  print '<td align="center">' . $data[$i][0] . '</td>';
+                  print '<td align="center">' . $data[$i][1] . '</td>';
+                  print '<td align="center">' . $data[$i][2] . '</td>';
+                  print '<td align="center">' . $data[$i][3] . '</td>';
+                  //print '<td align="center">' . $data[$i][9] . '</td>';
+                  print '<td align="center">' . $data[$i][8] . '</td>';//room
+                  //print '<td align="center">$' . $data[$i][4] . '</td>';//price
 
                   switch(strtolower($data[$i][5])) {
                   	case "tentative":
-		                print '<td><font color="gray">' . $data[$i][5] . '</font></td>';
+		                print '<td align="center"><font color="gray">' . $data[$i][5] . '</font></td>';
                   		//print '<td align="center"><input type="button" value="Remove" onclick="javascript:window.location=\'crc_handler.php?method=courses&func=remove&course=' . $data[$i][6] . '\';" class="button"></td>';
 						print '<td align="center">[None]</td>';
                   		break;
                   	case "in progress":
-		                print '<td><font color="maroon">' . $data[$i][5] . '</font></td>';
+		                print '<td align="center"><font color="maroon">' . $data[$i][5] . '</font></td>';
 						if ($data[$i][11] == 1) {
 	                  		print '<td align="center"><input type="button" value="Evaluate" onclick="javascript:window.location=\'crc_handler.php?method=evaluation&func=get&course=' . $data[$i][10] . '\';" class="button"></td>';
 						} else {
@@ -84,7 +82,7 @@
 						}
                   		break;
                   	case "completed":
-		                print '<td><font color="green">' . $data[$i][5] . '</font></td>';
+		                print '<td align="center"><font color="green">' . $data[$i][5] . '</font></td>';
 						if ($data[$i][11] == 1) {
 	                  		print '<td align="center"><input type="button" value="Evaluate" onclick="javascript:window.location=\'crc_handler.php?method=evaluation&func=get&course=' . $data[$i][10] . '\';" class="button"></td>';
 						} else {
@@ -92,15 +90,15 @@
 						}
                   		break;
                   	case "no participation":
-		                print '<td><font color="red">' . $data[$i][5] . '</font></td>';
+		                print '<td align="center"><font color="red">' . $data[$i][5] . '</font></td>';
                   		print '<td align="center">[None]</td>';
                   		break;
                   	case "cancelled":
-		                print '<td><font color="red">' . $data[$i][5] . '</font></td>';
+		                print '<td align="center"><font color="red">' . $data[$i][5] . '</font></td>';
                   		print '<td align="center">[None]</td>';
                   		break;
                   	default:
-		                print '<td>' . $data[$i][5] . '</td>';
+		                print '<td align="center">' . $data[$i][5] . '</td>';
                   		print '<td align="center">[None]</td>';
                   }
 
@@ -120,5 +118,5 @@
       </table>
     </td>
   </tr>
-<table>
+</table>
 
