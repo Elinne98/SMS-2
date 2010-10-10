@@ -10,15 +10,16 @@ FreeSMS provides the following features:
  - Allow admin to add courses
  - Allow admin to add students and enroll them to one or more courses
  - Allow admin to edit students already entered into database
+ - Allow admin to edit courses already entered into database
  - Allow teachers to manage student attendance
+ - Allow teachers to display graphically course evaluation
  - Allow for students to check their enrollment
+ - Allow students to evaluate the course
  
 Features to implement:
 
- - Allow admin to edit courses already entered into database
  - Allow teachers to display graphically course attendance
  - Allow teachers to evaluate student performance for a given course
- - Allow students to evaluate the course
 
 From a technical perspective FreeSMS is based on PHP5 and requires a MySQL database. This 
 demonstration site has been tested on: 
