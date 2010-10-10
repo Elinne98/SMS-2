@@ -407,23 +407,33 @@ print '[' . $title . ']';
 		} else if ($_GET['method'] == 'evaluation') {
 
 			$_SESSION['msg'] = "";
+			$evaluation = new crc_evaluation(false);
 
 			if ($_GET['func'] == 'get') {
-
-				$evaluation = new crc_evaluation(false);
+				
 				$evaluation->fn_getquestions();
 				$_SESSION['evaluation'] = $evaluation->m_data;
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_evaluation.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '&course=' . $_GET['course'] . '">';
 
 			} else if ($_GET['func'] == 'add') {
 
-				$evaluation = new crc_evaluation(false);
 				if ($evaluation->fn_setquestions($_SESSION['profileid'], $_GET['questions'], $_POST)) {
 					$_SESSION['msg'] = "Thank you! You feedback is important to us and will be communicated accordingly.";
 				} else {
 					$_SESSION['msg'] = "Sorry, There was an error submittimg your feedback.";
 				}
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_evaluation.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '&course=' . $_GET['course'] . '">';
+				
+			} else if ($_GET['func'] == 'getanswers') {
+
+				if ($evaluation->fn_getanswers($_GET['scheduleid']) != null ) {
+					$_SESSION['evaluation'] = $evaluation->m_data;
+					$_SESSION['coursesdata'] = $evaluation->fn_getcoursename($_GET['scheduleid']);
+				} else {
+					$_SESSION['msg'] = "There are no statistics for this course";
+				}
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_evaluation.php?' . session_name() . '=' . session_id() . '&func=stats">';			
+				
 			}
 
 		} else if ($_GET['method'] == 'faq') {

@@ -3,7 +3,7 @@
     echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php">';
   }
 ?>
-<table width="500">
+<table width="550">
 	<tr>
 
 		<td valign="top" width="80">
@@ -16,7 +16,7 @@
 				?>
 		</td>
 
-		<td valign="top" align="left" width="420">
+		<td valign="top" align="left" width="550">
 	    <!--
         This is the content
       -->
@@ -33,15 +33,17 @@
 
 			$data = $_SESSION['teacherscheduledata'];
 
-			print '&nbsp ' . $_SESSION['name'] . ',';
-			print ' these are your courses. Please note that courses mentioned are forcasts and may ';
+			print $_SESSION['name'] . ',';
+			print '<p>';
+			print '&nbsp These are your courses, if any. Please note that courses mentioned are forcasts and may ';
             print 'change upon teacher and student availability.';
 			print '<br>&nbsp By clicking on the students number you will be able to mark the attendance for the current date.';
+			print '<br>&nbsp By clicking on the course name you will be able to see course statistics (attendance, course feedback).';
 			print '<p></p>';
 
 			if (count($data) > 0) {
 
-		        print '<table width="400" border=0 class="popcal">';
+		        print '<table width="550" border=0 class="popcal">';
 				print '<tr>';
 				print '  <th>Course Name</th>';
 				print '  <th>Start Date</th>';
@@ -55,11 +57,11 @@
 				for ($i=0; $i < count($data); $i++) {
 
 					print '<tr>';
-					print '<td>' . $data[$i][0] . '</td>';
-					print '<td>' . $data[$i][1] . '</td>';
-					print '<td>' . $data[$i][2] . '</td>';
-					print '<td>' . $data[$i][3] . '</td>';
-					print '<td>' . $data[$i][8] . '</td>';
+					print '<td align="center"><a href="crc_handler.php?method=evaluation&func=getanswers&scheduleid=' . $data[$i][6] . '"><b>' . $data[$i][0] . '</b></td>';
+					print '<td align="center">' . $data[$i][1] . '</td>';
+					print '<td align="center">' . $data[$i][2] . '</td>';
+					print '<td align="center">' . $data[$i][3] . '</td>';
+					print '<td align="center">' . $data[$i][8] . '</td>';
 
 					if ($data[$i][9] == 0) {
 					   print '<td align="center">0</td>';
@@ -71,7 +73,7 @@
 						}
 					}
 
-					print '<td>' . $data[$i][5] . '</td>';
+					print '<td align="center">' . $data[$i][5] . '</td>';
 					print '</tr>';
 
 				}

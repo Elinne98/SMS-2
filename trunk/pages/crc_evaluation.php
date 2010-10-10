@@ -51,7 +51,11 @@
 				<!-- The Page Content -->
 				<TR CLASS="OUTER">
 					<?php
-						include "data/crc_evaluation_main.html";
+						if (isset($_GET['func']) && ($_GET['func'] == 'stats')) {
+							include "data/crc_course_stats_main.html";	
+						} else {
+							include "data/crc_evaluation_main.html";
+						}
 					?>
 				</TR>
 				<!-- The Page Footer -->

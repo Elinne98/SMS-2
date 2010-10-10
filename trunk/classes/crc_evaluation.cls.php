@@ -26,9 +26,9 @@
 	class crc_evaluation extends crc_object {
 
 		var $m_sql;
-		var $m_categories;
-		var $m_questions;
 		var $m_data;
+		var $m_question;
+		var $m_firstlastname;
 		
 		function crc_evaluation($debug) {
 			//******************************************
@@ -48,7 +48,6 @@
 			}
 
 		}
-
 
 		function fn_getcategory($category) {
 			//******************************************
@@ -83,7 +82,7 @@
 
 				}
 				
-				//$db->fn_freesql($resource);
+				$db->fn_freesql($resource);
 				return $result;
 
 			}
@@ -178,7 +177,6 @@
 			}
 		}
 
-
 		function fn_setquestions($profileid, $questions, $post) {
 			//******************************************
 			// Update the users evaluation information
@@ -194,9 +192,8 @@
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != false) {
 
-
 				$this->m_sql = 'insert into ' . MYSQL_FEEDBACK_TBL .
-														' (feedback_profile_id, feedback_session_id) ' .
+														' (feedback_profile_id, feedback_schedule_id) ' .
 														' values (' . $profileid . ', ' . $post['schedule_id'] . ')'; 					
 				$db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if (mysql_affected_rows() > 0) {
@@ -206,7 +203,7 @@
 					$db->fn_runsql(MYSQL_DB, $this->m_sql);
 					$this->m_sql = 'select * from ' . MYSQL_FEEDBACK_TBL .
 															' where (feedback_profile_id = ' . $profileid . ') and ' .
-															'(feedback_session_id = ' . $post['schedule_id'] . ')'; 
+															'(feedback_schedule_id = ' . $post['schedule_id'] . ')'; 
 					$feedback = mysql_fetch_array($db->fn_runsql(MYSQL_DB, $this->m_sql));
 					for ($i = 1; $i <= count($_SESSION['evaluation']); $i++) {
 						$question = $_SESSION['evaluation'][$i - 1];
@@ -246,14 +243,170 @@
 					}
 					$result = false;
 				}
-
 				//$db->fn_freesql($resource);
-				$db->fn_disconnect();
-
-			} else {
-				$db->fn_disconnect();
 			}
+			$db->fn_disconnect();
 			return $result;
+		}
+		
+		function fn_getanswers($scheduleid) {
+			//***********************************************
+			//Get the answers to questions for a given course
+			//***********************************************
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_evaluation::fn_getanswers}: Getting the user evaluation information for the schedule id " . $scheduleid . ".<br>";
+			}
+			
+			$db = new crc_mysql($this->_DEBUG);
+			$dbhandle = $db->fn_connect();
+			$this->m_data = null;
+			if ($dbhandle != false) {
+				//get student_schedule_id				
+				$this->m_sql = 'select student_schedule_id, student_schedule_profile_id ' . 
+								'from ' . MYSQL_STUDENT_SCHEDULE_TBL . 
+								' where (student_schedule_schedule_id = "' . $scheduleid . '")';
+				$studentscheduleid = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($studentscheduleid) > 0) {					
+					$studidx = 0;
+					while ($ssid = mysql_fetch_array($studentscheduleid)) {
+						//get student first and last names
+						$firstlastname = $this->fn_getfirstlastname($db, $ssid[1]);
+						//get feedback_id
+						$this->m_sql = 'select feedback_id ' . 
+								'from ' . MYSQL_FEEDBACK_TBL . 
+								' where (feedback_schedule_id = "' . $ssid[0] . '")';
+						$feedbackid = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+						if (mysql_num_rows($feedbackid) > 0) {
+							$fid = mysql_fetch_row($feedbackid);//a single feedback id should correspond to a student schedule id
+							//get questions, answers and comments
+							$this->m_sql = 'select feedback_answers_questions_id, ' .
+												'feedback_answers_answer, feedback_answers_comments ' . 
+												'from ' . MYSQL_FEEDBACK_ANSWERS_TBL . 
+												' where (feedback_answers_feedback_id = "' . $fid[0] . '")';
+							$answers = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+							if (mysql_num_rows($answers) > 0) {
+								$ansidx = 0;
+								while ($ans = mysql_fetch_array($answers)) {
+									if ($studidx == 0) {
+										$this->m_data[$ansidx]['ans'] = 0;
+										$this->m_data[$ansidx]['comm'] = "";
+										$this->m_data[$ansidx]['que'] = $this->fn_getquestion($db, $ans[0]);
+									}
+									$this->m_data[$ansidx]['ans'] += $ans[1];
+									if ($ans[2] != "") {
+										$this->m_data[$ansidx]['comm'] = $firstlastname . ': ' . $ans[2] . '<br>';
+									}									
+									$ansidx++; 
+								}
+							} else if ($this->_DEBUG) {
+								echo "DEBUG {crc_evaluation::fn_getanswers}: Cannot get the answers.<br>";
+							}
+							$db->fn_freesql($answers);
+						}
+						$db->fn_freesql($feedbackid);
+						$studidx++;
+					}
+					for ($i = 0; $i < $ansidx; $i++) {
+						$this->m_data[$i]['ans'] /=  $studidx;//take the mean evaluation
+					}
+				} else if ($this->_DEBUG) {
+					echo "DEBUG {crc_evaluation::fn_getanswers}: Cannot get the student schedule.<br>";
+				}
+				$db->fn_freesql($studentscheduleid);
+			} else 	if ($this->_DEBUG) {
+				echo "DEBUG {crc_evaluation::fn_getanswers}: Cannot connect to MySQL database.<br>";
+			}
+			$db->fn_disconnect();
+			return $this->m_data;
+		}
+		
+		function fn_getquestion($db, $questionid) {
+			//*****************************************************
+			//Get the question string identified by the question id
+			//*****************************************************
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_evaluation::fn_getquestion}: Getting the question string for the question id " . $questionid . ".<br>";
+			}
+			
+			$this->m_question = null;
+			if ($db->m_mysqlhandle != false) {
+				$this->m_sql = 'select feedback_questions_question ' . 
+								'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
+								' where (feedback_questions_id = "' . $questionid . '")';
+				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($result) > 0) {
+					$row = mysql_fetch_row($result);
+					$this->m_question = $row[0];
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_evaluation::fn_getquestion}: ' . $this->m_question . '<br>';
+					}
+				} else if ($this->_DEBUG) {
+					echo 'ERROR {crc_evaluation::fn_getquestion}: The sql command returned nothing. <br>';
+				}
+				$db->fn_freesql($result);
+			}
+			return $this->m_question;
+		}
+		
+		function fn_getfirstlastname($db, $profileid) {
+			//**********************************************
+			// Get first and last name, given the profile id
+			//**********************************************
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_evaluation::fn_getfirstlastname}: Getting the first and last name for the profile id " . $profileid . ".<br>";
+			}
+			
+			$this->m_firstlastname = null;
+			if ($db->m_mysqlhandle != false) {
+				$this->m_sql = 'select profile_firstname, profile_lastname ' . 
+								'from ' . MYSQL_PROFILES_TBL . 
+								' where (profile_id = "' . $profileid . '")';
+				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($result) > 0) {
+					$row = mysql_fetch_row($result);
+					$this->m_firstlastname = $row[0] . " " . $row[1];
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_evaluation::fn_getfirstlastname}: ' . $this->m_firstlastname . '. <br>';
+					}
+				} else if ($this->_DEBUG) {
+					echo 'ERROR {crc_evaluation::fn_getfirstlastname}: The sql command returned nothing. <br>';
+				}
+				$db->fn_freesql($result);
+			}
+			return $this->m_firstlastname;
+		}
+		
+		function fn_getcoursename($scheduleid) {
+			//*************************************
+			// Get course from from the schedule id
+			//*************************************
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_evaluation::fn_getcoursename}: Getting the course name for the schedule id " . $scheduleid . ".<br>";
+			}
+			
+			$db = new crc_mysql($this->_DEBUG);
+			$dbhandle = $db->fn_connect();
+			$this->m_data = null;
+			if ($dbhandle != false) {
+				$this->m_sql = 'select schedule_course_id ' . 
+								'from ' . MYSQL_SCHEDULE_TBL . 
+								' where (schedule_id = "' . $scheduleid . '")';
+				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($result) > 0) {
+					$row = mysql_fetch_row($result);
+					$this->m_sql = 'select course_name ' . 
+								'from ' . MYSQL_COURSES_TBL . 
+								' where (course_id = "' . $row[0] . '")';
+					$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+					if (mysql_num_rows($result) > 0) {
+						$row = mysql_fetch_row($result);
+						$this->m_data = $row[0];
+					}
+				}
+				$db->fn_freesql($result);
+			}
+			$db->fn_disconnect();
+			return $this->m_data;
 		}
 	}
 ?>
