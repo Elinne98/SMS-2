@@ -1,3 +1,18 @@
+2010-10-10 15:30  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* classes/crc_evaluation.cls.php, classes/crc_graph.mod.php,
+	  classes/crc_handler.php, mysql/crc_database_setup.sql,
+	  pages/crc_evaluation.php, pages/crc_handler.php,
+	  pages/data/crc_course_stats_main.html,
+	  pages/data/crc_courses_main.html,
+	  pages/data/crc_teacher_main.html: added support for displaying
+	  course feedback, removed classes/crc_handler.php, changed column
+	  name in crc_feedback, GUI improvements
+
+2010-10-09 10:26  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: changelog upd
+
 2010-10-09 10:25  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* ChangeLog, classes/crc_admin.cls.php,
