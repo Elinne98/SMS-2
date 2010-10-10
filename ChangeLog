@@ -1,3 +1,11 @@
+2010-10-10 15:41  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* install.txt: updated list of features
+
+2010-10-10 15:33  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: ChangeLog updated
+
 2010-10-10 15:30  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* classes/crc_evaluation.cls.php, classes/crc_graph.mod.php,
