@@ -1,3 +1,11 @@
+2010-10-12 15:46  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* install.txt: corrected typo
+
+2010-10-12 15:23  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: release 2.0.0
+
 2010-10-12 15:20  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* ChangeLog, classes/crc_evaluation.cls.php, install.txt,
