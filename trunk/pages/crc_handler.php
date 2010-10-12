@@ -426,9 +426,11 @@ print '[' . $title . ']';
 				
 			} else if ($_GET['func'] == 'getanswers') {
 
-				if ($evaluation->fn_getanswers($_GET['scheduleid']) != null ) {
-					$_SESSION['evaluation'] = $evaluation->m_data;
+				$_SESSION['evaluation'] = $evaluation->fn_getanswers($_GET['scheduleid']);
+				$_SESSION['scheduledata'] = $evaluation->fn_getattendance($_GET['scheduleid']);				
+				if (($_SESSION['evaluation'] != null) || ($_SESSION['scheduledata'] != null)) {
 					$_SESSION['coursesdata'] = $evaluation->fn_getcoursename($_GET['scheduleid']);
+					$_SESSION['data'] = $evaluation->m_studentnb;
 				} else {
 					$_SESSION['msg'] = "There are no statistics for this course";
 				}
