@@ -1,4 +1,4 @@
-This file will provide you with a brief description of FreSMS and instructions
+This file will provide you with a brief description of FreeSMS and instructions
 on how to install FreeSMS.
 
 Since it's development in 2003, FreeSMS has successfully offered educational organizations
