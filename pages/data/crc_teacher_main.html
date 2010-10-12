@@ -2,6 +2,7 @@
   if (!isset($_SESSION['uid'])) {
     echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php">';
   }
+include_once('../classes/crc_profile.cls.php');
 ?>
 <table width="550">
 	<tr>
@@ -81,9 +82,10 @@
 				print '</table>';
 
 			} else {
-
+				$profile = new crc_profile(false);
+		  		$profile->fn_getadminprofile();
 				print '<table class="green"><tr><td>&nbsp Sorry there are no courses assigned to you at this time. Please contact ';
-				print 'the administrator if you require further information.</td></tr></table>';
+				print 'the <a href=mailto:' . $profile->m_data[5] . '><b>administrator</b></a> if you require assistance.</td></tr></table>';
 
 			}
 

@@ -25,31 +25,42 @@
             $len = strlen($_SESSION['msg']);
             if ($len > 0) {
                	print '<span class=red>' . $_SESSION['msg'] . '</span>';
-            } else {				
-				print '<th><b>Feedback for the course "' . $_SESSION['coursesdata'] . '"</b></th>';
-				print '<tr><td>';
-				$data = $_SESSION['evaluation'];              	
-				for($i = 0; $i < count($data); $i++) {
-					print 'Q' . $i . ': ' . $data[$i]['que'] . '<br>';
-					if ($data[$i]['ans'] != 0) {
-						if ($i < 10) {
-							$values['Q' . $i . '&nbsp;'] = $data[$i]['ans'];
-						} else {
+            } else {
+				$data = $_SESSION['scheduledata'];
+				if ($data != null) {
+					print '<th><b>Attendance for the course "' . $_SESSION['coursesdata'] . '"</b></th>';
+					print '<tr><td align="center">';
+					print '<table>';
+					print '<tr><td align="center"><br></td></tr>';								
+					print ae_bar_html($data);
+					print '<tr><td align="center" colspan="' . count($data) . '"><b>Attendance on each DD-MM-YYYY (min 0, max ' . $_SESSION['data'] . ')</b></td></tr>';
+					print '</table>';
+					print '</td></tr>';
+				}
+				$data = $_SESSION['evaluation'];
+				if ($data != null) {				
+					print '<th><b>Feedback for the course "' . $_SESSION['coursesdata'] . '"</b></th>';
+					print '<tr><td>';				              
+					for($i = 0; $i < count($data); $i++) {
+						print 'Q' . $i . ': ' . $data[$i]['que'] . '<br>';
+						if ($data[$i]['ans'] != 0) {
 							$values['Q' . $i] = $data[$i]['ans'];
 						}
+						if ($data[$i]['comm'] != "") {
+							print 'Comment(s): ' . $data[$i]['comm'] . '<br>';
+						} else if ($data[$i]['ans'] == 0) {
+							print 'Comment(s): none<br>';
+						}
 					}
-					if ($data[$i]['comm'] != "") {
-						print 'Comment(s): ' . $data[$i]['comm'] . '<br>';
-					} else if ($data[$i]['ans'] == 0) {
-						print 'Comment(s): none<br>';
-					}
+					print '</td></tr>';
+					print '<tr><td align="center">';
+					print '<table>';
+					print '<tr><td align="center"><br></td></tr>';								
+					print ae_bar_html($values);
+					print '<tr><td align="center" colspan="' . count($values) . '"><b>Mean feedback at each question (min 1, max 5)</b></td></tr>';
+					print '</table>';
+					print '</td></tr>';
 				}
-				print '</td></tr>';
-				print '<table>';
-				print '<tr><td align="center"><br></td></tr>';								
-				print ae_bar_html($values);
-				print '<tr><td align="center" colspan="' . count($values) . '"><b>Mean feedback at each question (min 1, max 5)</b></td></tr>';
-				print '</table>';
             }
         ?>
       	</table>
