@@ -1,3 +1,12 @@
+2010-10-13 06:41  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* classes/crc_admin.cls.php: if the course name is already in
+	  database, exit with error instead of updating the course info
+
+2010-10-13 06:29  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: ChangeLog upd
+
 2010-10-13 06:29  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* ChangeLog, classes/crc_admin.cls.php, pages/crc_handler.php,
