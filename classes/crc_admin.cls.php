@@ -183,10 +183,10 @@
 												'values("' . $this->m_coursename . '","' . $this->m_coursedesc .
 												 '","' . $this->m_active . '","' . $this->m_coursefee . '")';
 				} else {
-					$this->m_sql = 'update ' . MYSQL_COURSES_TBL . ' set course_desc = "' .
-									$this->m_coursedesc . '", course_active = "' . $this->m_active .
-									'", course_fee = "' . $this->m_coursefee . '" ' .
-									'where(course_name = "' . $this->m_coursename . '")';
+					$db->fn_freesql($resource);
+					$db->fn_disconnect();
+					$this->lasterrmsg = "The course \"" . $this->m_coursename . "\" already exists in database";						
+					return false;
 				}				
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);			
 				if (mysql_errno() != 0) {
