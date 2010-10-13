@@ -26,6 +26,7 @@
 				$len = strlen($_SESSION['msg']);
 				if ($len > 0) {
 					print('<tr><td colspan="2"class="error"><b><br>' . $_SESSION['msg'] . '</b><br><br></td></tr>');
+					$_SESSION['msg'] = "";
 				}
 
 				print '<tr>';
@@ -127,6 +128,7 @@
 				$len = strlen($_SESSION['msg']);
 				if ($len > 0) {
 					print('<tr><td colspan="2"class="error"><b><br>' . $_SESSION['msg'] . '</b><br><br></td></tr>');
+					$_SESSION['msg'] = "";
 				}
 
 				print '<tr>';

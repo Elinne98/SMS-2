@@ -1,35 +1,73 @@
-2010-10-12 15:46  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-13 06:18  
+
+	* classes/crc_admin.cls.php, pages/crc_handler.php: improved error
+	  handling when adding a course
+
+2010-10-13 06:03  
+
+	* classes/crc_admin.cls.php, pages/crc_handler.php,
+	  pages/data/crc_register_main.html: when a student is added, the
+	  add operation fails if the student exists in db, error handling
+	  improved when adding a student, error message is reset after
+	  being displayed
+
+2010-10-12 15:45  
 
 	* install.txt: corrected typo
 
-2010-10-12 15:23  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-12 15:09  
 
 	* ChangeLog: release 2.0.0
 
-2010-10-12 15:20  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-12 15:08  
 
-	* ChangeLog, classes/crc_evaluation.cls.php, install.txt,
-	  mysql/crc_database_setup.sql, pages/crc_handler.php,
+	* install.txt, pages/data/crc_help_main.html,
+	  pages/data/crc_teacher_main.html: updated install.txt, the word
+	  administrator has attached to it the admin email as a link
+
+2010-10-12 14:25  
+
+	* pages/data/crc_evaluation_main.html: GUI improvements
+
+2010-10-12 13:36  
+
+	* classes/crc_evaluation.cls.php,
+	  pages/data/crc_course_stats_main.html: attendance key includes
+	  the year,
+
+2010-10-11 18:10  
+
+	* ChangeLog: ChangeLog upd
+
+2010-10-11 18:07  
+
+	* classes/crc_evaluation.cls.php, pages/crc_handler.php,
+	  pages/data/crc_course_stats_main.html: added attendance graph to
+	  course statistics, corrected bug when displaying course feedback
+
+2010-10-11 13:53  
+
+	* ChangeLog: changelog upd
+
+2010-10-11 13:52  
+
+	* classes/crc_evaluation.cls.php, mysql/crc_database_setup.sql,
 	  pages/data/crc_course_stats_main.html,
-	  pages/data/crc_evaluation_main.html,
-	  pages/data/crc_help_main.html, pages/data/crc_teacher_main.html:
-	  added for students the ability to provide course feedback,
-	  teachers are able to see course stats (attendance, feedback),
-	  minor improvements and bug fixing
+	  pages/data/crc_evaluation_main.html: changed the way the asnwers
+	  are saved into database (comments are always in comments column),
+	  corrected db setup script, corrected the way the mean score is
+	  displayed (with two digits after the decimal point), error msg is
+	  reset after being displayed in evaluation_main
 
-2010-10-10 15:46  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-11 11:42  
 
-	* ChangeLog: ChangeLog updated
+	* install.txt: install.txt updated
 
-2010-10-10 15:41  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-10 15:17  
 
-	* install.txt: updated list of features
+	* ChangeLog: ChangeLog improvements
 
-2010-10-10 15:33  Bogdan Cristea <cristeab@users.sourceforge.net>
-
-	* ChangeLog: ChangeLog updated
-
-2010-10-10 15:30  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-10 15:16  
 
 	* classes/crc_evaluation.cls.php, classes/crc_graph.mod.php,
 	  classes/crc_handler.php, mysql/crc_database_setup.sql,
@@ -40,63 +78,423 @@
 	  course feedback, removed classes/crc_handler.php, changed column
 	  name in crc_feedback, GUI improvements
 
-2010-10-09 10:26  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-09 10:14  
 
 	* ChangeLog: changelog upd
 
-2010-10-09 10:25  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-09 10:14  
 
-	* ChangeLog, classes/crc_admin.cls.php,
-	  classes/crc_evaluation.cls.php, classes/crc_teacher.cls.php,
+	* pages/data/crc_courses_main.html: the student can only evaluate a
+	  course when it's in progress or completed
+
+2010-10-09 10:09  
+
+	* ChangeLog: changelog upd
+
+2010-10-09 10:08  
+
+	* classes/crc_admin.cls.php, classes/crc_evaluation.cls.php,
 	  mysql/crc_database_setup.sql, pages/crc_handler.php,
 	  pages/data/crc_admin_add_course.html,
-	  pages/data/crc_admin_add_student.html,
 	  pages/data/crc_courses_main.html,
 	  pages/data/crc_edit_profile_main.html,
-	  pages/data/crc_evaluation_main.html: students are able to
-	  evaluate a course while in progress or completed, changes made to
-	  database template in order to evaluate the course
+	  pages/data/crc_evaluation_main.html: added evaluation entries in
+	  database, evaluation form is now activated, removed course active
+	  option when adding a course
 
-2010-10-08 06:16  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-08 08:01  
 
-	* ChangeLog: ChangeLog updated
+	* classes/crc_teacher.cls.php,
+	  pages/data/crc_admin_add_student.html: minor corrections
 
-2010-10-08 06:04  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-10-07 20:31  
 
-	* 20030516_Database_Diagram.png, ChangeLog, admin/phpinfo.php,
-	  classes/crc_admin.cls.php, classes/crc_constants.mod.php,
-	  classes/crc_courses.cls.php, classes/crc_dbsetup.cls.php,
+	* ChangeLog: changelog updated
+
+2010-10-07 20:29  
+
+	* classes/crc_teacher.cls.php, pages/crc_handler.php,
+	  pages/data/crc_attendance_main.html,
+	  pages/data/crc_students_main.html,
+	  pages/data/crc_teacher_main.html: Corrected major bug when
+	  entering student attendace for the current date. GUI improvements
+	  when displaying student attendace. When the course is no longer
+	  in progress, student att is disabled.
+
+2010-10-07 16:33  
+
+	* classes/crc_admin.cls.php, classes/crc_courses.cls.php,
+	  common/crc_menu.html, pages/crc_courses.php,
+	  pages/crc_handler.php, pages/data/crc_admin_add_course.html,
+	  pages/data/crc_courses_main.html,
+	  pages/data/crc_edit_course_main.html,
+	  pages/data/crc_edit_profile_main.html,
+	  pages/data/crc_teacher_main.html, scripts/tools.js: Added "Edit
+	  Course" menu for admin. Checkboxes are checked with isset() fct
+
+2010-10-06 08:01  
+
+	* pages/data/crc_teacher_main.html: minor GUI improvement
+
+2010-10-06 06:35  
+
+	* pages/data/crc_edit_profile_main.html: added error message when
+	  no students are found in the database
+
+2010-10-06 06:21  
+
+	* install.txt: minor corrections
+
+2010-10-06 05:07  
+
+	* ChangeLog, classes/crc_handler.php,
+	  pages/data/crc_admin_main.html,
+	  pages/data/crc_db_setup_main.html,
+	  pages/data/crc_edit_profile_main.html,
+	  pages/data/crc_register_main.html,
+	  pages/data/crc_teacher_main.html: minor typos corrected
+
+2010-10-04 19:54  
+
+	* classes/crc_admin.cls.php, classes/crc_teacher.cls.php,
+	  pages/data/crc_admin_add_course.html,
+	  pages/data/crc_admin_add_student.html,
+	  pages/data/crc_edit_profile_main.html: when updating a table
+	  mysql_errno() is used to check for errors
+
+2010-10-04 19:03  
+
+	* classes/crc_admin.cls.php: corrected fn_getcourseid()
+
+2010-10-04 18:28  
+
+	* pages/data/crc_teacher_main.html: corrected minor typo
+
+2010-10-04 18:22  
+
+	* ChangeLog: changelog updated
+
+2010-10-04 18:22  
+
+	* pages/data/crc_login_main.html: at login error message is set to
+	  null after displaying the message
+
+2010-10-04 18:18  
+
+	* pages/data/crc_page_header_band.html: fixed path to images
+
+2010-10-04 16:23  
+
+	* classes/crc_admin.cls.php, classes/crc_courses.cls.php,
 	  classes/crc_evaluation.cls.php, classes/crc_login.cls.php,
-	  classes/crc_mysql.cls.php, classes/crc_object.cls.php,
-	  classes/crc_profile.cls.php, classes/crc_register.cls.php,
-	  classes/crc_schedule.cls.php, classes/crc_teacher.cls.php,
-	  common/crc_menu.html, crc_index_main.html,
-	  docs/20030516_Database_Diagram.vsd,
-	  docs/20030606_Object_Model_Diagram.vsd, index.php, install.txt,
+	  classes/crc_object.cls.php, classes/crc_profile.cls.php,
+	  classes/crc_register.cls.php, classes/crc_schedule.cls.php,
+	  classes/crc_teacher.cls.php, crc_index_main.html, install.txt,
+	  pages/data/crc_page_footer_band.html: changed boilerplate for
+	  class files, changed install.txt
+
+2010-10-04 15:51  
+
+	* ChangeLog: changelog updated
+
+2010-10-04 15:49  
+
+	* classes/crc_admin.cls.php, classes/crc_courses.cls.php,
+	  pages/crc_handler.php, pages/data/crc_courses_main.html,
+	  pages/data/crc_edit_profile_main.html,
+	  pages/data/crc_help_main.html, pages/data/crc_profile_main.html,
+	  scripts/tools.js: Finished to implement edit student from admin
+	  account. Corrected Schedule menu for student account.
+
+2010-10-03 19:44  
+
+	* classes/crc_admin.cls.php, classes/crc_profile.cls.php,
+	  common/crc_menu.html, pages/crc_handler.php,
+	  pages/crc_profile.php, pages/data/crc_edit_profile_main.html,
+	  pages/data/crc_profile_main.html: need to update the list with
+	  enrolled courses
+
+2010-10-03 07:53  
+
+	* ChangeLog: updated ChangeLog
+
+2010-10-03 07:53  
+
+	* classes/crc_admin.cls.php: when the course name is found in the
+	  database, the course info is updated instead of inserting a new
+	  entry
+
+2010-10-02 17:34  
+
+	* classes/crc_admin.cls.php, common/crc_menu.html,
+	  pages/crc_handler.php: starting to add option for editing
+	  students
+
+2010-10-02 15:37  
+
+	* ChangeLog: added ChangeLog
+
+2010-10-02 15:36  
+
+	* classes/crc_admin.cls.php, classes/crc_schedule.cls.php,
+	  classes/crc_teacher.cls.php, common/crc_menu.html,
+	  pages/crc_handler.php, pages/data/crc_admin_add_course.html,
+	  pages/data/crc_teacher_main.html: Added teacher list when adding
+	  a new course. Merged Attendance and Schedule menus to a single
+	  menu. There is a redundancy in handler.php: schedule, get has the
+	  same functionality as teacher, getschedule. Cleaning is needed.
+
+2010-10-02 09:18  
+
+	* classes/crc_login.cls.php, classes/crc_mysql.cls.php,
+	  pages/crc_handler.php, pages/data/crc_login_main.html: displaying
+	  error msgs at login
+	  improvements to mysql class
+
+2010-10-02 08:35  
+
+	* classes/crc_dbsetup.cls.php, install.txt, mysql/setup.php,
+	  pages/crc_handler.php, pages/data/crc_db_setup_main.html:
+	  finished to implement database setup with a default account
+
+2010-10-01 19:26  
+
+	* classes/crc_dbsetup.cls.php, classes/crc_evaluation.cls.php,
+	  classes/crc_mysql.cls.php, install.txt,
 	  mysql/crc_database_setup.sql, mysql/create_freesms_database.sh,
-	  mysql/setup.php, pages/crc_admin.php, pages/crc_courses.php,
-	  pages/crc_handler.php, pages/crc_profile.php,
+	  mysql/setup.php, pages/crc_handler.php,
+	  pages/data/crc_db_setup_main.html, scripts/tools.js: added
+	  support for installing database from the web browser. GUI
+	  improvements needed
+
+2010-10-01 14:25  
+
+	* classes/crc_admin.cls.php, classes/crc_profile.cls.php,
+	  classes/crc_register.cls.php, classes/crc_teacher.cls.php,
+	  install.txt, mysql/crc_database_setup.sql,
+	  mysql/create_freesms_database.sh,
+	  pages/data/crc_admin_add_course.html,
+	  pages/data/crc_admin_add_student.html,
+	  pages/data/crc_login_main.html, pages/data/crc_profile_main.html,
+	  pages/data/crc_register_main.html: - improvements to database
+	  generation script
+	  - GUI improvements (using default class opts)
+	  - updated install.txt
+
+2010-10-01 09:51  
+
+	* classes/crc_admin.cls.php, classes/crc_constants.mod.php,
+	  classes/crc_teacher.cls.php, mysql/crc_database_setup.sql,
+	  mysql/create_freesms_database.sh,
+	  pages/data/crc_students_main.html: Added script for creating
+	  empty database with default admin
+	  Corrected day display when the date is less than 10
+
+2010-09-29 12:25  
+
+	* classes/crc_admin.cls.php: the default user name is the first
+	  name when adding a student
+
+2010-09-29 12:03  
+
+	* classes/crc_profile.cls.php, classes/crc_register.cls.php,
+	  pages/crc_handler.php, pages/data/crc_profile_main.html,
+	  pages/data/crc_register_main.html,
+	  pages/data/crc_schedule_main.html, scripts/tools.js: added
+	  username as input field when registering a user or editing one.
+	  uid and email are now separated fields
+
+2010-09-29 09:51  
+
+	* pages/crc_handler.php: removed debug option
+
+2010-09-29 09:50  
+
+	* classes/crc_profile.cls.php, pages/data/crc_profile_main.html,
+	  pages/data/crc_register_main.html: corrected issue when changing
+	  the profile
+	  The password must be reintroduced each time the profile is edited
+
+2010-09-29 08:42  
+
+	* classes/crc_admin.cls.php, classes/crc_profile.cls.php,
+	  common/crc_menu.html, pages/crc_handler.php,
+	  pages/data/crc_help_main.html, pages/data/crc_teacher_main.html:
+	  changed help message
+	  minor corrections
+
+2010-09-29 07:08  
+
+	* classes/crc_admin.cls.php, pages/data/crc_admin_add_student.html:
+	  corrected two bugs related to student information insertion
+
+2010-09-29 06:42  
+
+	* classes/crc_teacher.cls.php: when the attendance is checked, all
+	  students are added to the attendance table and marked as absents
+	  if no entry is found
+
+2010-09-28 19:26  
+
+	* classes/crc_teacher.cls.php: corrected bug when tacking
+	  attendance check in attendance page
+
+2010-09-28 18:47  
+
+	* classes/crc_teacher.cls.php, pages/crc_handler.php,
+	  pages/data/crc_students_main.html: corrected bug when tacking
+	  attendance check in attendance page
+
+2010-09-28 16:29  
+
+	* classes/crc_login.cls.php, classes/crc_profile.cls.php,
+	  classes/crc_register.cls.php, mysql/crc_database_setup.sql:
+	  passwords are stored encrypted
+
+2010-09-28 16:02  
+
+	* classes/crc_admin.cls.php, classes/crc_login.cls.php,
+	  classes/crc_teacher.cls.php, index.php: corrected bug when adding
+	  students (uid is set to none, which could be a security issue)
+
+2010-09-28 13:21  
+
+	* pages/data/crc_attendance_main.html,
+	  pages/data/crc_students_main.html: attendance page improvements
+
+2010-09-28 13:07  
+
+	* classes/crc_admin.cls.php, classes/crc_register.cls.php,
+	  classes/crc_teacher.cls.php, pages/crc_handler.php: corrected bug
+	  in handler when switching student attendance
+
+2010-09-28 11:53  
+
+	* classes/crc_register.cls.php: corrected user registration for
+	  students already registered by admin
+
+2010-09-28 11:25  
+
+	* common/crc_menu.html, pages/data/crc_attendance_main.html,
+	  pages/data/crc_main_main.html, pages/data/crc_students_main.html:
+	  changed welcome screen
+
+2010-09-28 11:12  
+
+	* classes/crc_teacher.cls.php, pages/crc_handler.php,
+	  pages/data/crc_students_main.html: added attendance page for
+	  marking each student present/absent
+
+2010-09-27 10:55  
+
+	* classes/crc_admin.cls.php, classes/crc_teacher.cls.php,
+	  pages/crc_handler.php, pages/data/crc_admin_add_student.html,
+	  pages/data/crc_students_main.html,
+	  pages/data/crc_teacher_main.html: added attendance, interface
+	  improvements needed
+
+2010-09-26 13:04  
+
+	* classes/crc_admin.cls.php, classes/crc_mysql.cls.php,
+	  classes/crc_teacher.cls.php, common/crc_menu.html,
+	  pages/crc_handler.php: Corrected warning when releasing the
+	  database. Deleted menu option.
+
+2010-09-26 12:51  
+
+	* classes/crc_admin.cls.php, classes/crc_schedule.cls.php,
+	  classes/crc_teacher.cls.php, common/crc_menu.html,
+	  pages/crc_handler.php, pages/data/crc_schedule_main.html: some
+	  corrections
+
+2010-09-26 10:23  
+
+	* classes/crc_admin.cls.php, classes/crc_mysql.cls.php,
+	  common/crc_menu.html, pages/crc_admin.php, pages/crc_handler.php,
 	  pages/data/crc_admin_add_course.html,
 	  pages/data/crc_admin_add_student.html,
 	  pages/data/crc_admin_main.html,
-	  pages/data/crc_attendance_main.html,
-	  pages/data/crc_courses_main.html,
-	  pages/data/crc_db_setup_main.html,
-	  pages/data/crc_edit_course_main.html,
-	  pages/data/crc_edit_profile_main.html,
-	  pages/data/crc_help_main.html, pages/data/crc_login_main.html,
-	  pages/data/crc_main_main.html,
-	  pages/data/crc_page_footer_band.html,
 	  pages/data/crc_page_header_band.html,
-	  pages/data/crc_profile_main.html,
-	  pages/data/crc_register_main.html,
-	  pages/data/crc_schedule_main.html,
-	  pages/data/crc_students_main.html,
-	  pages/data/crc_teacher_main.html,
-	  pages/data/crc_unknown_main.html, scripts/tools.js: this is the
-	  2.0.0 beta release with some improvements
+	  pages/data/crc_unknown_main.html, scripts/tools.js: added option
+	  for entering students and enrolling them to courses
+	  There is a problem in fn_getcourselis(), the resource needs to be
+	  explicitly cast to string before release
 
-2010-10-08 05:42  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-09-25 11:45  
+
+	* classes/crc_admin.cls.php, classes/crc_schedule.cls.php,
+	  common/crc_menu.html, pages/crc_handler.php,
+	  pages/data/crc_admin_main.html,
+	  pages/data/crc_register_main.html, scripts/tools.js: begin to add
+	  student admin panel
+
+2010-09-25 09:21  
+
+	* classes/crc_admin.cls.php, classes/crc_teacher.cls.php,
+	  images/.directory, pages/crc_handler.php,
+	  pages/data/crc_admin_main.html, pages/data/crc_login_main.html,
+	  pages/data/crc_register_main.html,
+	  pages/data/crc_teacher_main.html,
+	  pages/data/crc_unknown_main.html, scripts/tools.js: can add
+	  courses from admin menu
+
+2010-09-24 09:48  
+
+	* classes/crc_handler.php: after removing crc_handler from classes
+
+2010-09-24 09:48  
+
+	* classes/crc_handler.php: before removing crc_handler from classes
+
+2010-09-24 08:29  
+
+	* pages/crc_handler.php:
+
+2010-09-23 07:04  
+
+	* common/crc_menu.html, pages/data/crc_admin_main.html,
+	  pages/data/crc_page_header_band.html, scripts/tools.js:
+
+2010-09-22 16:43  
+
+	* .directory, 20030516_Database_Diagram.png,
+	  classes/crc_admin.cls.php, pages/crc_handler.php,
+	  pages/data/crc_admin_main.html,
+	  pages/data/crc_page_footer_band.html,
+	  pages/data/crc_page_header_band.html, scripts/tools.js: adding
+	  admin page for course information
+
+2010-09-22 12:41  
+
+	* .buildpath, .project, .settings, .settings/.jsdtscope,
+	  .settings/org.eclipse.php.core.prefs,
+	  .settings/org.eclipse.wst.jsdt.ui.superType.container,
+	  .settings/org.eclipse.wst.jsdt.ui.superType.name,
+	  admin/phpinfo.php, docs/20030516_Database_Diagram.vsd,
+	  docs/20030606_Object_Model_Diagram.vsd, pages/crc_admin.php:
+	  check point
+
+2010-09-22 10:09  
+
+	* pages/crc_handler.php: removed debug input, this seems to be a
+	  working version
+
+2010-09-22 10:02  
+
+	* classes/crc_login.cls.php, classes/crc_profile.cls.php,
+	  pages/crc_handler.php: unused data member has been commented out
+
+2010-09-22 09:19  
+
+	* classes/crc_constants.mod.php, classes/crc_login.cls.php,
+	  pages/crc_handler.php: using database access, debug enabled
+
+2010-09-05 05:42  
+
+	* classes/crc_constants.mod.php, classes/crc_profile.cls.php,
+	  mysql/crc_database_setup.sql: version from openSUSE repo
+
+2010-09-04 15:53  
 
 	* admin, admin/phpinfo.php, classes, classes/crc_constants.mod.php,
 	  classes/crc_courses.cls.php, classes/crc_evaluation.cls.php,
@@ -135,9 +533,9 @@
 	  pages/data/crc_teacher_main.html, pages/data/crc_team_main.html,
 	  pages/data/crc_template_main.html,
 	  pages/data/crc_unknown_main.html, scripts, scripts/tools.js,
-	  styles, styles/crc_main.css: release 1.0
+	  styles, styles/crc_main.css: initial import
 
-2010-10-08 05:36  Bogdan Cristea <cristeab@users.sourceforge.net>
+2010-09-04 15:50  
 
-	* .: added basic folder structure
+	* .:
 
