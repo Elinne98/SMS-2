@@ -102,8 +102,9 @@
 			}
 
 			$db = new crc_mysql($this->_DEBUG);
-			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			$db->fn_connect();
+			$result = true;
+			if ($db->m_mysqlhandle != false) {
 
 				$this->m_coursename = $post['cname'];
 				$this->m_coursedesc = $post['cdesc'];
@@ -155,7 +156,8 @@
 							echo 'ERROR {crc_admin::fn_setcourse}: Could not insert room information. <br>';
 						}
 						$db->fn_freesql($resource);
-						$db->fn_disconnect();						
+						$db->fn_disconnect();
+						$this->lasterrmsg = "Could not insert room information";						
 						return false;
 					}
 
@@ -166,7 +168,8 @@
 							echo 'ERROR {crc_admin::fn_setcourse}: Could not get room id. <br>';
 						}
 						$db->fn_freesql($resource);
-						$db->fn_disconnect();						
+						$db->fn_disconnect();
+						$this->lasterrmsg = "Could not get room id";						
 						return false;
 					}
 				}
@@ -191,7 +194,8 @@
 						echo 'ERROR {crc_admin::fn_setcourse}: Could not update/insert course information. <br>';
 					}
 					$db->fn_freesql($resource);
-					$db->fn_disconnect();					
+					$db->fn_disconnect();
+					$this->lasterrmsg = "Could not update/insert course information";					
 					return false;
 				}
 				
@@ -202,7 +206,8 @@
 						echo 'ERROR {crc_admin::fn_setcourse}: Could not get course id. <br>';
 					}
 					$db->fn_freesql($resource);
-					$db->fn_disconnect();					
+					$db->fn_disconnect();
+					$this->lasterrmsg = "Could not get course id";					
 					return false;
 				}
 				
@@ -222,7 +227,8 @@
 						echo 'ERROR {crc_admin::fn_setcourse}: Could not insert schedule information. <br>';
 					}
 					$db->fn_freesql($resource);
-					$db->fn_disconnect();					
+					$db->fn_disconnect();
+					$this->lasterrmsg = "Could not insert schedule information";					
 					return false;
 				}
 				
@@ -233,7 +239,8 @@
 						echo 'ERROR {crc_admin::fn_setcourse}: Could not get schedule id. <br>';
 					}
 					$db->fn_freesql($resource);
-					$db->fn_disconnect();					
+					$db->fn_disconnect();
+					$this->lasterrmsg = "Could not get schedule id";					
 					return false;
 				}				
 
@@ -257,6 +264,7 @@
 							}
 							$db->fn_freesql($resource);
 							$db->fn_disconnect();
+							$this->lasterrmsg = "Could not insert teacher schedule information";
 							return false;
 						}
 					}
@@ -267,16 +275,17 @@
 					if ($this->_DEBUG) {
 						echo 'ERROR {crc_admin::fn_setcourse}: No teacher has been selected. <br>';
 					}
-					$db->fn_freesql($resource);
-					$db->fn_disconnect();
-					return false;
-				}				
+					$result = false;
+					$this->lasterrmsg = "No teacher has been selected";
+				}
 				$db->fn_freesql($resource);
 				$db->fn_disconnect();
 			} else {
 				$db->fn_disconnect();
+				$result = false;
+				$this->lasterrmsg = "Cannot connect to MySQL database";
 			}
-			return true;
+			return $result;
 		}
 
 		function fn_getcourseid($db, $course) {
@@ -550,11 +559,12 @@
 
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_admin::fn_setcourse}: Setting student information <br>";
-			}			
-			
+			}
+				
 			$db = new crc_mysql($this->_DEBUG);
-			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			$db->fn_connect();
+			$result = true;
+			if ($db->m_mysqlhandle != false) {
 				$this->m_firstname = $post['fname'];
 				$this->m_lastname = $post['lname'];
 				$this->m_gender = strtoupper($post['gender'][0]);
@@ -569,11 +579,13 @@
 				$this->m_data['lcode'] = $post['lcode'];
 				$this->m_data['lprefix'] = $post['lprefix'];
 				$this->m_data['lpostfix'] = $post['lpostfix'];
-				
+
 				if( ($this->m_firstname == "") || ($this->m_lastname == "") ) {
 					if ($this->_DEBUG) {
-						echo 'ERROR {crc_admin::fn_setstudent}: First or last name are empty.<br>';
+						echo 'ERROR {crc_admin::fn_setstudent}: First or last name is empty.<br>';
 					}
+					$db->fn_disconnect();
+					$this->lasterrmsg = "First or last name is empty";
 					return false;
 				}
 					
@@ -599,46 +611,59 @@
 					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 					if (mysql_affected_rows() <= 0) {
 						if ($this->_DEBUG) {
-							echo 'ERROR {crc_admin::fn_setstudent}: Could not insert student information. <br>';			
+							echo 'ERROR {crc_admin::fn_setstudent}: Could not insert student information. <br>';
 						}
 						$db->fn_freesql($resource);
-						$db->fn_disconnect();						
+						$db->fn_disconnect();
+						$this->lasterrmsg = "Could not insert student information";
 						return false;
 					}
-				}
-				
-				//initialize m_profileid
-				$this->fn_getprofileid($db, $this->m_firstname, $this->m_lastname);
-				if ($this->m_profileid == 0) {
-					if ($this->_DEBUG) {
-						echo 'ERROR {crc_admin::fn_setstudent}: Could not get profile id. <br>';
-					}
-					$db->fn_freesql($resource);
-					$db->fn_disconnect();
-					return false;
-				}				
-				
-				//initialize m_scheduleid using selected course(s)				
-				if ($this->fn_setstudentschedule($db, $post, $this->m_profileid) == false) {
-					return false;
-				}
 
-				//check if at least one course has been selected
-				if ($this->m_scheduleid == 0) {
-					if ($this->_DEBUG) {
-						echo 'ERROR {crc_admin::fn_setstudent}: No course has been selected. <br>';
+					//initialize m_profileid
+					$this->fn_getprofileid($db, $this->m_firstname, $this->m_lastname);
+					if ($this->m_profileid == 0) {
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_admin::fn_setstudent}: Could not get profile id. <br>';
+						}
+						$db->fn_freesql($resource);
+						$db->fn_disconnect();
+						$this->lasterrmsg = "Could not get profile id";
+						return false;
 					}
-					$db->fn_freesql($resource);
-					$db->fn_disconnect();
-					return false;				
-				}								
+
+					//initialize m_scheduleid using selected course(s)
+					if ($this->fn_setstudentschedule($db, $post, $this->m_profileid) == false) {
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_admin::fn_setstudent}: Cannot set student schedule. <br>';
+						}
+						$db->fn_freesql($resource);
+						$db->fn_disconnect();
+						$this->lasterrmsg = "Cannot set student schedule";
+						return false;
+					}
+
+					//check if at least one course has been selected
+					if ($this->m_scheduleid == 0) {
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_admin::fn_setstudent}: No course has been selected. <br>';
+						}
+						$this->lasterrmsg = "No course has been selected";
+						$result = false;
+					}
+				} else {
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_admin::fn_setstudent}: User ' . $this->m_firstname . ' ' . $this->m_lastname . ' already exists in database.<br>';
+					}
+					$this->lasterrmsg = "User " . $this->m_firstname . " " . $this->m_lastname . " already exists in database.<br>Use \"Edit Student\" menu if you want to modify this user.";
+					$result = false;
+				}
 				
 				$db->fn_freesql($resource);
 				$db->fn_disconnect();
 			} else {
 				$db->fn_disconnect();
 			}
-			return true;
+			return $result;
 		}
 		
 		function fn_setstudentschedule($db, $post, $profileid) {

@@ -365,7 +365,7 @@ print '[' . $title . ']';
 				$result = $admin->fn_setcourse($_POST);
 				if($result == false) {
 					$_SESSION['data'] = $admin->m_data;
-					$_SESSION['msg'] = "Cannot add course";
+					$_SESSION['msg'] = $admin->lasterrmsg;
 				} else {
 					$_SESSION['msg'] = "Course successfully added";
 				}
@@ -381,7 +381,7 @@ print '[' . $title . ']';
 				$result = $admin->fn_setstudent($_POST);
 				if($result == false) {
 					$_SESSION['data'] = $admin->m_data;
-					$_SESSION['msg'] = "Cannot add student";
+					$_SESSION['msg'] = $admin->lasterrmsg;
 				} else {
 					$_SESSION['msg'] = "Student successfully added";
 				}
