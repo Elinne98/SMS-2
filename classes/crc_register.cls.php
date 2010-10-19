@@ -7,7 +7,7 @@
 	include_once('crc_mysql.cls.php');
 
 	//******************************************
-	// Name: crc_object
+	// Name: crc_register
 	//******************************************
 	//
 	// Desc: The Register Object
@@ -69,7 +69,6 @@
 			
 		}
 
-
 		function fn_getroleid($db, $role) {
 			//******************************************
 			// Get the users role_id
@@ -79,7 +78,7 @@
 				echo "DEBUG {crc_register::fn_getroleid}: Retreiving the role id: " . $role . " for the profile. <br>";
 			}
 
-			if ($db->m_mysqlhandle != 0) {
+			if ($db->m_mysqlhandle != false) {
 
 				$this->m_sql = 'select role_id from ' . 
 														MYSQL_ROLES_TBL . 
@@ -115,10 +114,10 @@
 				echo 'DEBUG {crc_register::fn_userexists}: Checking to see if the username: ' .$username . ' already exists!. <br>';
 			}
 
-			$this->m_sql = 'select * from ' . MYSQL_PROFILES_TBL . ' where profile_username = "' . $username .'"';
+			$this->m_sql = 'select * from ' . MYSQL_PROFILES_TBL . ' where profile_uid = "' . $username .'"';
 			$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 			if (mysql_num_rows($resource) > 0) {
-				$this->lasterrmsg = 'The username ' . $username . ' already exists. Please choose a different username.';					
+				$this->lasterrmsg = 'The username ' . $username . ' already exists. Please choose a different username or contact the admin if you need to modify this user.';					
 				return true;
 			}
 
@@ -140,18 +139,45 @@
 
 		}
 		
-		
 		function fn_register($post) {
 			//******************************************
 			// Register a new user
 			//******************************************
+			if ($this->_DEBUG) {
+				echo 'DEBUG {crc_register::fn_register}: Registering user.<br>';
+			}
+			
+			//checking post variables
+			if (!isset($post['username'], $post['password'], $post['email'],
+				$post['context'], $post['profile'], $post['email'], $post['password'], 
+				$post['fname'], $post['lname'], $post['year'], $post['month'], 
+				$post['day'], $post['gender'], $post['add1'], $post['add2'], 
+				$post['city'], $post['province'], $post['pc'], $post['country'],
+				$post['lcode'], $post['lprefix'], $post['lpostfix'])) {
+				$this->lasterrmsg = "Incomplete input";
+				return false;		
+			}
+			if (($post['username'] == "") || ($post['password'] == "") || ($post['email'] == "") ||
+				($post['context'] == "") || ($post['profile'] == "") ||
+				($post['email'] == "") || ($post['password'] == "") ||
+				($post['fname'] == "") || ($post['lname'] == "") ||
+				($post['year'] == "") || ($post['month'] == "") ||
+				($post['day'] == "") || ($post['gender'] == "") ||
+				($post['add1'] == "") ||
+				($post['city'] == "") || ($post['province'] == "") ||
+				($post['pc'] == "") || ($post['country'] == "") ||
+				($post['lcode'] == "") || ($post['lprefix'] == "") || ($post['lpostfix'] == "")) {
+					$this->lasterrmsg = "Invalid input";
+					return false;
+			}
+			
 			$result = false;
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 
 				if ($this->_DEBUG) {
-					echo 'DEBUG {crc_register::fn_register}: Reading $post variables. <br>';
+					echo 'DEBUG {crc_register::fn_register}: Reading $post variables.<br>';
 				}
 				
 				$this->m_uid = $post['username'];
@@ -187,13 +213,8 @@
 															'"' . $this->m_email . '","' . $this->m_dob . '","' . $this->m_gender . '","' . $this->m_add1 . '",' .
 															'"' . $this->m_add2 . '","' . $this->m_city . '","' . $this->m_prov . '","' . $this->m_code . '",' .
 															'"' . $this->m_country . '","' . $this->m_phland . '",' . $this->m_roleid . ',"' . $this->m_rdn . '")';
-
-					//print('SQL: [' . $this->m_sql . ']');
-					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-					if (mysql_affected_rows() > 0) {
-						$result = true;
-					} else {
+					$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+					if ($result == false) {
 						$this->lasterrnum = ERR_REGISTER_ADD_NUM;
 						$this->lasterrmsg = ERR_REGISTER_ADD_DESC;
 						if ($this->_DEBUG) {
@@ -201,63 +222,25 @@
 							echo 'ERROR {crc_profile::fn_setprofile}: Error number: ' . $this->lasterrnum . '. <br>';
 							echo 'ERROR {crc_profile::fn_setprofile}: Error description: ' . $this->lasterrmsg . '. <br>';
 						}
-						$result = false;
-					}
-					
-					$db->fn_freesql($resource);
-					$db->fn_disconnect();
-					
-					return $result;
-				
-				} else {
-				
+					}				
+				} else {				
 					$this->lasterrnum = ERR_REGISTER_USEREXISTS_NUM;
 					//lasterrmsg is provided by fn_userexists()
 					if ($this->_DEBUG) {
 						echo 'ERROR {crc_profile::fn_setprofile}: This user ' . $this->m_fname . ' '. $this->m_lname . ' already exists! <br>';
-						echo 'ERROR {crc_profile::fn_setprofile}: Error number: ' . $this->lasterrnum . '. <br>';
-						echo 'ERROR {crc_profile::fn_setprofile}: Error description: ' . $this->lasterrmsg . '. <br>';
-					}
-					
-					$result = false;
-				
-				}
-				
-				$db->fn_disconnect();
-				return $result;
-
+						echo 'ERROR {crc_profile::fn_setprofile}: Error number: ' . $this->lasterrnum . '.<br>';
+						echo 'ERROR {crc_profile::fn_setprofile}: Error description: ' . $this->lasterrmsg . '.<br>';
+					}							
+				}				
+				$db->fn_disconnect();				
 			} else {
-				$db->fn_disconnect();
-				return $result;
+				$this->lasterrmsg = mysql_error();
+				$this->lasterrnum = mysql_errno();
+				if ($this->_DEBUG) {
+					echo 'ERROR {crc_profile::fn_setprofile}: ' . $this->lasterrmsg . '.<br>';
+				}
 			}
+			return $result;
 		}
 	}
 ?>
-
-<!--
-?php
-	//This will test the fn_register function.
-	$register = new crc_register(True);
-	$data['context'] = 'ou=Don Mills,ou=Toronto,ou=Ontario,ou=Canada,o=CRC World';
-	$data['profile'] = 'Student';
-	$data['email'] = 'al';
-	$data['password'] = 'al';
-	$data['fname'] = 'al';
-	$data['lname'] = 'bhanji3';
-	$data['year'] = '1969';
-	$data['month'] = '03';
-	$data['day'] = '24';
-	$data['gender'] = 'Male';
-	$data['add1'] = '28 Elson Street';
-	$data['add2'] = '';
-	$data['city'] = 'Markham';
-	$data['province'] = 'ON';
-	$data['pc'] = 'L3S2J5';
-	$data['country'] = 'Canada';
-	$data['lcode'] = '416';
-	$data['lprefix'] = '524';
-	$data['lpostfix'] = '9520';
-	
-	$register->fn_register($data);
-?
--->

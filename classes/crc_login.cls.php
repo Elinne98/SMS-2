@@ -11,7 +11,7 @@
 	include_once('crc_mysql.cls.php');	
 
 	//******************************************
-	// Name: crc_object
+	// Name: crc_login
 	//******************************************
 	//
 	// Desc: The Login Object
@@ -58,50 +58,62 @@
 
 		}
 
-
 		function fn_session() {
 			//******************************************
 			// Return SQL query result
 			//******************************************
 
 			if ($this->_DEBUG) {
-				echo "DEBUG {crc_login::fn_session}: Adding user information to the sesson table. <br>";
+				echo "DEBUG {crc_login::fn_session}: Adding user information to the session table.<br>";
 			}
 
+			//check entries
+			if (($this->m_sess == "") || ($this->m_uid == "") ||
+				($this->m_pwd == "") || ($this->m_rdn == ""))
+			{
+				$this->lasterrmsg = "Invalid input";
+				return false;		
+			}
+			
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
-			if ($dbhandle != 0) {
+			if ($dbhandle != false) {
 
 				$this->m_sql = 'insert into ' . MYSQL_SESSIONS_TBL .
-														'(session_id, session_uid, session_pwd, session_dn) ' .
-												'values("' . $this->m_sess . '", "' . $this->m_uid	. '", "' .
-														$this->m_pwd . '", "' . $this->m_rdn . '")';
+								'(session_id, session_uid, session_pwd, session_dn) ' .
+								'values("' . $this->m_sess . '", "' . $this->m_uid	. '", "' .
+								$this->m_pwd . '", "' . $this->m_rdn . '")';
 
-				//print('SQL: [' . $this->m_sql . ']');
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 				$db->fn_disconnect();
 				return true;
 			} else {
 				$this->lasterrnum = $db->lasterrnum;
 				$this->lasterrmsg = $db->lasterrmsg;
+				if ($this->_DEBUG) {
+					echo "DEBUG {crc_login::fn_session}: " . $this->lasterrmsg . ".<br>";
+				}
 				return false;
 			}
 		}
 
-
 		function fn_login($post) {
 			//******************************************
-			// Return SQL query result
+			// Set all the member variables with the post information.
 			//******************************************
-
-			// Set all the member variables with the post
-			// information.
-			$result = false;
 			
 			$this->m_uid = $post['username'];
 			$this->m_pwd = $post['password'];
 			$this->m_rdn = $post['context'];
 			$this->m_sess = session_id();
+			
+			//check entries
+			if (($this->m_sess == "") || ($this->m_uid == "") ||
+				($this->m_pwd == "") || ($this->m_rdn == ""))
+			{
+				$this->lasterrmsg = "Please enter a nonempty username and/or password";
+				return false;		
+			}
 			
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_login::fn_login}: Trying to login. <br>";
@@ -110,14 +122,15 @@
 				echo "DEBUG {crc_login::fn_login}: The password for login is \"" . $this->m_pwd . "\". <br>";
 				echo "DEBUG {crc_login::fn_login}: The context for login is \"" . $this->m_rdn . "\". <br>";
 			}
+			$result = false;
 			if ($this->fn_session()) { 
 				$db = new crc_mysql($this->_DEBUG);
 				$dbhandle = $db->fn_connect();
-				if ($dbhandle != 0) {
+				if ($dbhandle != false) {
 					$this->m_sql = 'select profile_id, profile_firstname, profile_lastname, profile_role_id ' . 
-													'from ' . MYSQL_PROFILES_TBL . 
-													' where ((profile_uid = "' . $this->m_uid . '") AND' .
-															' (profile_pwd = SHA1("' . $this->m_pwd . '")) AND (profile_rdn = "' . $this->m_rdn . '"))';
+									'from ' . MYSQL_PROFILES_TBL . 
+									' where ((profile_uid = "' . $this->m_uid . '") AND' .
+									' (profile_pwd = SHA1("' . $this->m_pwd . '")) AND (profile_rdn = "' . $this->m_rdn . '"))';
 
 					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 
@@ -143,23 +156,13 @@
 						}
 					}
 					$db->fn_freesql($resource);
-					$db->fn_disconnect();
+					$db->fn_disconnect();					
 				} else {
 					$this->lasterrnum = $db->lasterrnum;
 					$this->lasterrmsg = $db->lasterrmsg;
-				}
+				}				
 			}
 			return $result;
 		}
 	}
-?>
-
-<?php
-/*
-	$login = new crc_login(true);
-	$user['username'] = "shaffin1";
-	$user['password'] = "shaffin1";
-	$user['context'] = "ou=don mills,ou=toronto,ou=ontario,ou=canada,o=crc world";
-	$login->fn_login($user);
-*/
 ?>

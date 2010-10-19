@@ -6,7 +6,7 @@
 	include_once('crc_object.cls.php');
 
 	//******************************************
-	// Name: crc_ldap
+	// Name: crc_mysql
 	//******************************************
 	//
 	// Desc: This object is responsible for all ldap calls
@@ -53,6 +53,11 @@
 			//***************************************
 			// Set the mysql server configuration
 			//***************************************
+			if(($server == "") || ($port == "")) {
+				$this->lasterrmsg = "Invalid input";
+				return false;
+			}
+			
 			$this->m_mysqlserver = $server;
 			$this->m_mysqlport = $port;
 			if ($this->_DEBUG) {
@@ -68,6 +73,11 @@
 			//***************************************
 			// Set the mysql user information
 			//***************************************
+			if(($user == "") || ($pass == "")) {
+				$this->lasterrmsg = "Invalid input";
+				return false;
+			}
+			
 			$this->m_mysqlusername = $user;
 			$this->m_mysqlpassword = $pass;
 			if ($this->_DEBUG) {
@@ -95,9 +105,7 @@
 				echo '</font>';
 			}
 			
-			if ($this->m_mysqlhandle) {
-				return $this->m_mysqlhandle;
-			} else {
+			if ($this->m_mysqlhandle == NULL) {
 				if ($this->_DEBUG) {
 					echo '<font color="red">';
 					echo 'ERROR {crc_mysql::fn_connect}: Could not connect to the server. <br>';
@@ -108,84 +116,83 @@
 				$this->m_mysqlhandle = 0;
 				$this->lasterrnum = mysql_errno();
 				$this->lasterrmsg = mysql_error();
-				return $this->m_mysqlhandle;
-				die;
+				
 			}
+			return $this->m_mysqlhandle;
 		}
 
 		function fn_runsql($db, $sql) {
 			//***************************************
 			// Run SQL 
 			//***************************************
-			if ($this->m_mysqlhandle != 0) {
+			if ($this->m_mysqlhandle != false) {
 				if (mysql_select_db($db) == false) {
 					if ($this->_DEBUG) {
 						echo '<font color="blue">';
-						echo 'DEBUG {crc_mysql::fn_runsql}: Cannot connect to database: ' . $db . '. <br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Cannot connect to database: ' . $db . '.<br>';
 						echo '</font>';
 					}
 					return null;
 				}
 				if ($this->_DEBUG) {
 					echo '<font color="blue">';
-					echo 'DEBUG {crc_mysql::fn_runsql}: Running an SQL against database: ' . $db . '. <br>';
-					echo 'DEBUG {crc_mysql::fn_runsql}: Running the SQL command: ' . $sql . '. <br>';
+					echo 'DEBUG {crc_mysql::fn_runsql}: Running an SQL against database: ' . $db . '.<br>';
+					echo 'DEBUG {crc_mysql::fn_runsql}: Running the SQL command: ' . $sql . '.<br>';
 					echo '</font>';
 				}
 				
 				$rows = mysql_query($sql);
-				if ($this->_DEBUG) {
-					//if ((strpos($sql,'insert') === false) | (strpos($sql,'update') === false)) {
+				if ($this->_DEBUG && ($rows !== false)) {
 					if (strpos($sql,"insert",0) !== false) {
 						echo '<font color="blue">';
-						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (INSERT): ' . $rows . '. <br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (INSERT): ' . mysql_affected_rows() . '.<br>';
 						echo '</font>';
 					} elseif (strpos($sql,"update",0) !== false) {
 						echo '<font color="blue">';
-						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (UPDATE): ' . $rows . '. <br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (UPDATE): ' . mysql_affected_rows() . '.<br>';
 						echo '</font>';
 					} elseif (strpos($sql,"delete",0) !== false) {
 						echo '<font color="blue">';
-						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (DELETE): ' . $rows . '. <br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows affected (DELETE): ' . mysql_affected_rows() . '.<br>';
 						echo '</font>';
-					} else {
+					} else {						
 						echo '<font color="blue">';
-						echo 'DEBUG {crc_mysql::fn_runsql}: The SQL resource: : ' . $rows . '. <br>';
-						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows returned: ' . mysql_num_rows($rows) . '. <br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: The SQL resource: : ' . $rows . '.<br>';
+						echo 'DEBUG {crc_mysql::fn_runsql}: Number of rows returned: ' . mysql_num_rows($rows) . '.<br>';
 						echo '</font>';
 					}
 				}
-				if ($rows) {
+				if ($rows !== false) {
 					return $rows;
 				} else {
 					$this->lasterrnum = mysql_errno();
 					$this->lasterrmsg = mysql_error();
 					if ($this->_DEBUG) {
 						echo '<font color="red">';
-						echo 'ERROR {crc_mysql::fn_runsql}: The sql command returned nothing. <br>';
-						echo 'ERROR {crc_mysql::fn_connect}: Error number: ' . mysql_errno() . '. <br>';
-						echo 'ERROR {crc_mysql::fn_connect}: Error description: ' . mysql_error() . '. <br>';
+						echo 'ERROR {crc_mysql::fn_runsql}: The sql command returned nothing.<br>';
+						echo 'ERROR {crc_mysql::fn_connect}: Error number: ' . mysql_errno() . '.<br>';
+						echo 'ERROR {crc_mysql::fn_connect}: Error description: ' . mysql_error() . '.<br>';
 						echo '</font>';
-						die();
 					}
 					return null;
 				}
+			} else {
+				$this->lasterrmsg = "Invalid MySQL handle";
 			}
 		}		  
 
 		function fn_freesql($resource) {
 			//***************************************
 			// Run SQL 
-			//***************************************
-			$result = false;
-
+			//***************************************			
 			if ($this->_DEBUG) {
 				echo '<font color="blue">';
 				echo 'DEBUG {crc_mysql::fn_freesql}: Freeing the SQL resultset: ' . $resource . '. <br>';
 				echo '</font>';
 			}
 
-			if (strpos((string)$resource, "Resource") != false) {
+			$result = false;
+			if (is_resource($resource)) {
 				$result = mysql_free_result($resource); 
 
 				if ($result == false) {
@@ -194,40 +201,25 @@
 					if ($this->_DEBUG) {
 						echo '<font color="red">';
 						echo 'ERROR {crc_mysql::fn_freesql}: The resource could not be freed. <br>';
-						echo 'ERROR {crc_mysql::fn_connect}: Error number: ' . $this->m_lasterrnum . '. <br>';
-						echo 'ERROR {crc_mysql::fn_connect}: Error description: ' . $this->m_lasterrmsg . '. <br>';
+						echo 'ERROR {crc_mysql::fn_connect}: Error number: ' . $this->lasterrnum . '. <br>';
+						echo 'ERROR {crc_mysql::fn_connect}: Error description: ' . $this->lasterrmsg . '. <br>';
 						echo '</font>';
-						//die();
 					}
+				} else if ($this->_DEBUG) {
+					echo '<font color="blue">';
+					echo 'DEBUG {crc_mysql::fn_freesql}: The resource was successfully freed.<br>';
+					echo '</font>';
+				}
+			} else {
+				$this->lasterrmsg = "Invalid resource";
+				if ($this->_DEBUG) {
+					echo '<font color="red">';
+					echo 'ERROR {crc_mysql::fn_freesql}: Invalid resource.<br>';
+					echo '</font>';
 				}
 			}
 			return $result;
-		}		
-
-
-		function fn_print($result) {
-			//***************************************
-			// Run SQL 
-			//***************************************
-			if ($this->_DEBUG) {
-				echo '<font color="blue">';
-				echo 'DEBUG {crc_mysql::fn_print}: Printing the SQL resultset. <br>';
-				echo '</font>';
-			}
-			
-			$table = $this->get_style();
-			$table .= '<table>'; 
-			while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) { 
-				$table .= '<tr>'; 
-				foreach ($line as $col_value) { 
-					$table .= '<td class="e">' . $col_value . '</td>'; 
-				} 
-				$table .= '</tr>'; 
-			} 
-			$table .= '</table>';
-			print($table); 
-		}		  
-
+		}
 
 		function fn_disconnect() {
 			//***************************************
@@ -242,8 +234,8 @@
 			}
 			
 			if (isset($this->m_mysqlhandle)) {
-				mysql_close($this->m_mysqlhandle);
-				$result = true;
+				$result = mysql_close($this->m_mysqlhandle);
+				$this->m_mysqlhandle = null;
 			} else {
 				$this->lasterrnum = ERR_MYSQL_DISCONNECT_NUM;
 				$this->lasterrmsg = ERR_MYSQL_DISCONNECT_DESC;
@@ -252,17 +244,4 @@
 			return $result;
 		}
 	}
-?>	
-
-	
-<!--
-?php 
-	//This is a test code to test this class
-	$test = new crc_mysql(True);
-	$test->fn_connect();
-	$result = $test->fn_runsql('crcdb', 'select * from crc_roles');
-	$test->fn_print($result);
-	$test->fn_freesql($result);	
-	$test->fn_disconnect();
-?
--->
+?>

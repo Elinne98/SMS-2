@@ -51,78 +51,78 @@
 
 		}
 
-		function fn_getcategory($category) {
-			//******************************************
+		function fn_getcategory($db, $category) {
+			//***************************************************************
 			// Get the questions for a specific category
-			//******************************************
-		
-			$result = false;
-		
+			// Reads continuosly from database without closing the connection
+			//and without freeing the resource
+			//***************************************************************						
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_evaluation::fn_getsection}: Retreiving questions for category: '" . $category . "'. <br>";
 			}
-
-			$db = new crc_mysql($this->_DEBUG);
-			$dbhandle = $db->fn_connect();
-			if ($dbhandle != false) {
 			
-				$this->m_sql = 'select * ' .
-												'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
-												' where (feedback_questions_active = 0) and ' .
-												'(feedback_questions_category = "' . $category . '") ' . 
-												'order by feedback_questions_sequence asc';
-
-				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-				if (mysql_num_rows($resource) > 0) {
-
-					$result = $resource;
-
-				} else {
-				
-					$result = null;
-
-				}
-				
-				$db->fn_freesql($resource);
-				return $result;
-
+			if (!isset($category) || ($category == "")) {
+				$this->lasterrmsg = "Invalid input";
+				return null;
 			}
-			
+
+			$result = null;
+			if ($db->m_mysqlhandle != false) {			
+				$this->m_sql = 'select * ' .
+								'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
+								' where (feedback_questions_active = 0) and ' .
+								'(feedback_questions_category = "' . strtoupper($category) . '") ' . 
+												'order by feedback_questions_sequence asc';
+				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (is_resource($resource) && mysql_num_rows($resource) > 0) {
+					$result = $resource;
+				} else {
+					$this->lasterrmsg = mysql_error();
+					$this->lasterrnum = mysql_errno();
+					if ($this->_DEBUG) {
+						echo "DEBUG {crc_evaluation::fn_getsection}: '" . $this->lasterrmsg . "'.<br>";
+					}
+				}											
+			} else {
+				$this->lasterrmsg = mysql_error();
+				$this->lasterrnum = mysql_errno();
+				if ($this->_DEBUG) {
+					echo "DEBUG {crc_evaluation::fn_getsection}: '" . $this->lasterrmsg . "'.<br>";
+				}
+			}
+			return $result;			
 		}
 
 		function fn_getquestions() {
 			//******************************************
 			// Get the questions to generate the evaluation form
-			//******************************************
-			$result = false;
-			
+			//******************************************						
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_evaluation::fn_getquestions}: Retreiving feedback questions<br>";
 			}
 
+			$this->m_data = null;
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != false) {
-
 				$this->m_sql = 'select distinct feedback_questions_category ' . 
-												'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
-												' where (feedback_questions_active = 0)';
+								'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
+								' where (feedback_questions_active = 0)';
 				$categories = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-
-				if (mysql_num_rows($categories) > 0) {
-
-					
+				if (is_resource($categories) && (mysql_num_rows($categories) > 0)) {				
 					if ($this->_DEBUG) {
 						echo "DEBUG {crc_evaluation::fn_getquestions}: Number of sections found are: " . mysql_num_rows($categories) . ". <br>";
-					}
-					
-					$index = 0;
-					
+					}					
+					$index = 0;					
 					while ($category = mysql_fetch_array($categories)) {
-
-						$questions = $this->fn_getcategory($category[0]);
-						
+						$questions = $this->fn_getcategory($db, $category[0]);
+						if ($questions == null) {
+							if ($this->_DEBUG) {
+								echo 'DEBUG {crc_evaluation::fn_getquestions}: Cannot get category' . $category[0] . '<br>';
+								echo 'DEBUG {crc_evaluation::fn_getquestions}: ' . $this->lasterrmsg . '<br>';
+							}
+							continue;
+						}						
 						while ($row = mysql_fetch_array($questions)) {					
 							$this->m_data[$index] = $row;
 							if ($this->_DEBUG) {							
@@ -142,54 +142,47 @@
 								echo 'DEBUG {crc_evaluation::fn_getquestions}: Question found: "' . $this->m_data[$index][1] . '" ' . $form . '<br>';
 							}												
 							$index = $index + 1;
-						}
-						
-						$db->fn_freesql($questions);
-					
+						}						
+						$db->fn_freesql($questions);					
 					}
-
 					if ($this->_DEBUG) {
 						echo 'DEBUG {crc_evaluation::fn_getquestions}: Total questions are: ' . count($this->m_data) . '<br>';
 					}
-
 					$db->fn_freesql($categories);
-
 				} else {
-
-					$this->m_data = null;
 					$this->lasterrnum = ERR_FEEDBACK_QUESTIONS_NOSECTIONS_NUM;
-					$this->lasterrmsg = ERR_FEEDBACK_QUESTIONS_NOSECTIONS_DESC;
-					
+					$this->lasterrmsg = ERR_FEEDBACK_QUESTIONS_NOSECTIONS_DESC;					
 					if ($this->_DEBUG) {
-
 						echo 'ERROR {crc_evaluation::fn_getquestions}: The sql command returned nothing. <br>';
-						echo 'ERROR {crc_evaluation::fn_getquestions}: Error number: ' . $this->m_lasterrnum . '. <br>';
-						echo 'ERROR {crc_evaluation::fn_getquestions}: Error description: ' . $this->m_lasterrmsg . '. <br>';
-
+						echo 'ERROR {crc_evaluation::fn_getquestions}: Error number: ' . $this->lasterrnum . '. <br>';
+						echo 'ERROR {crc_evaluation::fn_getquestions}: Error description: ' . $this->lasterrmsg . '. <br>';
 					}
-
 				}
-
-				$db->fn_disconnect();
-				return $this->m_data;
+				$db->fn_disconnect();				
 			} else {
-				$db->fn_freesql($resource);
-				$db->fn_disconnect();
-				return null;
+				$this->lasterrmsg = mysql_error();
+				$this->lasterrnum = mysql_errno();
+				if ($this->_DEBUG) {
+					echo 'ERROR {crc_evaluation::fn_getquestions}: ' . $this->lasterrmsg . '.<br>';
+				}
 			}
+			return $this->m_data;
 		}
 
-		function fn_setquestions($profileid, $questions, $post) {
-			//******************************************
+		function fn_setquestions($profileid, $post) {
+			//*****************************************
 			// Update the users evaluation information
-			//******************************************
-
-			$result = false;
-
+			//*****************************************
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_evaluation::fn_setquestions}: Updating the user evaluation information.<br>";
 			}
+			if(!isset($post['schedule_id']) || ($post['schedule_id'] == "") ||
+			    ($profileid == null) || ($profileid == "")) {
+				$this->lasterrmsg = "Invalid input";
+				return false;
+			}
 
+			$result = false;
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != false) {
@@ -202,11 +195,28 @@
 					$this->m_sql = 'update ' . MYSQL_STUDENT_SCHEDULE_TBL .
 									' SET student_schedule_questions = 0 ' .
 									'where (student_schedule_id = ' . $post['schedule_id'] . ')'; 
-					$db->fn_runsql(MYSQL_DB, $this->m_sql);
+					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+					if (!is_resource($resource))
+					{
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_evaluation::fn_setquestions}: Cannot update student schedule.<br>';
+						}
+						$this->lasterrmsg = "Cannot update student schedule";
+						return false;
+					}
 					$this->m_sql = 'select * from ' . MYSQL_FEEDBACK_TBL .
 									' where (feedback_profile_id = ' . $profileid . ') and ' .
-									'(feedback_schedule_id = ' . $post['schedule_id'] . ')'; 
-					$feedback = mysql_fetch_array($db->fn_runsql(MYSQL_DB, $this->m_sql));
+									'(feedback_schedule_id = ' . $post['schedule_id'] . ')';
+					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+					if (!is_resource($resource))
+					{
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_evaluation::fn_setquestions}: Cannot select feedback table.<br>';
+						}
+						$this->lasterrmsg = "Cannot select feedback table";
+						return false;
+					}
+					$feedback = mysql_fetch_array($resource);					
 					for ($i = 1; $i <= count($_SESSION['evaluation']); $i++) {
 						$question = $_SESSION['evaluation'][$i - 1];
 						$answers = $post;
@@ -232,22 +242,21 @@
 						$db->fn_runsql(MYSQL_DB, $this->m_sql);
 					}
 					$result = true;			
-
+					$db->fn_freesql($resource);
 				} else {
-
 					$this->lasterrnum = ERR_FEEDBACK_ADD_NUM;
 					$this->lasterrmsg = ERR_FEEDBACK_ADD_DESC;
-
 					if ($this->_DEBUG) {
 						echo 'ERROR {crc_evaluation::fn_setquestions}: Could not add feedback information. <br>';
-						echo 'ERROR {crc_evaluation::fn_setquestions}: Error number: ' . $this->m_lasterrnum . '. <br>';
-						echo 'ERROR {crc_evaluation::fn_setquestions}: Error description: ' . $this->m_lasterrmsg . '. <br>';
+						echo 'ERROR {crc_evaluation::fn_setquestions}: Error number: ' . $this->lasterrnum . '. <br>';
+						echo 'ERROR {crc_evaluation::fn_setquestions}: Error description: ' . $this->lasterrmsg . '. <br>';
 					}
-					$result = false;
 				}
-				//$db->fn_freesql($resource);
-			}
-			$db->fn_disconnect();
+				$db->fn_disconnect();				
+			} else {
+				$this->lasterrmsg = mysql_error();
+				$this->lasterrnum = mysql_errno();
+			}			
 			return $result;
 		}
 		
@@ -334,22 +343,29 @@
 				echo "DEBUG {crc_evaluation::fn_getquestion}: Getting the question string for the question id " . $questionid . ".<br>";
 			}
 			
+			//check input
+			if (!isset($db, $questionid) || ($questionid == "")) {
+				return null;
+			}
+			
 			$this->m_question = null;
 			if ($db->m_mysqlhandle != false) {
 				$this->m_sql = 'select feedback_questions_question ' . 
 								'from ' . MYSQL_FEEDBACK_QUESTIONS_TBL . 
 								' where (feedback_questions_id = "' . $questionid . '")';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-				if (mysql_num_rows($result) > 0) {
-					$row = mysql_fetch_row($result);
-					$this->m_question = $row[0];
-					if ($this->_DEBUG) {
-						echo 'ERROR {crc_evaluation::fn_getquestion}: ' . $this->m_question . '<br>';
+				if (is_resource($result)) {
+					if (mysql_num_rows($result) > 0) {
+						$row = mysql_fetch_row($result);
+						$this->m_question = $row[0];
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_evaluation::fn_getquestion}: ' . $this->m_question . '<br>';
+						}
+					} else if ($this->_DEBUG) {
+						echo 'ERROR {crc_evaluation::fn_getquestion}: The sql command returned nothing. <br>';
 					}
-				} else if ($this->_DEBUG) {
-					echo 'ERROR {crc_evaluation::fn_getquestion}: The sql command returned nothing. <br>';
+					$db->fn_freesql($result);
 				}
-				$db->fn_freesql($result);
 			}
 			return $this->m_question;
 		}
@@ -362,22 +378,29 @@
 				echo "DEBUG {crc_evaluation::fn_getprofilename}: Getting the first and last name for the profile id " . $profileid . ".<br>";
 			}
 			
+			//check input
+			if (!isset($db, $profileid) || ($profileid == "")) {
+				return null;
+			}
+			
 			$this->m_profilename = null;
 			if ($db->m_mysqlhandle != false) {
 				$this->m_sql = 'select profile_firstname, profile_lastname ' . 
 								'from ' . MYSQL_PROFILES_TBL . 
 								' where (profile_id = "' . $profileid . '")';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-				if (mysql_num_rows($result) > 0) {
-					$row = mysql_fetch_row($result);
-					$this->m_profilename = $row[1] . ", " . $row[0];
-					if ($this->_DEBUG) {
-						echo 'ERROR {crc_evaluation::fn_getprofilename}: ' . $this->m_profilename . '. <br>';
+				if (is_resource($result)) {
+					if (mysql_num_rows($result) > 0) {
+						$row = mysql_fetch_row($result);
+						$this->m_profilename = $row[1] . ", " . $row[0];
+						if ($this->_DEBUG) {
+							echo 'ERROR {crc_evaluation::fn_getprofilename}: ' . $this->m_profilename . '. <br>';
+						}
+					} else if ($this->_DEBUG) {
+						echo 'ERROR {crc_evaluation::fn_getprofilename}: The sql command returned nothing. <br>';
 					}
-				} else if ($this->_DEBUG) {
-					echo 'ERROR {crc_evaluation::fn_getprofilename}: The sql command returned nothing. <br>';
+					$db->fn_freesql($result);
 				}
-				$db->fn_freesql($result);
 			}
 			return $this->m_profilename;
 		}
@@ -493,13 +516,4 @@
 			return $this->m_date;
 		}
 	}
-?>
-
-
-<?php 
-	/*
-	//This will test the get_profile function.
-	//$test = new crc_evaluation(True);
-	//$data = $test->fn_getquestions();
-	*/
 ?>

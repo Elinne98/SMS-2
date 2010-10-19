@@ -56,7 +56,7 @@
 			}
 
 			if (($dbname == "") || ($rootpwd == "") || ($username == "") || ($userpwd == "")) {
-				$this->lasterrmsg = '';
+				$this->lasterrmsg = "Invalid input";
 				return false;
 			}
 			
@@ -93,7 +93,7 @@
 				}
 				
 				//setup tables
-				$textfile= '../mysql/crc_database_setup.sql'; 
+				$textfile= dirname(__FILE__) . '/../mysql/crc_database_setup.sql'; 
 				$handle = fopen($textfile, "r");
 				if ($handle == false) {
 					$this->lasterrmsg = "Cannot open sql script file " . $textfile;
@@ -153,13 +153,4 @@
 		}
 		
 	}
-?>
-
-
-<?php 
-	/*
-	//This will test the get_profile function.
-	//$test = new crc_evaluation(True);
-	//$data = $test->fn_getquestions();
-	*/
 ?>
