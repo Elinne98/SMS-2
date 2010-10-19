@@ -13,7 +13,7 @@
 <HTML>
 	<HEAD>
     <?php
-    	include_once('../classes/crc_constants.mod.php');
+    	include_once(dirname(__FILE__) . '/../classes/crc_constants.mod.php');
     ?>
 		<TITLE>
 			[FreeSMS: install]
@@ -46,20 +46,20 @@
 				<!-- The Page Header -->
 				<TR CLASS="OUTER">
 					<?php
-						include "../pages/data/crc_page_header_band.html";
+						include dirname(__FILE__) . "/../pages/data/crc_page_header_band.html";
 					?>
 				</TR>
 
 				<!-- The Page Content -->
 				<TR CLASS="OUTER">
 					<?php
-						include "../pages/data/crc_db_setup_main.html";
+						include dirname(__FILE__) . "/../pages/data/crc_db_setup_main.html";
 					?>
 				</TR>
 				<!-- The Page Footer -->
 				<TR CLASS="OUTER">
 					<?php
-						include "../pages/data/crc_page_footer_band.html";
+						include dirname(__FILE__) . "/../pages/data/crc_page_footer_band.html";
 					?>
 				</TR>
 			</TABLE>

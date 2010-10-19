@@ -37,7 +37,7 @@ include_once('../classes/crc_profile.cls.php');
           can also send requests or feedback via email to the 
           <?php
           $profile = new crc_profile(false);
-		  $profile->fn_getadminprofile();
+		  $profile->fn_getprofile("admin");
           print '<a href=mailto:' . $profile->m_data[5] . '><b>administrator</b></a>'; 
           ?>.
           </p>

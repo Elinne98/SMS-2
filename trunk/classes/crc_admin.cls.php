@@ -106,13 +106,49 @@
 			$result = true;
 			if ($db->m_mysqlhandle != false) {
 
-				$this->m_coursename = $post['cname'];
-				$this->m_coursedesc = $post['cdesc'];
-				$this->m_startdate = $post['syear'] . '-' . $post['smonth'] . '-' . $post['sday'];
-				$this->m_enddate = $post['eyear'] . '-' . $post['emonth'] . '-' . $post['eday'];
-				$this->m_daytime = $post['daytime'];
+				if(isset($post['cname'])) {
+					$this->m_coursename = $post['cname'];	
+				} else {
+					$this->m_coursename = "";
+				}
+				if(isset($post['cdesc'])) {
+					$this->m_coursedesc = $post['cdesc'];
+				} else {
+					$this->m_coursedesc = "";
+				}
+				if(isset($post['syear']) && isset($post['smonth']) && isset($post['sday'])) {
+					$this->m_startdate = $post['syear'] . '-' . $post['smonth'] . '-' . $post['sday'];
+					$this->m_data['syear'] = $post['syear'];
+					$this->m_data['smonth'] = $post['smonth'];
+					$this->m_data['sday'] = $post['sday'];
+				} else {
+					$this->m_startdate = "";
+					$this->m_data['syear'] = "";
+					$this->m_data['smonth'] = "";
+					$this->m_data['sday'] = "";
+				}
+				if(isset($post['eyear']) && isset($post['emonth']) && isset($post['eday'])) {
+					$this->m_enddate = $post['eyear'] . '-' . $post['emonth'] . '-' . $post['eday'];
+					$this->m_data['eyear'] = $post['eyear'];
+					$this->m_data['emonth'] = $post['emonth'];
+					$this->m_data['eday'] = $post['eday'];
+				} else {
+					$this->m_enddate = "";
+					$this->m_data['eyear'] = "";
+					$this->m_data['emonth'] = "";
+					$this->m_data['eday'] = "";
+				}
+				if(isset($post['daytime'])) {
+					$this->m_daytime = $post['daytime'];
+				} else {
+					$this->m_daytime = "";
+				}
 				$this->m_status = 'In progress';
-				$this->m_roomname = $post['roomname'];
+				if(isset($post['roomname'])) {
+					$this->m_roomname = $post['roomname'];
+				} else {
+					$this->m_roomname = "";
+				}
 				$this->m_roomdesc = 'N/A';
 				$this->m_active = '0';//fixed when adding a course
 				$this->m_venueid = '1';//unused
@@ -124,12 +160,6 @@
 				$this->m_data['cdesc'] = $this->m_coursedesc;
 				$this->m_data['daytime'] = $this->m_daytime;
 				$this->m_data['roomname'] = $this->m_roomname;
-				$this->m_data['syear'] = $post['syear'];
-				$this->m_data['smonth'] = $post['smonth'];
-				$this->m_data['sday'] = $post['sday'];
-				$this->m_data['eyear'] = $post['eyear'];
-				$this->m_data['emonth'] = $post['emonth'];
-				$this->m_data['eday'] = $post['eday'];				
 				
 				if( ($this->m_coursename == "") || 
 				    ($this->m_data['syear'] == "") ||
@@ -144,6 +174,7 @@
 				}				
 				
 				//check if the room already exists in database
+				$resource = null;
 				$this->fn_getroomid($db, $this->m_roomname);
 				if($this->m_roomid == 0) { //the room doesn't exist in database
 					$this->m_sql = 'insert into ' . MYSQL_ROOMS_TBL . '(' .
@@ -185,7 +216,7 @@
 				} else {
 					$db->fn_freesql($resource);
 					$db->fn_disconnect();
-					$this->lasterrmsg = "The course \"" . $this->m_coursename . "\" already exists in database";						
+					$this->lasterrmsg = "Course \"" . $this->m_coursename . "\" already exists in database.<br>Use \"Edit Course\" menu if you want to modify this course.";						
 					return false;
 				}				
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);			
@@ -248,7 +279,7 @@
 				$this->fn_getteacherlist($db);
 				$this->m_profileid = 0;
 				for($i = 0; $i < count($this->m_teacherlist); $i++) {
-					if(isset($post['teacher' . $i])) {
+					if(isset($post['teacher' . $i]) && (strtolower($post['teacher' . $i]) == "on")) {
 						$this->m_profileid = $this->m_teacherlist[$i]['profileid'];
 						$this->m_sql = 'insert into ' . MYSQL_TEACHER_SCHEDULE_TBL . '(' .
 												'teacher_schedule_profile_id, ' .
@@ -558,27 +589,51 @@
 		function fn_setstudent($post) {
 
 			if ($this->_DEBUG) {
-				echo "DEBUG {crc_admin::fn_setcourse}: Setting student information <br>";
+				echo "DEBUG {crc_admin::fn_setstudent}: Setting student information <br>";
 			}
 				
 			$db = new crc_mysql($this->_DEBUG);
 			$db->fn_connect();
 			$result = true;
 			if ($db->m_mysqlhandle != false) {
-				$this->m_firstname = $post['fname'];
-				$this->m_lastname = $post['lname'];
-				$this->m_gender = strtoupper($post['gender'][0]);
-				$this->m_email = $post['email'];
-				$this->m_phone = $post['lcode'] . $post['lprefix'] . $post['lpostfix'];
+				if(isset($post['fname'])) {
+					$this->m_firstname = $post['fname'];
+				} else {
+					$this->m_firstname = "";
+				}
+				if(isset($post['lname'])) {
+					$this->m_lastname = $post['lname'];
+				} else {
+					$this->m_lastname = "";
+				}
+				if(isset($post['gender']))
+				{
+					$this->m_gender = strtoupper($post['gender'][0]);
+				} else {
+					$this->m_gender = "";
+				}
+				if(isset($post['email'])) {
+					$this->m_email = $post['email'];
+				} else {
+					$this->m_email = "";
+				}
+				if(isset($post['lcode']) && isset($post['lprefix']) && isset($post['lpostfix'])) {
+					$this->m_phone = $post['lcode'] . $post['lprefix'] . $post['lpostfix'];
+					$this->m_data['lcode'] = $post['lcode'];
+					$this->m_data['lprefix'] = $post['lprefix'];
+					$this->m_data['lpostfix'] = $post['lpostfix'];
+				} else {
+					$this->m_phone = "";
+					$this->m_data['lcode'] = "";
+					$this->m_data['lprefix'] = "";
+					$this->m_data['lpostfix'] = "";
+				}
 
 				//this data should be restored if something goes wrong
 				$this->m_data['fname'] = $this->m_firstname;
 				$this->m_data['lname'] = $this->m_lastname;
 				$this->m_data['gender'] = $this->m_gender;
 				$this->m_data['email'] = $this->m_email;
-				$this->m_data['lcode'] = $post['lcode'];
-				$this->m_data['lprefix'] = $post['lprefix'];
-				$this->m_data['lpostfix'] = $post['lpostfix'];
 
 				if( ($this->m_firstname == "") || ($this->m_lastname == "") ) {
 					if ($this->_DEBUG) {
@@ -690,7 +745,7 @@
 			$this->fn_getcourselist($db);
 			$this->m_scheduleid = 0;
 			for($i = 0; $i < count($this->m_courselist); $i++) {
-				if(isset($post['course' . $i])) {
+				if(isset($post['course' . $i]) && (strtolower($post['course' . $i]) == "on")) {
 					$this->fn_getscheduleid($db, $this->m_courselist[$i]['courseid']);
 					if ($this->m_scheduleid == 0) {
 						if ($this->_DEBUG) {
@@ -737,28 +792,3 @@
 		}
 	}
 ?>
-
-<!-- 
-?php 
-	//This will test the set_profile function.
-	$profile = new crc_admin(TRUE);
-	$data['courseid'] = '1';
-	$data['cname'] = 'Digital Signal Processing';
-	$data['cdesc'] = 'some course';
-	$data['cactive'] = '1';
-	$data['cfee'] = '0';
-	echo "setting course info";
-	$profile->fn_setprofile($data);
-?
--->
-
-<!--
-?php 
-	//This will test the get_profile function.
-	$profile = new crc_profile(True);
-	$data = $profile->fn_getprofile("shaffin");
-	echo "Values returned: <br>";
-	print_r(array_values($data));
-?
--->
-

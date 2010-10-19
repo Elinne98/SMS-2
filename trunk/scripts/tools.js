@@ -9,8 +9,8 @@
 //---------------------------------------------------
 
 function fn_showstatus(text) {
-	window.status = text
-	setTimeout("window.status=''", 5000)
+	window.status = text;
+	setTimeout("window.status=''", 5000);
 }
 
 function verify(page) {

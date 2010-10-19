@@ -83,7 +83,7 @@ print '[' . $title . ']';
 			if ($result == false) {
 					
 				$_SESSION['msg'] = $login->lasterrmsg;
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_login.php?' . session_name() . '=' . session_id() . '&uid=' . $_POST['username'] . '">';
+				echo '<meta http-equiv="refresh" content="0;URL=crc_login.php?' . session_name() . '=' . session_id() . '&uid=' . $_POST['username'] . '">';
 
 			} else {
 
@@ -105,7 +105,7 @@ print '[' . $title . ']';
 				$_SESSION['msg'] = "";
 				$login->m_sess = session_id();
 				$login->fn_session();
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_main.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				echo '<meta http-equiv="refresh" content="0;URL=crc_main.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 
 			}
 
@@ -396,11 +396,11 @@ print '[' . $title . ']';
 				} else {
 					$_SESSION['msg'] = "success";
 				}
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=../mysql/setup.php?' . session_name() . '=' . session_id() . '">';
+				echo '<meta http-equiv="refresh" content="0;URL=../mysql/setup.php?' . session_name() . '=' . session_id() . '">';
 				
 			} else {
 				
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_unknown.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				echo '<meta http-equiv="refresh" content="0;URL=crc_unknown.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 				
 			}
 

@@ -83,7 +83,7 @@ include_once('../classes/crc_profile.cls.php');
 
 			} else {
 				$profile = new crc_profile(false);
-		  		$profile->fn_getadminprofile();
+		  		$profile->fn_getprofile("admin");
 				print '<table class="green"><tr><td>&nbsp Sorry there are no courses assigned to you at this time. Please contact ';
 				print 'the <a href=mailto:' . $profile->m_data[5] . '><b>administrator</b></a> if you require assistance.</td></tr></table>';
 

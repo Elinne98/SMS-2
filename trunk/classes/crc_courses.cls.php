@@ -95,8 +95,8 @@
 				$db->fn_disconnect($dbhandle);
 				return $this->m_data;
 			} else {
-				$this->lasterrnum = $db->m_lasterrnum;
-				$this->lasterrmsg = $db->m_lasterrmsg;
+				$this->lasterrnum = $db->lasterrnum;
+				$this->lasterrmsg = $db->lasterrmsg;
 				$db->fn_disconnect($dbhandle);
 				return null;
 			}
@@ -127,8 +127,8 @@
 				}
 				$db->fn_freesql($result);
 			} else {
-				$this->lasterrnum = $db->m_lasterrnum;
-				$this->lasterrmsg = $db->m_lasterrmsg;
+				$this->lasterrnum = $db->lasterrnum;
+				$this->lasterrmsg = $db->lasterrmsg;
 			}
 			$db->fn_disconnect($dbhandle);
 			return $this->m_data;
@@ -138,17 +138,28 @@
 			//****************************
 			// Set the course information 
 			//****************************
+			if ($this->_DEBUG) {
+				echo "DEBUG {crc_courses::fn_setcourseinfo}: Retreiving the courses for the course id " . $post['courseid'] . "<br>";
+			}
+			
+			//input check
+			if(!isset($post['cname']) || !isset($post['cdesc']) ||
+			   !isset($post['cfee']) || !isset($post['courseid']) || !isset($post['cactive']) ||
+			   !isset($post['syear']) || !isset($post['smonth']) || !isset($post['sday']) ||
+			   !isset($post['eyear']) || !isset($post['emonth']) || !isset($post['eday']) ||
+			   !isset($post['cstatus']) || !isset($post['roomname']) || !isset($post['roomdesc']) ||
+			   !isset($post['daytime'])) {
+			   	$this->lasterrmsg = "Invalid input";
+				return false;
+			}
+			
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
 			$retresult = false;
 			if ($dbhandle != false) {
-
-				if ($this->_DEBUG) {
-					echo "DEBUG {crc_courses::fn_setcourseinfo}: Retreiving the courses for the course id " . $post['courseid'] . "<br>";
-				}
 				
 				//update courses table
-				if(isset($post['cactive'])) {
+				if(isset($post['cactive']) && (strtolower($post['cactive']) == "on")) {
 					$cactive = '0';
 				} else {
 					$cactive = '-1';
@@ -160,8 +171,8 @@
 									'where(course_id = "' . $post['courseid'] . '")';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if (mysql_errno() != 0) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrnum = $db->lasterrnum;
+					$this->lasterrmsg = $db->lasterrmsg;
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;
@@ -175,8 +186,8 @@
 									'where(schedule_course_id = "' . $post['courseid'] . '")';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if (mysql_errno() != 0) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrnum = $db->lasterrnum;
+					$this->lasterrmsg = $db->lasterrmsg;
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;
@@ -185,8 +196,8 @@
 				//update rooms table
 				$roomid = $this->fn_getroomid($db, $post['roomname']);
 				if ($roomid == 0) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrnum = $db->lasterrnum;
+					$this->lasterrmsg = $db->lasterrmsg;
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;					
@@ -196,8 +207,8 @@
 									'" where(room_id = "' . $roomid . '")';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if (mysql_errno() != 0) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrnum = $db->lasterrnum;
+					$this->lasterrmsg = $db->lasterrmsg;
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;
@@ -206,16 +217,15 @@
 				//add/remove from teacher schedule
 				$teacherlist = $this->fn_getteacherlist($db, $post['courseid']);
 				if ($teacherlist == null) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrnum = $db->lasterrnum;
+					$this->lasterrmsg = $db->lasterrmsg;
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;					
 				}
 				$scheduleid = $this->fn_getscheduleid($db, $post['courseid']);
 				if ($scheduleid == 0) {
-					$this->lasterrnum = $db->m_lasterrnum;
-					$this->lasterrmsg = $db->m_lasterrmsg;
+					$this->lasterrmsg = "Invalid course ID";
 					$db->fn_freesql($result);
 					$db->fn_disconnect($dbhandle);
 					return false;					
@@ -239,8 +249,8 @@
 					if ($this->m_sql != null) {
 						$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 						if (mysql_errno() != 0) {
-							$this->lasterrnum = $db->m_lasterrnum;
-							$this->lasterrmsg = $db->m_lasterrmsg;
+							$this->lasterrnum = $db->lasterrnum;
+							$this->lasterrmsg = $db->lasterrmsg;
 							$db->fn_freesql($result);
 							$db->fn_disconnect($dbhandle);
 							return false;
@@ -251,8 +261,8 @@
 				$db->fn_freesql($result);
 				$retresult = true;
 			} else {
-				$this->lasterrnum = $db->m_lasterrnum;
-				$this->lasterrmsg = $db->m_lasterrmsg;
+				$this->lasterrnum = $db->lasterrnum;
+				$this->lasterrmsg = $db->lasterrmsg;
 			}
 			$db->fn_disconnect($dbhandle);
 			return $retresult;
@@ -303,7 +313,7 @@
 					$this->m_scheduleid = $row[0];
 				} else {
 					if ($this->_DEBUG) {
-						echo 'ERROR {crc_courses::fn_getscheduleid}: The sql command returned nothing. <br>';
+						echo 'ERROR {crc_courses::fn_getscheduleid}: The sql command returned nothing.<br>';
 					}
 				}
 			}
@@ -339,8 +349,8 @@
 				$db->fn_disconnect($dbhandle);
 				return $result;
 			} else {
-				$this->lasterrnum = $db->m_lasterrnum;
-				$this->lasterrmsg = $db->m_lasterrmsg;
+				$this->lasterrnum = $db->lasterrnum;
+				$this->lasterrmsg = $db->lasterrmsg;
 				return $result;
 			}
 		}
@@ -383,8 +393,8 @@
 				
 			} else {
 				
-				$this->lasterrnum = $db->m_lasterrnum;
-				$this->lasterrmsg = $db->m_lasterrmsg;
+				$this->lasterrnum = $db->lasterrnum;
+				$this->lasterrmsg = $db->lasterrmsg;
 				
 			}
 			if ($closedb == true) {
@@ -432,17 +442,3 @@
 		}
 	}
 ?>
-
-
-<!--
-	Write the test case here
-	
-?php
-	$courses = new crc_courses(True);
-	$courses->fn_getcourses(8);
-	//$courses->fn_removecourse(8,9);
-
-?
--->
-
-	
