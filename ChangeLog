@@ -1,3 +1,12 @@
+2010-11-01 18:44  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* pages/data/crc_page_header_band.html, tests/web_test.php: updated
+	  version number
+
+2010-11-01 17:58  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: updated ChangeLog
+
 2010-11-01 17:52  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* tests, tests/admin_test.php, tests/all_tests.php,
