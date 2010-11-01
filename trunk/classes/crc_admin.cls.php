@@ -171,7 +171,24 @@
 				    ($this->m_daytime == "") ||
 				    ($this->m_roomname == "") ) {
 					return false;
-				}				
+				}
+
+				//check if at least one teacher has been selected
+				$teacherselected = false;
+				$this->fn_getteacherlist($db);
+				for($i = 0; $i < count($this->m_teacherlist); $i++) {
+					if(isset($post['teacher' . $i])) {
+						$teacherselected = true;
+						break;
+					}
+				}
+				if ($teacherselected == false) {
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_admin::fn_setcourse}: No teacher has been selected. <br>';
+					}					
+					$this->lasterrmsg = "No teacher has been selected";
+					return false;
+				}
 				
 				//check if the room already exists in database
 				$resource = null;
@@ -275,8 +292,7 @@
 					return false;
 				}				
 
-				//set teacher schedule
-				$this->fn_getteacherlist($db);
+				//set teacher schedule				
 				$this->m_profileid = 0;
 				for($i = 0; $i < count($this->m_teacherlist); $i++) {
 					if(isset($post['teacher' . $i]) && (strtolower($post['teacher' . $i]) == "on")) {
@@ -643,6 +659,24 @@
 					$this->lasterrmsg = "First or last name is empty";
 					return false;
 				}
+				
+				//check if at least one course has been selected
+				$this->fn_getcourselist($db);
+				$courseselected = false;
+				for($i = 0; $i < count($this->m_courselist); $i++) {
+					if(isset($post['course' . $i]) && (strtolower($post['course' . $i]) == "on")) {
+						$courseselected = true;
+						break;
+					}
+				}
+				if($courseselected == false) {
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_admin::fn_setstudent}: No course has been selected.<br>';
+					}
+					$db->fn_disconnect();
+					$this->lasterrmsg = "No course has been selected";
+					return false;
+				}
 					
 				//check for user name
 				$this->m_sql = 'select * ' .
@@ -650,7 +684,7 @@
 							' where (profile_firstname = "' . $this->m_firstname .
 							'" and profile_lastname = "' . $this->m_lastname . '")';
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-				if (mysql_num_rows($resource) == 0) {
+				if (mysql_num_rows($resource) == 0) {					
 					//insert student
 					$this->m_sql = 'insert into ' . MYSQL_PROFILES_TBL . '(' .
 									'profile_uid, profile_firstname, profile_lastname, ' .
@@ -695,15 +729,6 @@
 						$db->fn_disconnect();
 						$this->lasterrmsg = "Cannot set student schedule";
 						return false;
-					}
-
-					//check if at least one course has been selected
-					if ($this->m_scheduleid == 0) {
-						if ($this->_DEBUG) {
-							echo 'ERROR {crc_admin::fn_setstudent}: No course has been selected. <br>';
-						}
-						$this->lasterrmsg = "No course has been selected";
-						$result = false;
 					}
 				} else {
 					if ($this->_DEBUG) {

@@ -1,6 +1,7 @@
-
 <form name="editcourse" action="crc_handler.php?method=courses&func=updatecourse" method="post">
+
 <input type="hidden" name="context" value="ou=Don Mills,ou=Toronto,ou=Ontario,ou=Canada,o=CRC World">
+
 <table width="500">
 		<tr>
 		<td valign="top" width="80">
@@ -24,16 +25,16 @@
 		if ($_GET['func'] == 'courselist') {
 
 			$data = $_SESSION['coursesdata'];
-			$data_len = count($data);
+			$data_len = count($data);			
 
 			print '<table class="std">';
 
 			$len = strlen($_SESSION['msg']);
 			if ($len > 0) {
-    			print('<tr><td class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
+    			print('<tr><td colspan="2" class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
 				$_SESSION['msg'] = "";
 			}
-
+			
 			print '<tr>';
 			print '<th colspan="2"><em>Edit Course Information</em></th>';
 			print '</tr>';
@@ -48,7 +49,7 @@
 				for ($i = 0; $i < $data_len; $i++) {
 					print '<tr>';
 					$cname = explode(",", $data[$i]['cnamedesc']); 
-					print '<td align="center" colspan="2"><a href="crc_handler.php?method=courses&func=editcourse&courseid=' . $data[$i]['courseid'] . '"><b>' . $cname[0] . '</b></td>';
+					print '<td align="center" colspan="2"><a href="crc_handler.php?method=courses&func=editcourse&courseid=' . $data[$i]['courseid'] . '"><b>' . $cname[0] . '</b></a></td>';
 					print '</tr>';	
 				}			
 			} else {
@@ -79,14 +80,14 @@
 			print '<table class="tbl">';
 			$len = strlen($_SESSION['msg']);
 			if ($len > 0) {
-    			print('<tr><td class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
+    			print('<tr><td colspan="2" class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
 				$_SESSION['msg'] = "";
 			}
 			print '<tr>';
 			print '<th colspan="2"><em>Edit Course Information</em></th>';
 			print '</tr>';
 			print '<tr>';
-        		print '<td align="right">Course Name: </td>';
+        		print '<td align="right"><span class="error">*</span>Course Name: </td>';
         		print '<td><input type="text" name="cname" size="50" value="' . $data[1] . '"></td>';
         	print '</tr>';
 			print '<tr>';
@@ -141,23 +142,23 @@
         		print '</td>';
         	print '</tr>';
 			print '<tr>';
-        		print '<td align="right">Start Date: </td>';
+        		print '<td align="right"><span class="error">*</span>Start Date: </td>';
 				$sdate = explode("-", $data[7]);
         		print '<td><input type="text" name="sday" size="2" value="' . $sdate[2] . '">-<input type="text" name="smonth" size="2" value="' . $sdate[1] . '">-<input type="text" name="syear" size="4" value="' . $sdate[0] . '"> (DD-MM-YYYY)';
         		print '</td>';
         	print '</tr>';
 			print '<tr>';
 				$edate = explode("-", $data[8]);
-        		print '<td align="right">End Date: </td>';
+        		print '<td align="right"><span class="error">*</span>End Date: </td>';
         		print '<td><input type="text" name="eday" size="2" value="' . $edate[2] . '">-<input type="text" name="emonth" size="2" value="' . $edate[1] . '">-<input type="text" name="eyear" size="4" value="' . $edate[0] . '"> (DD-MM-YYYY)';
         		print '</td>';
         	print '</tr>';
     		print '<tr>';
-	        	print '<td align="right">Day [Time]: </td>';
+	        	print '<td align="right"><span class="error">*</span>Day [Time]: </td>';
     	    	print '<td><input type="text" name="daytime" size="15" value="' . $data[9] . '"></td>';
 	        print '</tr>';
     		print '<tr>';
-        		print '<td align="right">Room: </td>';
+        		print '<td align="right"><span class="error">*</span>Room: </td>';
 	       		print '<td><input type="text" name="roomname" size="5" value="' . $data[15] . '"></td>';
         	print '</tr>';
     		print '<tr>';
@@ -184,12 +185,13 @@
 				}
 			print '</tr>';
   			print '<tr>';
-      			print '<td colspan="2" align="center"><BR/><input type="button" onclick="javascript:verify(\'editcourse\');" name="update" value="Update">';
+      			print '<td colspan="2" align="center"><BR/><input type="submit" name="Update" value="Update" onclick="javascript:verify(\'editcourse\');">';
 				print '</td>';
     		print '</tr>';
 			print '</table>'; 
 
 		}
     ?>
+</table>
 </form>
 

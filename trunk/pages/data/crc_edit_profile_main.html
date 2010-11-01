@@ -1,6 +1,7 @@
-
 <form name="editprofile" action="crc_handler.php?method=profile&func=updatestudent" method="post">
+
 <input type="hidden" name="context" value="ou=Don Mills,ou=Toronto,ou=Ontario,ou=Canada,o=CRC World">
+
 <table width="500">
 		<tr>
 		<td valign="top" width="80">
@@ -25,8 +26,10 @@
     <?php
 		$len = strlen($_SESSION['msg']);
 		if ($len > 0) {
-    		print('<tr><td class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
-			$_SESSION['msg'] = "";
+			if ($_SESSION['msg'] != "Invalid input") {//don't display an error message if the input is empty
+    			print('<tr><td class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
+				$_SESSION['msg'] = "";
+			}
 		}
 
 		print '<tr>';
@@ -48,7 +51,7 @@
         		print '</tr>';		
 				for ($i = 0; $i < $data_len; $i++) {
 					print '<tr>';
-					print '<td align="center" colspan="2"><a href="crc_handler.php?method=profile&func=editstudent&profileuid=' . $data[$i]['profileuid'] . '"><b>' . $data[$i]['lastfirstname'] . '</b></td>';
+					print '<td align="center" colspan="2"><a href="crc_handler.php?method=profile&func=editstudent&profileuid=' . $data[$i]['profileuid'] . '"><b>' . $data[$i]['lastfirstname'] . '</b></a></td>';
 					print '</tr>';	
 				}			
 			} else {
@@ -70,28 +73,32 @@
         	print '<td><input type="hidden" name="profileid" value="' . $data[0] . '" class="text"></td>';
         	print '</tr>';
 
+			print '<tr><br>';
+			print 'Please note that the fields with "<span class="error">*</span>" are mandatory.';
+			print '</tr>';
+
 		  	print '<tr>';
-		  		print '<td align="right">Username: </td>';
+		  		print '<td align="right"><span class="error">*</span>Username: </td>';
 		 		print '<td><input type="text" name="username" size="15" value="' . $data[1] . '"></td>';
 		  	print '</tr>';
           	print '<tr>';
-          		print '<td align="right">Password: </td>';
+          		print '<td align="right"><span class="error">*</span>Password: </td>';
           		print '<td><input type="password" name="password" size="15" value=""></td>';
           	print '</tr>';
           	print '<tr>';
-          		print '<td align="right">Given Name: </td>';
+          		print '<td align="right"><span class="error">*</span>Given Name: </td>';
           		print '<td><input type="text" name="fname" size="15" value="' . $data[3] . '"></td>';
           	print '</tr>';
           	print '<tr>';
-          		print '<td align="right">Surname: </td>';
+          		print '<td align="right"><span class="error">*</span>Surname: </td>';
           		print '<td><input type="text" name="lname" size="15" value="' . $data[4] . '"</td>';
           	print '</tr>';
     	  	print '<tr>';
-          		print '<td align="right">Email: </td>';
+          		print '<td align="right"><span class="error">*</span>Email: </td>';
           		print '<td><input type="text" name="email" size="40" value="' . $data[5] . '"></td>';
           	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Gender: </td>';
+          		print '<td align="right"><span class="error">*</span>Gender: </td>';
           		print '<td><select name="gender">';
           		if ($data[7] = 'M') {
             		print("<option selected>Male</option>");
@@ -104,12 +111,12 @@
           		print '</td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Date of Birth: </td>';
+          		print '<td align="right"><span class="error">*</span>Date of Birth: </td>';
           		print '<td><input type="text" name="day" size="2" value="' . substr($data[6], 8, 2) . '">-<input type="text" name="month" size="2" value="' . substr($data[6], 5, 2) . '">-<input type="text" name="year" size="4" value="' . substr($data[6], 0, 4) . '"> (DD-MM-YYYY)';
           		print '</td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Address: </td>';
+          		print '<td align="right"><span class="error">*</span>Address: </td>';
           		print '<td><input type="text" name="add1" size="40" value="' . $data[11] . '"></td>';
         	print '</tr>';
     		print '<tr>';
@@ -117,23 +124,23 @@
           		print '<td><input type="text" name="add2" size="40" value="' . $data[12] . '"></td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">City: </td>';
+          		print '<td align="right"><span class="error">*</span>City: </td>';
           		print '<td><input type="text" name="city" size="30" value="' . $data[13] . '"></td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Province: </td>';
+          		print '<td align="right"><span class="error">*</span>Province: </td>';
           		print '<td><input type="text" name="province" size="2" value="' . $data[14] . '"></td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Country: </td>';
+          		print '<td align="right"><span class="error">*</span>Country: </td>';
           		print '<td><input type="text" name="country" size="30" value="' . $data[16] . '"></td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Postal Code: </td>';
+          		print '<td align="right"><span class="error">*</span>Postal Code: </td>';
           		print '<td><input type="text" name="pc" size="15" value="' . $data[15] . '"></td>';
         	print '</tr>';
     		print '<tr>';
-          		print '<td align="right">Phone: </td>';
+          		print '<td align="right"><span class="error">*</span>Phone: </td>';
           		print '<td>(<input type="text" name="lcode" size="4" value="' . substr($data[17], 0, 4) . '">) ';
               	print '<input type="text" name="lprefix" size="4" value="' . substr($data[17], 4, 4) . '">-';
               	print '<input type="text" name="lpostfix" size="6" value="' . substr($data[17], 8, 6) . '">';
@@ -163,7 +170,7 @@
 				print '</td>';
 			print '</tr>';
   			print '<tr>';
-      			print '<td colspan="2" align="center"><BR/><input type="button" onclick="javascript:verify(\'editprofile\');" name="update" value="Update">';
+      			print '<td colspan="2" align="center"><BR/><input type="submit" onclick="javascript:verify(\'editprofile\');" name="update" value="Update">';
 		  		print '</td>';
     		print '</tr>';
 

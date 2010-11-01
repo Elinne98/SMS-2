@@ -152,6 +152,13 @@
 			   	$this->lasterrmsg = "Invalid input";
 				return false;
 			}
+			if(($post['cname'] == "") || ($post['syear'] == "") ||
+			($post['smonth'] == "") || ($post['sday'] == "") ||
+			($post['eyear'] == "") || ($post['emonth'] == "") ||
+			($post['eday'] == "") || ($post['roomname'] == "") ||
+			($post['daytime'] == "")) {
+				return false;
+			}
 			
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
