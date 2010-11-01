@@ -958,7 +958,7 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertText('Profile updated successfully!');
 	}
-	
+
 	function testStudentHelp() {
 		$this->assertTrue($this->get(FRESMS_BASE_URL . '/pages/crc_login.php'));
 		$this->assertTrue($this->setField('username', 'gica'));
