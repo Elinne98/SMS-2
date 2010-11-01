@@ -117,7 +117,51 @@ function verify(page) {
 			profile.submit();
 		}
 	} else if (page == "editprofile") {
-		editprofile.submit();
+		if (editprofile.username.value == "") {
+			alert("Please enter a valid username");
+			editprofile.username.focus();
+		} else if (editprofile.password.value == "") {
+			alert("Please enter a valid password");
+			editprofile.password.focus();
+		} else if (editprofile.fname.value == "") {
+			alert("Please enter a valid first name");
+			editprofile.fname.focus();
+		} else if (editprofile.lname.value == "") {
+			alert("Please enter a valid last name");
+			editprofile.lname.focus();
+		} else if (editprofile.email.value == "") {
+			alert("Please enter a valid e-mail");
+			editprofile.email.focus();
+		} else if (editprofile.day.value == "") {
+			alert("Please enter a valid day");
+			editprofile.day.focus();
+		} else if (editprofile.month.value == "") {
+			alert("Please enter a valid month");
+			editprofile.month.focus();
+		} else if (editprofile.year.value == "") {
+			alert("Please enter a valid year");
+			editprofile.year.focus();
+		} else if (editprofile.add1.value == "") {
+			alert("Please enter a valid address");
+			editprofile.add1.focus();
+		} else if (editprofile.city.value == "") {
+			alert("Please enter a valid city");
+			editprofile.city.focus();
+		} else if (editprofile.province.value == "") {
+			alert("Please enter a valid province");
+			editprofile.province.focus();
+		} else if (editprofile.country.value == "") {
+			alert("Please enter a valid country");
+			editprofile.country.focus();
+		} else if (editprofile.pc.value == "") {
+			alert("Please enter a valid postal code");
+			editprofile.pc.focus();
+		} else if ((editprofile.lcode.value == "") || (editprofile.lprefix.value == "") || (editprofile.lpostfix.value == "")) {
+			alert("Please enter a valid phone");
+			editprofile.lprefix.focus();			
+		} else {
+			editprofile.submit();
+		}
 	} else if (page == "adminaddcourse") {
 		if (adminaddcourse.cname.value == "") {
 			alert("Please enter a valid 'Course Name'!");
@@ -150,7 +194,36 @@ function verify(page) {
 			adminaddcourse.submit();
 		}
 	} else if (page == "editcourse") {
-		editcourse.submit();
+		if (editcourse.cname.value == "") {
+			alert("Please enter a valid 'Course Name'!");
+			editcourse.cname.focus();
+		} else if (editcourse.sday.value == "") {
+			alert("Please enter a valid 'Start Day'!");
+			editcourse.sday.focus();
+		} else if (editcourse.smonth.value == "") {
+			alert("Please enter a valid 'Start Month'!");
+			editcourse.smonth.focus();
+		} else if (editcourse.syear.value == "") {
+			alert("Please enter a valid 'Start Year'!");
+			editcourse.syear.focus();
+		} else if (editcourse.eday.value == "") {
+			alert("Please enter a valid 'End Day'!");
+			editcourse.eday.focus();
+		} else if (editcourse.emonth.value == "") {
+			alert("Please enter a valid 'End Month'!");
+			editcourse.emonth.focus();
+		} else if (editcourse.eyear.value == "") {
+			alert("Please enter a valid 'End Year'!");
+			editcourse.eyear.focus();
+		}else if (editcourse.daytime.value == "") {
+			alert("Please enter a valid 'Day Time'!");
+			editcourse.daytime.focus();
+		} else if (editcourse.roomname.value == "") {
+			alert("Please enter a valid 'Room'!");
+			editcourse.room.focus();
+		} else {
+			editcourse.submit();
+		}		
 	} else if (page == "adminaddstudent") {
 		if (adminaddstudent.fname.value == "") {
 			alert("Please enter a valid 'Given Name'!");

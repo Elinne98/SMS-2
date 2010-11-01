@@ -129,7 +129,11 @@
 				$this->lasterrmsg = "Incomplete input";
 				return false;		
 			}
-			if (($post['profileid'] == "") ||($post['username'] == "") || ($post['password'] == "") ||
+			if ($post['profileid'] == "") {
+				$this->lasterrmsg = "Empty profile ID";
+				return false;
+			}
+			if (($post['username'] == "") || ($post['password'] == "") ||
 				($post['email'] == "") ||($post['fname'] == "") || ($post['lname'] == "") ||
 				($post['year'] == "") || ($post['month'] == "") ||
 				($post['day'] == "") || ($post['gender'] == "") ||
@@ -137,7 +141,7 @@
 				($post['city'] == "") || ($post['province'] == "") ||
 				($post['pc'] == "") || ($post['country'] == "") ||
 				($post['lcode'] == "") || ($post['lprefix'] == "") || ($post['lpostfix'] == "")) {
-					$this->lasterrmsg = "Invalid input";
+					$this->lasterrmsg = "";
 					return false;
 			}			
 
@@ -145,6 +149,23 @@
 			$db = new crc_mysql($this->_DEBUG);
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != false) {
+				//don't allow users with the same name
+				$this->m_sql = 'select * ' . 
+								'from ' . MYSQL_PROFILES_TBL . 
+								' where (profile_firstname = "' . ucfirst($post['fname']) . '") and ' .
+								'(profile_lastname = "' . ucfirst($post['lname']) . '")';
+				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_num_rows($result) > 0) {
+					while ($row = mysql_fetch_array($result)) {
+						if ($row[0] != $post['profileid']) {
+							$this->lasterrmsg = 'The user ' . ucfirst($post['fname']) . ' '. ucfirst($post['lname']) . ' already exists in database.';
+							$db->fn_freesql($result);
+							$db->fn_disconnect();
+							return false;
+						}						
+					}
+				}
+				
 				$this->m_sql = 'update ' . MYSQL_PROFILES_TBL .
 								' SET profile_uid="' . $post['username'] . '", profile_pwd=SHA1("' . strtolower($post['password']) . '"), ' .
 								'profile_firstname="' . ucfirst($post['fname']) . '", profile_lastname="' . ucfirst($post['lname']) . '", ' .

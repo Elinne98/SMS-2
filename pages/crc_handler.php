@@ -1,7 +1,7 @@
 <?php
 if(isset($_REQUEST[session_name()])) {
 	// There is a session already available
-	session_start();
+	//session_start();
 } else {
 	session_name('crc');
 	session_start();
@@ -231,7 +231,6 @@ print '[' . $title . ']';
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_unknown.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 			}
 
-
 		} else if ($_GET['method'] == 'courses') {
 
 			if ($_GET['func'] == 'get') {
@@ -276,7 +275,6 @@ print '[' . $title . ']';
 			} else {
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_unknown.php?' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 			}
-
 
 		} else if ($_GET['method'] == 'teacher') {
 

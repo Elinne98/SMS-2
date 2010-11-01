@@ -25,6 +25,7 @@
             $len = strlen($_SESSION['msg']);
             if ($len > 0) {
                	print '<span class=red>' . $_SESSION['msg'] . '</span>';
+				$_SESSION['msg'] = '';
             } else {
 				$data = $_SESSION['scheduledata'];
 				if ($data != null) {
