@@ -1,3 +1,30 @@
+2010-11-01 17:52  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* tests, tests/admin_test.php, tests/all_tests.php,
+	  tests/courses_test.php, tests/dbsetup_test.php,
+	  tests/evaluation_test.php, tests/login_test.php,
+	  tests/mysql_test.php, tests/profile_test.php,
+	  tests/register_test.php, tests/schedule_test.php,
+	  tests/show_passes.php, tests/simpletest, tests/teacher_test.php,
+	  tests/web_test.php: added unit testing
+
+2010-11-01 17:50  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* classes/crc_admin.cls.php, classes/crc_courses.cls.php,
+	  classes/crc_profile.cls.php, pages/crc_courses.php,
+	  pages/crc_handler.php, pages/data/crc_course_stats_main.html,
+	  pages/data/crc_edit_course_main.html,
+	  pages/data/crc_edit_profile_main.html,
+	  pages/data/crc_profile_main.html,
+	  pages/data/crc_schedule_main.html,
+	  pages/data/crc_students_main.html,
+	  pages/data/crc_teacher_main.html, scripts/tools.js: added unit
+	  testing using simpletest framework
+
+2010-10-19 06:42  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: changeLog upd
+
 2010-10-19 06:35  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* ChangeLog, classes/crc_admin.cls.php,
