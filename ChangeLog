@@ -1,3 +1,14 @@
+2010-11-05 18:09  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* classes/crc_profile.cls.php, install.txt, pages/crc_handler.php,
+	  pages/data/crc_edit_profile_main.html, tests/web_test.php:
+	  corrected bug related to uid change when updating user profile as
+	  admin
+
+2010-11-01 19:19  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: added README file for unit tests
+
 2010-11-01 19:17  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* install.txt: added README file for unit tests
