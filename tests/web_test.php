@@ -615,7 +615,12 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertTrue($this->setField('username', 'admin'));
 		$this->assertTrue($this->setField('password', 'admin'));
 		$this->assertTrue($this->click('login'));
-		$this->followMetaRefreshURL();		
+		$this->followMetaRefreshURL();
+
+		//check account information
+		$this->assertText('User: Firstname Lastname');
+		$this->assertText('Userid: admin');
+		$this->assertText('Role: Administrator');
 		
 		//"Edit Course" menu
 		$this->assertTrue($this->click('Edit Student'));
@@ -639,6 +644,11 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertField('fname', 'Gheorghe');
 		$this->assertField('lname', 'Hagi');
 		
+		//account information should remain unchanged
+		$this->assertText('User: Firstname Lastname');
+		$this->assertText('Userid: admin');
+		$this->assertText('Role: Administrator');
+		
 		//set password without selecting any course and update should succeed
 		$this->assertTrue($this->setField('password', 'a'));
 		$this->assertTrue($this->click('Update'));		
@@ -646,6 +656,11 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertText('"Hagi, Gheorghe" updated successfully!');
 		$this->assertText('Edit Student Profile');
+		
+		//account information should remain unchanged
+		$this->assertText('User: Firstname Lastname');
+		$this->assertText('Userid: admin');
+		$this->assertText('Role: Administrator');
 		
 		//access the same student and select course
 		$this->assertTrue($this->click('Hagi, Gheorghe'));
@@ -658,6 +673,11 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->followMetaRefreshURL();
 		$this->assertText('"Hagi, Gheorghe" updated successfully!');
+		
+		//account information should remain unchanged
+		$this->assertText('User: Firstname Lastname');
+		$this->assertText('Userid: admin');
+		$this->assertText('Role: Administrator');
 	}
 	
 	function testAdminSchedule() {

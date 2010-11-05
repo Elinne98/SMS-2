@@ -40,7 +40,7 @@ you have a public_home folder you could extract there FreeSMS archive.
 
 3. MySQL Server Database Setup:
 ===============================
-From web browser: go to the following link: http://<server>/FreeSMS/mysql/setup.php
+From web browser: go to the following link: http://<server>/freesms/mysql/setup.php
 and follow the instructions (root access to the MySQL database is needed).
 From Linux terminal: use the bash script provided in "[Install Directory]/mysql/" folder 
 (root access to the MySQL database is needed).
