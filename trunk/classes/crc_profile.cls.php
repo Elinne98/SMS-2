@@ -112,7 +112,7 @@
 			return $this->m_data;
 		}
 
-		function fn_setprofile($post) {
+		function fn_setprofile($post, $keepuid = false) {
 			//******************************************
 			// Update the users profile information
 			//******************************************
@@ -177,7 +177,9 @@
 								' where (profile_id = ' . $post['profileid'] . ')';
 				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if ($result) {
-					$_SESSION['uid'] = $post['username'];
+					if ($keepuid == false) {
+						$_SESSION['uid'] = $post['username'];
+					}
 				} else {
 					$this->lasterrnum = ERR_PROFILE_UPDATE_NUM;
 					$this->lasterrmsg = ERR_PROFILE_UPDATE_DESC;

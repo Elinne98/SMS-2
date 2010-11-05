@@ -192,7 +192,7 @@ print '[' . $title . ']';
 			} else if ($_GET['func'] == 'updatestudent') {
 
 				$profile = new crc_profile(false);
-				$result_profile = $profile->fn_setprofile($_POST);
+				$result_profile = $profile->fn_setprofile($_POST, true);
 				$admin = new crc_admin(false);
 				$result_admin = $admin->fn_setstudentschedule(null, $_POST, $_POST['profileid']);
 				if ($result_profile == false) {
