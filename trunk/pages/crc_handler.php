@@ -415,7 +415,7 @@ print '[' . $title . ']';
 
 			} else if ($_GET['func'] == 'add') {
 
-				if ($evaluation->fn_setquestions($_SESSION['profileid'], $_GET['questions'], $_POST)) {
+				if ($evaluation->fn_setquestions($_SESSION['profileid'], $_POST)) {
 					$_SESSION['msg'] = "Thank you! You feedback is important to us and will be communicated accordingly.";
 				} else {
 					$_SESSION['msg'] = "Sorry, There was an error submittimg your feedback.";

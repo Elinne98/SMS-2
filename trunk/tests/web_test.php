@@ -16,6 +16,31 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->get($this->m_refreshurl);
 	}
 	
+	//only the first button is selected from the current page
+	function clickOnButton($button_type) {
+		
+		switch ($button_type) {
+			case 'Evaluate':
+				$link = 'crc_handler.php?method=evaluation&func=get&course=00'; 
+				break;
+			case 'MarkPresent':
+				$link = 'crc_handler.php?method=teacher&action=P&func=setpresent&scheduleid=00&day=19&month=11&year=2010';
+				break;
+			case 'MarkAbsent':
+				$link = 'crc_handler.php?method=teacher&action=A&func=setpresent&scheduleid=00&day=19&month=11&year=2010';
+				break;
+			default:
+				return false;
+		}
+		
+		$browser = $this->getBrowser();
+		$content = $browser->getContent();
+		$url = strstr($content, 'javascript:window.location');
+		$this->get(substr($url, strlen("javascript:window.location='"), strlen($link)));
+		$this->followMetaRefreshURL();
+		return true;
+	} 
+	
 	function testDBSetup() {
 		//load page
 		$this->assertTrue($this->get(FRESMS_BASE_URL . '/mysql/setup.php'));
@@ -821,14 +846,26 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertTrue($this->click('1'));
 		$this->followMetaRefreshURL();
 		$this->assertLink('Lacatus, Marius');
-		//and the corresponding page
+		$this->assertText('Absent');
+		//simulate toggle on 'MarkPresent'/'MarkAbsent' buttons
+		$this->assertTrue($this->clickOnButton('MarkPresent'));
+		$this->assertText('Present');
+		$this->assertTrue($this->clickOnButton('MarkAbsent'));
+		$this->assertText('Absent');
+		$this->assertTrue($this->clickOnButton('MarkPresent'));
+		$this->assertText('Present');
+		
+		
+		//check the page for "Lacatus, Marius"
 		$this->assertTrue($this->click('Lacatus, Marius'));
 		$this->followMetaRefreshURL();
 		$this->assertText('This page has the attendance for student Lacatus, Marius');
 		$this->assertLink('Digital Signal Processing');
+		$this->assertText('Present');
 		$this->assertTrue($this->click('Digital Signal Processing'));
 		$this->followMetaRefreshURL();
 		$this->assertLink('Lacatus, Marius');
+		$this->assertText('Present');
 		
 		//check student for "Numerical Algorithms"
 		$this->assertTrue($this->click('Schedule'));
@@ -837,6 +874,12 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertLink('Hagi, Gheorghe');
 		$this->assertLink('Rus, Cristina');
+		$this->assertText('Absent');
+		
+		//mark 'Hagi, Gheorghe' as present
+		$this->assertTrue($this->clickOnButton('MarkPresent'));
+		$this->assertText('Present');
+		
 		//check the page for 'Rus, Cristina'
 		$this->assertTrue($this->click('Rus, Cristina'));
 		$this->followMetaRefreshURL();
@@ -933,6 +976,14 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertText('These are the courses that you have registered for, if any.');
 		$this->assertText('C++ Programming');
 		$this->assertText('Numerical Algorithms');
+		
+		//"Evaluate" course (quick hack since a button cannot be clicked)		
+		$this->clickOnButton('Evaluate');
+		$this->assertText('Welcome Gheorghe Hagi,');
+		$this->assertText('Please note that once you submit your feedback you cannot change your answers or reevaluate this course.');
+		$this->assertTrue($this->click('Submit'));
+		$this->followMetaRefreshURL();
+		$this->assertText('Thank you! You feedback is important to us and will be communicated accordingly.');
 	}
 	
 	function testStudentProfile() {

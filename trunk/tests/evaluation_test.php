@@ -66,9 +66,9 @@ class TestOfEvaluationClass extends UnitTestCase {
 		$this->assertFalse($evaluation->fn_setquestions($profileid, ""));
 		$this->assertEqual($evaluation->lasterrmsg, "Invalid input");
 		
-		$data['schedule_id'] = "1";
+		$data['schedule_id'] = "1";		
 		$this->assertFalse($evaluation->fn_setquestions($profileid, $data));
-		$this->assertEqual($evaluation->lasterrmsg, "Cannot update student schedule");
+		$this->assertEqual($evaluation->lasterrmsg, "Cannot update student schedule");		
 	}
 	
 	function testGetQuestion() {

@@ -36,13 +36,13 @@ include_once('../classes/crc_profile.cls.php');
 
 			print $_SESSION['name'] . ',';
 			print '<p>';
-			print '&nbsp These are your courses, if any. Please note that courses mentioned are forcasts and may ';
-            print 'change upon teacher and student availability.';
-			print '<br>&nbsp By clicking on the students number you will be able to mark the attendance for the current date.';
-			print '<br>&nbsp By clicking on the course name you will be able to see course statistics (attendance, course feedback).';
-			print '<p></p>';
 
-			if (count($data) > 0) {
+			if (count($data) > 0) {				
+				print '&nbsp These are your courses, if any. Please note that courses mentioned are forcasts and may ';
+            	print 'change upon teacher and student availability.';
+				print '<br>&nbsp By clicking on the students number you will be able to mark the attendance for the current date.';
+				print '<br>&nbsp By clicking on the course name you will be able to see course statistics (attendance, course feedback).';
+				print '<p></p>';
 
 		        print '<table width="550" border=0 class="popcal">';
 				print '<tr>';

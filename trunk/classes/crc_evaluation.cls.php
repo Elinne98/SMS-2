@@ -176,6 +176,8 @@
 			if ($this->_DEBUG) {
 				echo "DEBUG {crc_evaluation::fn_setquestions}: Updating the user evaluation information.<br>";
 			}
+			
+			$this->lasterrmsg = "";//reset error message
 			if(!isset($post['schedule_id']) || ($post['schedule_id'] == "") ||
 			    ($profileid == null) || ($profileid == "")) {
 				$this->lasterrmsg = "Invalid input";
@@ -187,23 +189,23 @@
 			$dbhandle = $db->fn_connect();
 			if ($dbhandle != false) {
 
+				$this->m_sql = 'update ' . MYSQL_STUDENT_SCHEDULE_TBL .
+									' SET student_schedule_questions = 0 ' .
+									'where (student_schedule_id = ' . $post['schedule_id'] . ')'; 
+				$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+				if (mysql_affected_rows() <= 0)
+				{
+					if ($this->_DEBUG) {
+						echo 'ERROR {crc_evaluation::fn_setquestions}: Cannot update student schedule for student schedule id ' . $post['schedule_id'] . '.<br>';
+					}
+					$this->lasterrmsg = "Cannot update student schedule";
+					return false;
+				}				
 				$this->m_sql = 'insert into ' . MYSQL_FEEDBACK_TBL .
 								' (feedback_profile_id, feedback_schedule_id) ' .
 								' values (' . $profileid . ', ' . $post['schedule_id'] . ')'; 					
 				$db->fn_runsql(MYSQL_DB, $this->m_sql);
 				if (mysql_affected_rows() > 0) {
-					$this->m_sql = 'update ' . MYSQL_STUDENT_SCHEDULE_TBL .
-									' SET student_schedule_questions = 0 ' .
-									'where (student_schedule_id = ' . $post['schedule_id'] . ')'; 
-					$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
-					if (!is_resource($resource))
-					{
-						if ($this->_DEBUG) {
-							echo 'ERROR {crc_evaluation::fn_setquestions}: Cannot update student schedule.<br>';
-						}
-						$this->lasterrmsg = "Cannot update student schedule";
-						return false;
-					}
 					$this->m_sql = 'select * from ' . MYSQL_FEEDBACK_TBL .
 									' where (feedback_profile_id = ' . $profileid . ') and ' .
 									'(feedback_schedule_id = ' . $post['schedule_id'] . ')';
@@ -239,9 +241,17 @@
 											' values (' . $feedback[0] . ', ' . $question[0] . ', "0", "' . $answer . '")'; 
 						
 						}
-						$db->fn_runsql(MYSQL_DB, $this->m_sql);
-					}
-					$result = true;			
+						$result = $db->fn_runsql(MYSQL_DB, $this->m_sql);
+						if ($result == false) {
+							if ($this->_DEBUG) {
+								echo 'ERROR {crc_evaluation::fn_setquestions}: Could not insert feedback information.<br>';
+							}
+							$this->lasterrmsg = mysql_error();
+							$this->lasterrnum = mysql_errno();
+							$db->fn_freesql($resource);
+							return $result;
+						}
+					}		
 					$db->fn_freesql($resource);
 				} else {
 					$this->lasterrnum = ERR_FEEDBACK_ADD_NUM;
