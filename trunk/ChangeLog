@@ -1,3 +1,15 @@
+2010-11-13 13:45  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* pages/data/crc_page_header_band.html: changed version number
+
+2010-11-13 13:28  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* tests/simpletest/README: README for simpletest updated
+
+2010-11-13 13:22  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: ChangeLog upd
+
 2010-11-13 13:19  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* classes/crc_evaluation.cls.php, pages/crc_handler.php,
