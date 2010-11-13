@@ -1,3 +1,17 @@
+2010-11-13 13:19  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* classes/crc_evaluation.cls.php, pages/crc_handler.php,
+	  pages/data/crc_evaluation_main.html,
+	  pages/data/crc_teacher_main.html, tests/evaluation_test.php,
+	  tests/simpletest/README, tests/web_test.php: fixed course
+	  evaluation, added basic test support for course evaluation,
+	  changed message displayed for teacher when no course is
+	  scheduled, improved test support for student attendance
+
+2010-11-05 18:12  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog: ChangeLog upd
+
 2010-11-05 18:09  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* classes/crc_profile.cls.php, install.txt, pages/crc_handler.php,
