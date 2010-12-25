@@ -367,7 +367,7 @@ print '[' . $title . ']';
 				} else {
 					$_SESSION['msg'] = "Course successfully added";
 				}
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin.php?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 				
 			} else if ($_GET['func'] == 'showaddstudent') {
 								
