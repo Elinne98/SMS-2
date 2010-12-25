@@ -1,3 +1,12 @@
+2010-12-25 14:47  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* tests/simpletest/README: README upd
+
+2010-12-25 14:27  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog, tests/simpletest/README, tests/web_test.php: ChangeLog
+	  upd
+
 2010-12-25 14:09  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* mysql/crc_database_setup.sql, pages/crc_handler.php,
