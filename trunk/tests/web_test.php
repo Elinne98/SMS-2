@@ -2,7 +2,7 @@
 
 //the tests order in the web test case CANNOT be changed
 //TODO: modify the line bellow according to your settings
-define('FRESMS_BASE_URL', 'http://localhost/FreeSMS');
+define('FRESMS_BASE_URL', 'http://localhost/~bogdan/FreeSMS');
 
 class TestOfWebPagesClass extends WebTestCase {
 
