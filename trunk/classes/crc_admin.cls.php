@@ -439,7 +439,8 @@
 			if ($db->m_mysqlhandle != 0) {
 				$this->m_sql = 'select * ' .
 								'from ' . MYSQL_COURSES_TBL . 
-								' where (course_active = "0")';				
+								' where (course_active = "0") ' .
+								'order by course_name asc';				
 				$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);											
 				if (mysql_num_rows($resource) > 0) {					
 					$index = 0;
@@ -774,9 +775,11 @@
 					$this->fn_getscheduleid($db, $this->m_courselist[$i]['courseid']);
 					if ($this->m_scheduleid == 0) {
 						if ($this->_DEBUG) {
-							echo 'ERROR {crc_admin::fn_setstudent}: Could not get schedule id. <br>';
+							echo 'ERROR {crc_admin::fn_setstudentschedule}: Could not get schedule id. <br>';
 						}
-						$db->fn_freesql($resource);
+						if (is_resource($resource)) {
+							$db->fn_freesql($resource);
+						}
 						$db->fn_disconnect();
 						return false;
 					}
@@ -798,7 +801,7 @@
 						$resource = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 						if (mysql_affected_rows() <= 0) {
 							if ($this->_DEBUG) {
-								echo 'ERROR {crc_admin::fn_setstudent}: Could not insert student schedule information. <br>';
+								echo 'ERROR {crc_admin::fn_setstudentschedule}: Could not insert student schedule information. <br>';
 							}
 							$db->fn_freesql($resource);
 							$db->fn_disconnect();
@@ -809,7 +812,9 @@
 			}
 			
 			if ($closedb == true) {
-				$db->fn_freesql($resource);
+				if (is_resource($resource)) {
+					$db->fn_freesql($resource);
+				}
 				$db->fn_disconnect();
 			}
 			

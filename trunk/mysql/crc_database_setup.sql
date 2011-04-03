@@ -5,7 +5,7 @@ CREATE TABLE `crc_attendance` (
   `attendance_date_id` int(11) NOT NULL default '0',
   `attendance_check` char(1) NOT NULL default 'A',
   PRIMARY KEY  (`attendance_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 ;
+) TYPE=MyISAM AUTO_INCREMENT=75 ;
 
 DROP TABLE IF EXISTS `crc_courses`;
 CREATE TABLE `crc_courses` (
@@ -15,7 +15,7 @@ CREATE TABLE `crc_courses` (
   `course_active` tinyint(1) NOT NULL default '0',
   `course_fee` int(11) NOT NULL default '0',
   PRIMARY KEY  (`course_id`,`course_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 ;
+) TYPE=MyISAM AUTO_INCREMENT=13 ;
 
 DROP TABLE IF EXISTS `crc_date`;
 CREATE TABLE `crc_date` (
@@ -24,18 +24,18 @@ CREATE TABLE `crc_date` (
   `date_month` char(2) NOT NULL default '',
   `date_year` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`date_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 ;
+) TYPE=MyISAM AUTO_INCREMENT=14 ;
 
 DROP TABLE IF EXISTS `crc_feedback`;
 CREATE TABLE `crc_feedback` (
   `feedback_id` int(11) NOT NULL auto_increment,
   `feedback_profile_id` int(11) NOT NULL default '0',
   `feedback_schedule_id` int(11) NOT NULL default '0',
-  `feedback_date` timestamp NOT NULL,
+  `feedback_date` timestamp(14) NOT NULL,
   `feedback_active` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`feedback_id`),
   KEY `feedback_profile_id` (`feedback_profile_id`,`feedback_schedule_id`)
-) ENGINE=MyISAM COMMENT='This table is facility to store feddback information from st' AUTO_INCREMENT=20 ;
+) TYPE=MyISAM COMMENT='This table is facility to store feddback information from st' AUTO_INCREMENT=20 ;
 
 DROP TABLE IF EXISTS `crc_feedback_answers`;
 CREATE TABLE `crc_feedback_answers` (
@@ -46,7 +46,7 @@ CREATE TABLE `crc_feedback_answers` (
   `feedback_answers_active` tinyint(4) NOT NULL default '0',
   `feedback_answers_comments` text NOT NULL,
   PRIMARY KEY  (`feedback_answers_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=449 ;
+) TYPE=MyISAM AUTO_INCREMENT=449 ;
 
 DROP TABLE IF EXISTS `crc_feedback_questions`;
 CREATE TABLE `crc_feedback_questions` (
@@ -58,7 +58,7 @@ CREATE TABLE `crc_feedback_questions` (
   `feedback_questions_sequence` int(11) NOT NULL default '0',
   PRIMARY KEY  (`feedback_questions_id`),
   KEY `SEQUENCE` (`feedback_questions_sequence`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 ;
+) TYPE=MyISAM AUTO_INCREMENT=29 ;
 
 INSERT INTO `crc_feedback_questions` (`feedback_questions_id`, `feedback_questions_question`, `feedback_questions_active`, `feedback_questions_type`, `feedback_questions_category`, `feedback_questions_sequence`) VALUES (1, 'I feel that I have gained new skills and knowledge.', 0, 'OPTION', 'GENERAL', 1);
 INSERT INTO `crc_feedback_questions` (`feedback_questions_id`, `feedback_questions_question`, `feedback_questions_active`, `feedback_questions_type`, `feedback_questions_category`, `feedback_questions_sequence`) VALUES (2, 'I will recommend the course to other member(s).', 0, 'OPTION', 'GENERAL', 2);
@@ -109,9 +109,9 @@ CREATE TABLE `crc_profiles` (
   `profile_role_id` int(11) NOT NULL default '0',
   `profile_active` tinyint(1) NOT NULL default '0',
   `profile_rdn` varchar(100) default 'ou=don mills,ou=toronto,ou=ontario,ou=canada,o=crc world',
-  `profile_date` timestamp NOT NULL,
+  `profile_date` timestamp(14) NOT NULL,
   PRIMARY KEY  (`profile_id`,`profile_uid`,`profile_email`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 ;
+) TYPE=MyISAM AUTO_INCREMENT=24 ;
 
 INSERT INTO `crc_profiles` (`profile_id`, `profile_uid`, `profile_pwd`, `profile_firstname`, `profile_lastname`, `profile_email`, `profile_dob`, `profile_gender`, `profile_employed`, `profile_employed_title`, `profile_employed_company`, `profile_address_one`, `profile_address_two`, `profile_city`, `profile_province_state`, `profile_postal_code`, `profile_country`, `profile_phone_land`, `profile_phone_cell`, `profile_phone_fax`, `profile_role_id`, `profile_active`, `profile_rdn`) VALUES (1, 'admin', SHA1('admin'), 'Firstname', 'Lastname', 'admin@domain.com', '1977-11-19', 'M', 0, '', '', 'Campulung', '', 'Campulung', 'AG', '115100', 'Romania', '00400000000000', '00400000000000', '00400000000000', 1, 0, 'ou=don mills,ou=toronto,ou=ontario,ou=canada,o=crc world');
 
@@ -122,7 +122,7 @@ CREATE TABLE `crc_roles` (
   `role_desc` varchar(255) NOT NULL default '',
   `role_active` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`role_id`,`role_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 ;
+) TYPE=MyISAM AUTO_INCREMENT=4 ;
 
 INSERT INTO `crc_roles` (`role_id`, `role_name`, `role_desc`, `role_active`) VALUES (1, 'Administrator', 'CRC Administrator role', 1);
 INSERT INTO `crc_roles` (`role_id`, `role_name`, `role_desc`, `role_active`) VALUES (2, 'Teacher', 'CRC Teacher role', 1);
@@ -134,7 +134,7 @@ CREATE TABLE `crc_rooms` (
   `room_name` varchar(100) NOT NULL default '',
   `room_desc` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`room_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 ;
+) TYPE=MyISAM AUTO_INCREMENT=3 ;
 
 DROP TABLE IF EXISTS `crc_schedule`;
 CREATE TABLE `crc_schedule` (
@@ -148,7 +148,7 @@ CREATE TABLE `crc_schedule` (
   `schedule_active` tinyint(1) NOT NULL default '0',
   `schedule_venue_id` int(11) NOT NULL default '1',
   PRIMARY KEY  (`schedule_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 ;
+) TYPE=MyISAM AUTO_INCREMENT=15 ;
 
 DROP TABLE IF EXISTS `crc_sessions`;
 CREATE TABLE `crc_sessions` (
@@ -157,9 +157,9 @@ CREATE TABLE `crc_sessions` (
   `session_uid` varchar(15) NOT NULL default '',
   `session_pwd` varchar(15) NOT NULL default '',
   `session_dn` varchar(255) NOT NULL default '',
-  `session_time` timestamp NOT NULL,
+  `session_time` timestamp(14) NOT NULL,
   PRIMARY KEY  (`session_oid`)
-) ENGINE=MyISAM AUTO_INCREMENT=460 ;
+) TYPE=MyISAM AUTO_INCREMENT=460 ;
 
 DROP TABLE IF EXISTS `crc_states`;
 CREATE TABLE `crc_states` (
@@ -167,7 +167,7 @@ CREATE TABLE `crc_states` (
   `state_name` varchar(50) NOT NULL default '',
   `state_desc` text NOT NULL,
   PRIMARY KEY  (`state_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 ;
+) TYPE=MyISAM AUTO_INCREMENT=6 ;
 
 DROP TABLE IF EXISTS `crc_student_schedule`;
 CREATE TABLE `crc_student_schedule` (
@@ -178,7 +178,7 @@ CREATE TABLE `crc_student_schedule` (
   `student_schedule_amount` int(11) NOT NULL default '0',
   `student_schedule_questions` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`student_schedule_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 ;
+) TYPE=MyISAM AUTO_INCREMENT=37 ;
 
 DROP TABLE IF EXISTS `crc_teacher_schedule`;
 CREATE TABLE `crc_teacher_schedule` (
@@ -187,7 +187,7 @@ CREATE TABLE `crc_teacher_schedule` (
   `teacher_schedule_schedule_id` int(11) NOT NULL default '0',
   `teacher_schedule_evaluation` int(11) NOT NULL default '0',
   PRIMARY KEY  (`teacher_schedule_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 ;
+) TYPE=MyISAM AUTO_INCREMENT=8 ;
 
 DROP TABLE IF EXISTS `crc_venue`;
 CREATE TABLE `crc_venue` (
@@ -196,4 +196,4 @@ CREATE TABLE `crc_venue` (
   `venue_desc` varchar(100) NOT NULL default '',
   `venue_shortname` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`venue_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 ;
+) TYPE=MyISAM AUTO_INCREMENT=2 ;

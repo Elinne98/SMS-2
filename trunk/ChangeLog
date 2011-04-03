@@ -1,22 +1,3 @@
-2010-12-25 14:47  Bogdan Cristea <cristeab@users.sourceforge.net>
-
-	* tests/simpletest/README: README upd
-
-2010-12-25 14:27  Bogdan Cristea <cristeab@users.sourceforge.net>
-
-	* ChangeLog, tests/simpletest/README, tests/web_test.php: ChangeLog
-	  upd
-
-2010-12-25 14:09  Bogdan Cristea <cristeab@users.sourceforge.net>
-
-	* mysql/crc_database_setup.sql, pages/crc_handler.php,
-	  tests/all_tests.php, tests/web_test.php: corrections for WinXP
-	  installation
-
-2010-11-13 14:00  Bogdan Cristea <cristeab@users.sourceforge.net>
-
-	* ChangeLog: ChangeLog upd
-
 2010-11-13 13:45  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* pages/data/crc_page_header_band.html: changed version number
