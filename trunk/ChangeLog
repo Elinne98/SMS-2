@@ -1,3 +1,14 @@
+2011-04-03 15:40  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* ChangeLog, classes/crc_admin.cls.php,
+	  classes/crc_schedule.cls.php, common/crc_menu.html, install.txt,
+	  mysql/crc_database_setup.sql, pages/crc_courses.php,
+	  pages/crc_handler.php, pages/data/crc_courses_main.html,
+	  pages/data/crc_edit_course_main.html,
+	  pages/data/crc_enrollment_main.html, tests/simpletest/README,
+	  tests/web_test.php: added Enrollment menu when logged in as
+	  student
+
 2010-11-13 13:45  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* pages/data/crc_page_header_band.html: changed version number
