@@ -253,6 +253,22 @@ print '[' . $title . ']';
 				$_SESSION['coursesdata'] = $admin->fn_getcourselist(null);
 				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_courses.php?func=courselist&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 				
+			} else if ($_GET['func'] == 'editenroll') {
+				
+				$profile = new crc_profile(false);
+				$profile->fn_getprofile($_SESSION['uid']);//obtain profile id
+				$_SESSION['profiledata'] = $profile->m_data;
+				$schedule = new crc_schedule(false);
+				$schedule->fn_getschedule($profile->m_data[0], 3, true);//obtain information for all courses
+				$_SESSION['coursesdata'] = $schedule->m_data;
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_courses.php?func=register&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				
+			} else if ($_GET['func'] == 'enroll') {
+				
+				$admin = new crc_admin(false);
+				$result_admin = $admin->fn_setstudentschedule(null, $_POST, $_SESSION['profiledata'][0]);
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_handler.php?method=courses&func=editenroll">';
+				
 			} else if ($_GET['func'] == 'editcourse') {
 				
 				$course = new crc_courses(false);
@@ -367,7 +383,7 @@ print '[' . $title . ']';
 				} else {
 					$_SESSION['msg'] = "Course successfully added";
 				}
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin.php?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 				
 			} else if ($_GET['func'] == 'showaddstudent') {
 								

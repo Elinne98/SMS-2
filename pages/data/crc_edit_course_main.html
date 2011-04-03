@@ -60,6 +60,59 @@
 			print '</td></tr>';
 			print '</table>';
 
+		} else if ($_GET['func'] == 'register') {
+
+			$data = $_SESSION['coursesdata'];
+			$data_len = count($data);
+			$scheduledata = $_SESSION['scheduledata'];
+
+			print '<table class="std">';
+
+			$len = strlen($_SESSION['msg']);
+			if ($len > 0) {
+    			print('<tr><td colspan="2" class="error" align="center"><b>' . $_SESSION['msg'] . '</b></td></tr>');
+				$_SESSION['msg'] = "";
+			}
+			
+			print '<tr>';
+			print '<th colspan="2"><em>Register for Course(s)</em></th>';
+			print '</tr>';
+			
+			print '<tr><td>';
+			print '<table  width="300" align="left" border="0" cellpadding="6" cellspacing="0">';
+			
+			if ($data_len > 0) {	
+				print '<tr>';
+        		print '<br>Below are all courses found in the database:<br><br>';
+        		print '</tr>';
+				for ($i = 0; $i < $data_len; $i++) {
+					//check if the current course is already selected by this student
+					$found = false;
+					for ($j=0; $j < count($scheduledata); $j++) {						
+						if (strpos($data[$i]['cnamedesc'], $scheduledata[$j][0]) !== false) {
+							$found = true;
+							break;
+						}
+					}
+					//display the course as checked or unchecked
+					if ($found == true) {
+						print '<input type=checkbox disabled="disabled" checked name="course' . $i . '">' . $data[$i]['cnamedesc'] . '<br>';
+					} else {
+						print '<input type=checkbox name="course' . $i . '">' . $data[$i]['cnamedesc'] . '<br>';
+					}	
+				}
+				print '<tr>';
+      			print '<td colspan="2" align="center"><BR/><input type="submit"  name="Register" value="Register" onclick="javascript:verify(\'registercourse\');">';
+		  		print '</td>';
+    			print '</tr>';
+			} else {
+        		print '<tr>';
+        		print '<td class="error" align="center">No courses found in the database.</td>';
+        		print '</tr>';
+			}
+			print '</td></tr>';
+			print '</table>';
+
 		} else if ($_GET['func'] == 'editcourse') {
 
 			$data = $_SESSION['coursesdata'];

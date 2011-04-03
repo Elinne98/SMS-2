@@ -46,7 +46,7 @@
 			}
 		}
 
-		function fn_getschedule($profileid, $roleid) {
+		function fn_getschedule($profileid, $roleid, $all = false) {
 			//**********************************
 			// Get the schedule for the classes
 			//**********************************
@@ -99,6 +99,18 @@
 							$enrol = $db->fn_runsql(MYSQL_DB, $this->m_sql);
 							if ($this->_DEBUG) {
 								echo "DEBUG {crc_schedule::fn_getschedule}: Checking enrollment of schedule id " . $row[6] . " for profile id " . $profileid . ". <br>";
+							}
+							if (true == $all) {
+								//all courses all needed
+								$this->m_data[$index] = $row;
+								//check the enrollment
+								if (is_resource($enrol) && (mysql_num_rows($enrol) > 0)) {
+									$this->m_data[$index][9] = true;
+								} else {
+									$this->m_data[$index][9] = false;
+								}
+								$index = $index+1;
+								continue;
 							}
 							if (is_resource($enrol)) {
 								if (mysql_num_rows($enrol) > 0) {

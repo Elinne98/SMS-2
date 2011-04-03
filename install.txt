@@ -22,15 +22,9 @@ Features to implement:
 From a technical perspective FreeSMS is based on PHP5 and requires a MySQL database. This 
 demonstration site has been tested on: 
 
-* openSUSE 11.3 with:
  - Apache 2.2.15 (<a href="http://www.apache.org">www.apache.org</a>)
  - PHP 5.3.3 (<a href="http://www.php.net">www.php.net</a>)
  - MySQL 5.1.49 (<a href="http://www.mysql.com">www.mysql.com</a>)
-
-* Windows XP with:
- - httpd-2.2.17-win32-x86-no_ssl
- - php-5.3.4-Win32-VC6-x86
- - mysql-5.5.8-win32
 
 In order to install FreeSMS, please follow the following instructions:
 
@@ -76,18 +70,4 @@ volunteers on this project, please send us an email.
 
 Thank You,
 FreeSMS Team.
-
-
-
-Note for developers:
-
-In order to run the unit tests download from 
-http://www.simpletest.org/en/download.html
-simple test framework (version 1.0.1 is recommended) and unzip all sources to 
-<InstallPath>/FreeSMS/tests/simpletest
-
-Before running the tests open the file <InstallPath>/FreeSMS/tests/web_test.php and make sure
-that the variable FRESMS_BASE_URL points to the currect location.
-
-In order to run tests, point your web browser to: http://<server>/FreeSMS/tests/all_tests.php
 

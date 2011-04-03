@@ -53,8 +53,12 @@
 				<TR CLASS="OUTER">
 					<?php
 					if (isset($_GET['func']) && 
-						(($_GET['func'] == 'courselist') || ($_GET['func'] == 'editcourse'))) {
-						include "data/crc_edit_course_main.html";	
+						(($_GET['func'] == 'courselist') || 
+						($_GET['func'] == 'editcourse'))) {
+						include "data/crc_edit_course_main.html";
+					} else if (isset($_GET['func']) && 
+						($_GET['func'] == 'register')) {
+						include "data/crc_enrollment_main.html";
 					} else {
 						include "data/crc_courses_main.html";
 					}
