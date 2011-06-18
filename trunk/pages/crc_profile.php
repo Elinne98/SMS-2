@@ -5,7 +5,6 @@
   } else {
     session_name('crc');
     session_start();
-	session_register('msg');
   }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

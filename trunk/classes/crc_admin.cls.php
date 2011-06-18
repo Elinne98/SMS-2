@@ -770,6 +770,7 @@
 			
 			$this->fn_getcourselist($db);
 			$this->m_scheduleid = 0;
+            $resource = 0;
 			for($i = 0; $i < count($this->m_courselist); $i++) {
 				if(isset($post['course' . $i]) && (strtolower($post['course' . $i]) == "on")) {
 					$this->fn_getscheduleid($db, $this->m_courselist[$i]['courseid']);
