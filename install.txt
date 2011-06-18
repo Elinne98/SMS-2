@@ -33,7 +33,7 @@ openSUSE 11.4 with
  Windows Seven with
  - WampServer 2.1
 
-In order to install FreeSMS, please follow the following instructions:
+In order to install FreeSMS, please use the following instructions:
 
 1. Download FreeSMS: 
 ====================
@@ -50,6 +50,7 @@ you have a public_home folder you could extract there FreeSMS archive.
 
 3. MySQL Server Database Setup:
 ===============================
+You need a 'root' account configured on the MySQL server with password.
 From web browser: go to the following link: http://<server>/freesms/mysql/setup.php
 and follow the instructions (root access to the MySQL database is needed).
 From Linux terminal: use the bash script provided in "[Install Directory]/mysql/" folder 
