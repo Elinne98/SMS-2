@@ -149,6 +149,9 @@
 				return false;
 			}
 			mysql_close($dbhandle);
+            if ($this->_DEBUG) {
+                echo "DEBUG {crc_admin::fn_dbsetup}: end<br>";
+            }
 			return true;			
 		}
 		

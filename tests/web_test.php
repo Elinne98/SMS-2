@@ -2,7 +2,7 @@
 
 //the tests order in the web test case CANNOT be changed
 
-define('FRESMS_BASE_URL', 'http://localhost/~bogdan/FreeSMS');
+include_once('setup_vars.php');
 
 class TestOfWebPagesClass extends WebTestCase {
 
@@ -60,9 +60,9 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertText('Invalid input');				
 		
 		//initialize fields
-		$this->assertTrue($this->setField('password', 'Aephae4A'));
-		$this->assertTrue($this->setField('username', 'bogdan'));
-		$this->assertTrue($this->setField('userpassword', 'ewigkeit'));
+		$this->assertTrue($this->setField('password', MYSQL_ROOT_PASSWORD));
+		$this->assertTrue($this->setField('username', USER_NAME));
+		$this->assertTrue($this->setField('userpassword', USER_PASSWORD));
 		
 		//click submit
 		$this->assertTrue($this->click('Create Database'));
@@ -589,9 +589,9 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertField('lcode', '0040');
 		$this->assertField('lprefix', '0000');
 		$this->assertField('lpostfix', '000000');
-		$this->assertText("Digital Signal Processing");
-		$this->assertText("Numerical Algorithms");
-		$this->assertText("C++ Programming");
+        $this->assertText("C++ Programming");//course 0
+		$this->assertText("Digital Signal Processing");//course 1
+		$this->assertText("Numerical Algorithms");//course 2	
 		
 		//initialize fields
 		$this->assertTrue($this->setField('fname', 'Marius'));
@@ -717,7 +717,7 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();					
 		$this->assertText('These are your courses, if any');
 		$this->assertLink("Digital Signal Processing");
-		$this->assertLink("1");
+		$this->assertLink("2");
 		
 		//click on course name
 		$this->assertTrue($this->click("Digital Signal Processing"));
@@ -727,11 +727,13 @@ class TestOfWebPagesClass extends WebTestCase {
 		//click on students number
 		$this->back();
 		$this->back();
-		$this->assertTrue($this->click("1"));
+		$this->assertTrue($this->click("2"));
 		$this->followMetaRefreshURL();
 		$this->assertText("Here you will find the students registered for the course");
 		$this->assertText("Digital Signal Processing");
-		$this->assertTrue($this->click("Lacatus, Marius"));
+        $this->assertLink("Hagi, Gheorghe");
+        $this->assertLink("Rus, Cristina");
+		$this->assertTrue($this->click("Hagi, Gheorghe"));        
 		$this->followMetaRefreshURL();
 		$this->assertText('Absent');
 		//cannot check Mark Present/Absent button
@@ -839,13 +841,13 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertText('These are your courses, if any.');
 		$this->assertLink('Digital Signal Processing');
 		$this->assertLink('Numerical Algorithms');
-		$this->assertLink('1');
 		$this->assertLink('2');
+		$this->assertLink('1');
 		
-		//check student for "Digital Signal Processing" course
+		//check student for "Numerical Algorithms" course
 		$this->assertTrue($this->click('1'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Lacatus, Marius');
+		$this->assertLink('Hagi, Gheorghe');
 		$this->assertText('Absent');
 		//simulate toggle on 'MarkPresent'/'MarkAbsent' buttons
 		$this->assertTrue($this->clickOnButton('MarkPresent'));
@@ -857,17 +859,17 @@ class TestOfWebPagesClass extends WebTestCase {
 		
 		
 		//check the page for "Lacatus, Marius"
-		$this->assertTrue($this->click('Lacatus, Marius'));
+		$this->assertTrue($this->click('Hagi, Gheorghe'));
 		$this->followMetaRefreshURL();
-		$this->assertText('This page has the attendance for student Lacatus, Marius');
-		$this->assertLink('Digital Signal Processing');
+		$this->assertText('This page has the attendance for student Hagi, Gheorghe');
+		$this->assertLink('Numerical Algorithms');
 		$this->assertText('Present');
-		$this->assertTrue($this->click('Digital Signal Processing'));
+		$this->assertTrue($this->click('Numerical Algorithms'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Lacatus, Marius');
+		$this->assertLink('Hagi, Gheorghe');
 		$this->assertText('Present');
 		
-		//check student for "Numerical Algorithms"
+		//check student for "Digital Signal Processing"
 		$this->assertTrue($this->click('Schedule'));
 		$this->followMetaRefreshURL();
 		$this->assertTrue($this->click('2'));
@@ -884,8 +886,8 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertTrue($this->click('Rus, Cristina'));
 		$this->followMetaRefreshURL();
 		$this->assertText('This page has the attendance for student Rus, Cristina');
-		$this->assertLink('Numerical Algorithms');
-		$this->assertTrue($this->click('Numerical Algorithms'));
+		$this->assertLink('Digital Signal Processing');
+		$this->assertTrue($this->click('Digital Signal Processing'));
 		$this->followMetaRefreshURL();
 		$this->assertLink('Rus, Cristina');
 	}
@@ -974,7 +976,7 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertText('Gheorghe Hagi,');
 		$this->assertText('These are the courses that you have registered for, if any.');
-		$this->assertText('C++ Programming');
+		$this->assertText('Digital Signal Processing');
 		$this->assertText('Numerical Algorithms');
 		
 		//"Evaluate" course (quick hack since a button cannot be clicked)		
@@ -985,6 +987,35 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertText('Thank you! You feedback is important to us and will be communicated accordingly.');
 	}
+    
+    function testStudentEnrollment() {
+		$this->assertTrue($this->get(FRESMS_BASE_URL . '/pages/crc_login.php'));
+		$this->assertTrue($this->setField('username', 'gica'));
+		$this->assertTrue($this->setField('password', 'a'));
+		$this->assertTrue($this->click('login'));
+		$this->followMetaRefreshURL();
+        
+        //"Enrollment" menu
+		$this->assertTrue($this->click('Enrollment'));
+		$this->followMetaRefreshURL();
+		$this->assertText('Gheorghe Hagi,');
+		$this->assertText('These are all available courses, if any.');
+        $this->assertText('C++ Programming');
+		$this->assertText('Digital Signal Processing');
+		$this->assertText('Numerical Algorithms');
+        $this->assertTrue($this->setField('course0', 'on'));
+        $this->assertFalse($this->setField('course1', 'off'));//check box should be disabled
+        $this->assertFalse($this->setField('course2', 'off'));
+        
+        //push enroll button
+        $this->assertTrue($this->click('Enroll'));
+		$this->followMetaRefreshURL();
+        $this->followMetaRefreshURL();
+        
+		$this->assertText('Gheorghe Hagi,');
+		$this->assertText('These are all available courses, if any.');
+        $this->assertFalse($this->setField('course0', 'off'));//check box is now disabled        
+    }
 	
 	function testStudentProfile() {
 		$this->assertTrue($this->get(FRESMS_BASE_URL . '/pages/crc_login.php'));

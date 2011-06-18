@@ -18,19 +18,29 @@ FreeSMS provides the following features:
 Features to implement:
 
  - Allow admin to perform sanity checks on the database
+ - Allow students/admin to withdraw from an enrolled course
 
 From a technical perspective FreeSMS is based on PHP5 and requires a MySQL database. This 
 demonstration site has been tested on: 
 
+openSUSE 11.4 with
  - Apache 2.2.15 (<a href="http://www.apache.org">www.apache.org</a>)
  - PHP 5.3.3 (<a href="http://www.php.net">www.php.net</a>)
  - MySQL 5.1.49 (<a href="http://www.mysql.com">www.mysql.com</a>)
+ 
+ and
+ 
+ Windows Seven with
+ - WampServer 2.1
 
 In order to install FreeSMS, please follow the following instructions:
 
 1. Download FreeSMS: 
 ====================
 FreeSMS can be downloaded at http://sourceforge.net/projects/freesms/.
+You need also a properly configured http server (e.g. Apache) capable
+of running php code and a MySQL server. On Windows OSs the recommended
+approach is to use WampServer (<a href="http://www.wampserver.com/">www.wampserver.net</a>).
 
 2. Extract FreeSMS: 
 ===================

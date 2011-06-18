@@ -87,17 +87,17 @@ print '[' . $title . ']';
 
 			} else {
 
-				session_register('uid');
-				session_register('profileid');
-				session_register('name');
-				session_register('data');
-				session_register('profiledata');
-				session_register('scheduledata');
-				session_register('coursesdata');
-				session_register('teacherscheduledata');
-				session_register('teacherstudentsdata');
-				session_register('teacherattendancegetdata');
-				session_register('evaluation');
+                $_SESSION['uid'] = "";
+                $_SESSION['profileid'] = "";
+                $_SESSION['name'] = "";
+                $_SESSION['data'] = "";
+                $_SESSION['profiledata'] = "";
+                $_SESSION['scheduledata'] = "";
+                $_SESSION['coursesdata'] = "";
+                $_SESSION['teacherscheduledata'] = "";
+                $_SESSION['teacherstudentsdata'] = "";
+                $_SESSION['teacherattendancegetdata'] = "";
+                $_SESSION['evaluation'] = "";
 				$_SESSION['uid'] = $login->m_uid;
 				$_SESSION['name'] = $login->m_name;
 				$_SESSION['profileid'] = $login->m_profileid;
@@ -112,7 +112,7 @@ print '[' . $title . ']';
 		} else if ($_GET['method'] == 'register') {
 
 			$_SESSION['msg'] = "";
-			session_register('registerdata');
+            $_SESSION['registerdata'] = "";
 
 			if (isset($_GET['func'])) {
 
@@ -383,7 +383,7 @@ print '[' . $title . ']';
 				} else {
 					$_SESSION['msg'] = "Course successfully added";
 				}
-				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
+				echo '<meta http-equiv="refresh"' . 'content="0;URL=crc_admin.php?method=addcourse&' . session_name() . '=' . session_id() . '&uid=' . $_SESSION['uid'] . '">';
 				
 			} else if ($_GET['func'] == 'showaddstudent') {
 								
