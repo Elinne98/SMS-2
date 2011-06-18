@@ -30,8 +30,11 @@
       <table class="tbl">
         <tr><td valign="top">
           <?php
-
-			$len = strlen($_SESSION['msg']);
+            if (isset($_SESSION['msg'])) {
+			     $len = strlen($_SESSION['msg']);
+            } else {
+                $len = 0;
+            }
 
 			if ($len > 0) {
 				print('<tr><td class="RED"><br>' . $_SESSION['msg'] . '<br></td></tr>');
