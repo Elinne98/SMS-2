@@ -1,3 +1,15 @@
+2011-06-18 15:34  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+        * classes/crc_admin.cls.php, classes/crc_dbsetup.cls.php,
+          install.txt, mysql/crc_database_setup.sql, mysql/setup.php,
+          pages/crc_evaluation.php, pages/crc_handler.php,
+          pages/crc_login.php, pages/crc_profile.php,
+          pages/crc_register.php, pages/crc_schedule.php,
+          pages/data/crc_login_main.html, tests/dbsetup_test.php,
+          tests/setup_vars.php, tests/simpletest/README,
+          tests/web_test.php: corrections made to ensure compatibility
+	  with WampServer 2.1
+
 2011-04-03 15:40  Bogdan Cristea <cristeab@users.sourceforge.net>
 
 	* ChangeLog, classes/crc_admin.cls.php,
