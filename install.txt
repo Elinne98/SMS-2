@@ -30,8 +30,9 @@ openSUSE 11.4 with
  
  and
  
- Windows Seven with
- - WampServer 2.1
+ Windows Seven 32 bits with
+ - WampServer 2.1 or
+ - XAMPP 1.7.4
 
 In order to install FreeSMS, please use the following instructions:
 
