@@ -31,8 +31,8 @@ openSUSE 11.4 with
  and
  
  Windows Seven 32 bits with
- - WampServer 2.1 or
- - XAMPP 1.7.4
+ - WampServer 2.1 (<a href="http://www.wampserver.com/">www.wampserver.net</a>) or
+ - XAMPP 1.7.4 (<a href="http://www.apachefriends.org/en/xampp.html">http://www.apachefriends.org/en/xampp.html</a>)
 
 In order to install FreeSMS, please use the following instructions:
 
@@ -41,7 +41,7 @@ In order to install FreeSMS, please use the following instructions:
 FreeSMS can be downloaded at http://sourceforge.net/projects/freesms/.
 You need also a properly configured http server (e.g. Apache) capable
 of running php code and a MySQL server. On Windows OSs the recommended
-approach is to use WampServer (<a href="http://www.wampserver.com/">www.wampserver.net</a>).
+approach is to use WampServer or XAMPP.
 
 2. Extract FreeSMS: 
 ===================
