@@ -50,7 +50,8 @@ you have a public_home folder you could extract there FreeSMS archive.
 
 3. MySQL Server Database Setup:
 ===============================
-You need a 'root' account configured on the MySQL server with password.
+For security reasons, you need a 'root' account with nonempty password configured on the MySQL server.
+Also, for the same reasons, the password of the user account needed to access the FreeSMS database cannot be empty.
 From web browser: go to the following link: http://<server>/freesms/mysql/setup.php
 and follow the instructions (root access to the MySQL database is needed).
 From Linux terminal: use the bash script provided in "[Install Directory]/mysql/" folder 
