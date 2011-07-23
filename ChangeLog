@@ -1,3 +1,8 @@
+2011-07-23 19:15  Bogdan Cristea <cristeab@users.sourceforge.net>
+
+	* pages/data/crc_students_main.html: added e-mail display when
+	  showing the students list for a given course
+
 2011-06-18 15:34  Bogdan Cristea <cristeab@users.sourceforge.net>
 
         * classes/crc_admin.cls.php, classes/crc_dbsetup.cls.php,
