@@ -70,7 +70,7 @@
 				print '<tr align="left">';
 				print '<td align = "center"><a href="crc_handler.php?method=teacher&func=getattendance&profileid=' . $data[$i][6] . '&scheduleid=' . $data[$i][0] . '"><b>' . $data[$i][3] . ',&nbsp;' . $data[$i][2] . '</b></a></td>';
 				if (strlen(trim($data[$i][4]))> 0) {
-					print '<td align = "center"><a href=mailto:"' . $data[$i][4] . '">' . $data[$i][4] . '</a></td>';
+					print '<td align = "center"><a href="mailto:' . $data[$i][4] . '">' . $data[$i][4] . '</a></td>';
 				} else {
 					print '<td align = "center">N/A</td>';
 				}
