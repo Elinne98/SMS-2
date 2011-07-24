@@ -66,9 +66,13 @@
 		print('<td colspan="2" align="center" valign="bottom" nowrap>');
 		print('<input type="submit" name="login" value="Create Database" onclick="javascript:verify("dbsetup");" />');
 		print('</td>');
-		print('</tr>');
+		print('</tr>');		
 		?>
 
 	</table>
+
+	<?php
+	print('<p><b>Note</b>: for security reasons empty passwords are not allowed.');
+	?>
 
 </form>
