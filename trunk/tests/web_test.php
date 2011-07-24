@@ -731,9 +731,10 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertText("Here you will find the students registered for the course");
 		$this->assertText("Digital Signal Processing");
-        $this->assertLink("Hagi, Gheorghe");
-        $this->assertLink("Rus, Cristina");
-		$this->assertTrue($this->click("Hagi, Gheorghe"));        
+        $this->assertLink(html_entity_decode("Hagi,&nbsp;Gheorghe"));
+        $this->assertLink("gica@domain.com");
+        $this->assertLink(html_entity_decode("Rus,&nbsp;Cristina"));
+		$this->assertTrue($this->click(html_entity_decode("Hagi,&nbsp;Gheorghe")));        
 		$this->followMetaRefreshURL();
 		$this->assertText('Absent');
 		//cannot check Mark Present/Absent button
@@ -847,7 +848,7 @@ class TestOfWebPagesClass extends WebTestCase {
 		//check student for "Numerical Algorithms" course
 		$this->assertTrue($this->click('1'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Hagi, Gheorghe');
+		$this->assertLink(html_entity_decode("Hagi,&nbsp;Gheorghe"));
 		$this->assertText('Absent');
 		//simulate toggle on 'MarkPresent'/'MarkAbsent' buttons
 		$this->assertTrue($this->clickOnButton('MarkPresent'));
@@ -859,14 +860,14 @@ class TestOfWebPagesClass extends WebTestCase {
 		
 		
 		//check the page for "Lacatus, Marius"
-		$this->assertTrue($this->click('Hagi, Gheorghe'));
+		$this->assertTrue($this->click(html_entity_decode("Hagi,&nbsp;Gheorghe")));
 		$this->followMetaRefreshURL();
 		$this->assertText('This page has the attendance for student Hagi, Gheorghe');
 		$this->assertLink('Numerical Algorithms');
 		$this->assertText('Present');
 		$this->assertTrue($this->click('Numerical Algorithms'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Hagi, Gheorghe');
+		$this->assertLink(html_entity_decode("Hagi,&nbsp;Gheorghe"));
 		$this->assertText('Present');
 		
 		//check student for "Digital Signal Processing"
@@ -874,8 +875,8 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->followMetaRefreshURL();
 		$this->assertTrue($this->click('2'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Hagi, Gheorghe');
-		$this->assertLink('Rus, Cristina');
+		$this->assertLink(html_entity_decode("Hagi,&nbsp;Gheorghe"));
+		$this->assertLink(html_entity_decode("Rus,&nbsp;Cristina"));
 		$this->assertText('Absent');
 		
 		//mark 'Hagi, Gheorghe' as present
@@ -883,13 +884,13 @@ class TestOfWebPagesClass extends WebTestCase {
 		$this->assertText('Present');
 		
 		//check the page for 'Rus, Cristina'
-		$this->assertTrue($this->click('Rus, Cristina'));
+		$this->assertTrue($this->click(html_entity_decode("Rus,&nbsp;Cristina")));
 		$this->followMetaRefreshURL();
 		$this->assertText('This page has the attendance for student Rus, Cristina');
 		$this->assertLink('Digital Signal Processing');
 		$this->assertTrue($this->click('Digital Signal Processing'));
 		$this->followMetaRefreshURL();
-		$this->assertLink('Rus, Cristina');
+		$this->assertLink(html_entity_decode("Rus,&nbsp;Cristina"));
 	}
 	
 	function testTeacherProfile() {
