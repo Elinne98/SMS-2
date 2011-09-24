@@ -23,10 +23,15 @@ Features to implement:
 From a technical perspective FreeSMS is based on PHP5 and requires a MySQL database. This 
 demonstration site has been tested on: 
 
-openSUSE 11.4 with
+openSUSE 11.4 64 bits with
  - Apache 2.2.17 (<a href="http://www.apache.org">www.apache.org</a>)
  - PHP 5.3.6 (<a href="http://www.php.net">www.php.net</a>)
  - MySQL 5.5.13 (<a href="http://www.mysql.com">www.mysql.com</a>)
+
+CentOS 6.0 64 bits with
+ - Apache 2.2.15
+ - PHP 5.3.2
+ - MySQL 5.1.47
  
  and
  
