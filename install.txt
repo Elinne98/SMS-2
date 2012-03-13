@@ -37,7 +37,7 @@ CentOS 6.0 64 bits with
  
  Windows Seven 32 bits with
  - WampServer 2.1 (<a href="http://www.wampserver.com/">www.wampserver.net</a>) or
- - XAMPP 1.7.4 (<a href="http://www.apachefriends.org/en/xampp.html">http://www.apachefriends.org/en/xampp.html</a>)
+ - XAMPP 1.7.7 (<a href="http://www.apachefriends.org/en/xampp.html">http://www.apachefriends.org/en/xampp.html</a>)
 
 In order to install FreeSMS, please use the following instructions:
 
